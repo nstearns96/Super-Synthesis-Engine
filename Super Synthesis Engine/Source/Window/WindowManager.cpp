@@ -1,6 +1,7 @@
 #include "Window/WindowManager.h"
 
 #include <SDL/SDL.h>
+#include <SDL/SDL_vulkan.h>
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -15,7 +16,7 @@ namespace SSE
 
 	WindowManager::WindowManager() {};
 
-	bool WindowManager::createWindow(std::string windowName, const char* title, glm::vec2 position, glm::vec2 dimensions, unsigned int flags, bool setActive)
+	bool WindowManager::createWindow(const std::string& windowName, const char* title, const glm::vec2& position, const glm::vec2& dimensions, unsigned int flags, bool setActive)
 	{
 		if ((windows.find(windowName) != windows.end()))
 		{
@@ -37,7 +38,7 @@ namespace SSE
 		}
 	}
 
-	bool WindowManager::setActiveWindow(std::string windowName)
+	bool WindowManager::setActiveWindow(const std::string& windowName)
 	{
 		auto windowIter = windows.find(windowName);
 		if (windowIter != windows.end())
@@ -52,10 +53,26 @@ namespace SSE
 		return false;
 	}
 
-	bool WindowManager::destroyWindow(std::string windowName)
+	const Window* WindowManager::getWindow(const std::string& windowName) const
 	{
-		if ((windows.find(windowName) != windows.end()))
+		auto windowIter = windows.find(windowName);
+		if (windowIter == windows.end())
 		{
+			return nullptr;
+		}
+
+		return &windowIter->second;
+	}
+
+	bool WindowManager::destroyWindow(const std::string& windowName)
+	{
+		auto windowIter = windows.find(windowName);
+		if (windowIter != windows.end())
+		{
+			if (windowIter == activeWindow)
+			{
+				activeWindow = windows.begin();
+			}
 			windows.erase(windowName);
 			return true;
 		}
@@ -71,12 +88,7 @@ namespace SSE
 		windows.clear();
 	}
 
-	void WindowManager::clearWindows()
-	{
-
-	}
-
-	unsigned int WindowManager::handleEvents(SDL_Event &e)
+	unsigned int WindowManager::handleEvents(const SDL_Event& e)
 	{
 		unsigned int result = WindowEventResult::RESULT_NONE;
 
@@ -100,13 +112,23 @@ namespace SSE
 		return result;
 	}
 
-	unsigned int WindowManager::getWindowCount()
+	unsigned int WindowManager::getWindowCount() const
 	{
 		return windows.size();
 	}
 
-	Window& WindowManager::getActiveWindow()
+	Window& WindowManager::getActiveWindow() const
 	{
 		return (activeWindow->second);
+	}
+
+	glm::vec2 WindowManager::getWindowFrameBufferDimensions() const
+	{
+		glm::vec2 result;
+		Window window = getActiveWindow();
+		
+		SDL_Vulkan_GetDrawableSize(WindowManager::gWindowManager.getActiveWindow().getWindow(), (int *)&result.x, (int *)&result.y);
+
+		return result;
 	}
 }

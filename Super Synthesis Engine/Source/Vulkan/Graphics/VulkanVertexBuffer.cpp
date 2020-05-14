@@ -9,76 +9,44 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) 
+		bool VulkanVertexBuffer::create(const std::vector<Vertex>& _vertices, const std::vector<uint16_t> _indices)
 		{
-			VkPhysicalDeviceMemoryProperties memProperties;
-			vkGetPhysicalDeviceMemoryProperties(PHYSICAL_DEVICE_DEVICE, &memProperties);
-
-			for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) 
+			if(!vertexBuffer.create((void *)_vertices.data(), sizeof(Vertex) * _vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+				|| !indexBuffer.create((void *)_indices.data(), sizeof(uint16_t) * _indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
 			{
-				if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
-					return i;
-				}
-			}
-
-			gLogger.logError(ErrorLevel::EL_CRITICAL, "Unable to find valid memory type");
-			return -1;
-		}
-
-		bool VulkanVertexBuffer::create(const std::vector<Vertex>& _vertices)
-		{
-			VkBufferCreateInfo bufferInfo{};
-			bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-			bufferInfo.size = sizeof(Vertex) * _vertices.size();
-			bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-			bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-			if (vkCreateBuffer(LOGICAL_DEVICE_DEVICE, &bufferInfo, nullptr, &vertexBuffer) != VK_SUCCESS) 
-			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create vertex buffer.");
 				return false;
 			}
-
-			VkMemoryRequirements memRequirements;
-			vkGetBufferMemoryRequirements(LOGICAL_DEVICE_DEVICE, vertexBuffer, &memRequirements);
-
-			VkMemoryAllocateInfo allocInfo{};
-			allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-			allocInfo.allocationSize = memRequirements.size;
-			allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-			if (vkAllocateMemory(LOGICAL_DEVICE_DEVICE, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) 
-			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to allocate memory for vertex buffer.");
-				return false;
-			}
-
-			vkBindBufferMemory(LOGICAL_DEVICE_DEVICE, vertexBuffer, bufferMemory, 0);
-
-			void* data;
-			vkMapMemory(LOGICAL_DEVICE_DEVICE, bufferMemory, 0, bufferInfo.size, 0, &data);
-			memcpy(data, _vertices.data(), (size_t)bufferInfo.size);
-			vkUnmapMemory(LOGICAL_DEVICE_DEVICE, bufferMemory);
 
 			vertices = _vertices;
+			indices = _indices;
 
 			return true;
 		}
 
 		void VulkanVertexBuffer::destroy()
 		{
-			vkDestroyBuffer(LOGICAL_DEVICE_DEVICE, vertexBuffer, nullptr);
-			vkFreeMemory(LOGICAL_DEVICE_DEVICE, bufferMemory, nullptr);
+			vertexBuffer.destroy();
+			indexBuffer.destroy();
 		}
 
 		VkBuffer VulkanVertexBuffer::getVertexBuffer()
 		{
-			return vertexBuffer;
+			return vertexBuffer.getBuffer();
+		}
+
+		VkBuffer VulkanVertexBuffer::getIndexBuffer()
+		{
+			return indexBuffer.getBuffer();
 		}
 
 		unsigned int VulkanVertexBuffer::getVertexCount()
 		{
 			return vertices.size();
+		}
+
+		unsigned int VulkanVertexBuffer::getIndexCount()
+		{
+			return indices.size();
 		}
 	}
 }

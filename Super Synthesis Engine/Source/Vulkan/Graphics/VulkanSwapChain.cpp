@@ -11,9 +11,9 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanSwapChain::create(VulkanSurface& surface, unsigned int width, unsigned int height)
+		bool VulkanSwapChain::create(VulkanSurface& surface, const glm::vec2& dimensions)
 		{
-			if (width == 0 || height == 0)
+			if (dimensions.x == 0 || dimensions.y == 0)
 			{
 				gLogger.logError(ErrorLevel::EL_CRITICAL, "Swap chain dimension was 0. Swap chain was not created.");
 				return false;
@@ -65,7 +65,7 @@ namespace SSE
 			}
 			else 
 			{
-				VkExtent2D actualExtent = { width,height };
+				VkExtent2D actualExtent = { dimensions.x, dimensions.y};
 				
 				actualExtent.width = SDL_max(details.capabilities.minImageExtent.width, SDL_min(details.capabilities.maxImageExtent.width, actualExtent.width));
 				actualExtent.height = SDL_max(details.capabilities.minImageExtent.height, SDL_min(details.capabilities.maxImageExtent.height, actualExtent.height));

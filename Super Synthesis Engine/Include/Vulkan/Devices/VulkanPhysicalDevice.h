@@ -15,6 +15,7 @@ namespace SSE::Vulkan
 	private:
 		VkPhysicalDevice device;
 
+#pragma message("TODO: Generalize queue family support")
 		std::vector<VkQueueFamilyProperties> queueFamilies;
 		VkQueueFamilyProperties* graphicsFamily = nullptr;
 		VkQueueFamilyProperties* presentFamily = nullptr;

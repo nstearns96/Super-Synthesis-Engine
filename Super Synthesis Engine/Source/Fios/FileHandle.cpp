@@ -19,7 +19,7 @@ namespace SSE
 
 	bool FileHandle::close()
 	{
-		if (this->isValid())
+		if (isValid())
 		{
 			handle.close();
 			if (!handle.is_open())
@@ -84,7 +84,7 @@ namespace SSE
 	std::vector<char> FileHandle::readIntoVector()
 	{
 		std::vector<char> result;
-		if (this->isValid() && (mode & FioMode::FIOM_READ))
+		if (isValid() && (mode & FioMode::FIOM_READ))
 		{
 			size_t fileSize = (size_t)handle.tellg();
 			result.resize(fileSize);
@@ -99,7 +99,7 @@ namespace SSE
 
 	void FileHandle::writeToFile(const std::string& buffer)
 	{
-		if (this->isValid() && (mode & FioMode::FIOM_WRITE))
+		if (isValid() && (mode & FioMode::FIOM_WRITE))
 		{
 			handle.write(buffer.c_str(), buffer.size());
 		}

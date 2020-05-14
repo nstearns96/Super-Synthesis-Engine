@@ -22,10 +22,10 @@ namespace SSE::Vulkan
 		bool initDevice(VulkanPhysicalDevice& physicalDevice);
 		void cleanupDevice();
 
-		VkDevice& getDevice();
+		VkDevice getDevice();
 
-		bool submit(VkSubmitInfo& submitInfo, VkFence& fence, bool& recreateSwapChain);
-
+		VkResult submit(VkSubmitInfo& submitInfo, VkFence* fence);
+		void waitGraphicsIdle();
 		void present(VkPresentInfoKHR& presentInfo);
 	};
 

@@ -61,7 +61,7 @@ namespace SSE
 		return dimensions.y;
 	}
 
-	WindowEventResult Window::handleEvent(SDL_Event &e)
+	WindowEventResult Window::handleEvent(const SDL_Event &e)
 	{
 		switch (e.window.event)
 		{

@@ -54,7 +54,7 @@ namespace SSE
 		int getWidth();
 		int getHeight();
 
-		WindowEventResult handleEvent(SDL_Event &e);
+		WindowEventResult handleEvent(const SDL_Event& e);
 
 	};
 }

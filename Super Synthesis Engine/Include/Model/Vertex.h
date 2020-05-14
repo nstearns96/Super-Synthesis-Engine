@@ -8,6 +8,7 @@
 
 namespace SSE
 {
+#pragma message("TODO: Support generalized vertex format")
 	struct Vertex
 	{
 		glm::vec2 pos;

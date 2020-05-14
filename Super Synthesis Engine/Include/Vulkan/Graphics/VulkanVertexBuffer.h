@@ -5,6 +5,7 @@
 
 #include <vector>
 
+#include "Vulkan/VulkanBuffer.h"
 #include "Model/Vertex.h"
 
 namespace SSE::Vulkan
@@ -13,17 +14,21 @@ namespace SSE::Vulkan
 	{
 	private:
 		std::vector<Vertex> vertices;
-		VkBuffer vertexBuffer;
-		VkDeviceMemory bufferMemory;
+		std::vector<uint16_t> indices;
+#pragma message("TODO: Store vertex and index buffer in same VulkanBuffer object")
+		VulkanBuffer vertexBuffer;
+		VulkanBuffer indexBuffer;
 
 	public:
-		bool create(const std::vector<Vertex>& _vertices);
+		bool create(const std::vector<Vertex>& _vertices, const std::vector<uint16_t> _indices);
 		
 		void destroy();
 
 		VkBuffer getVertexBuffer();
+		VkBuffer getIndexBuffer();
 
 		unsigned int getVertexCount();
+		unsigned int getIndexCount();
 	};
 }
 

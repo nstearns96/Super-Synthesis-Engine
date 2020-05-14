@@ -30,6 +30,8 @@ namespace SSE::Graphics
 		unsigned int currentFrame;
 
 		bool recreateSwapChain();
+		bool constructPipeline();
+		bool constructCommandBuffers();
 
 	public:
 		Vulkan::VulkanSurface surface;

@@ -13,7 +13,7 @@ namespace SSE
 			for (int i = 0; i < sourceFiles.size(); ++i)
 			{
 				SSE::FileHandle sourceFile;
-				sourceFile.open("Shaders\\" + sourceFiles[i], FioMode::FIOM_BINARY | FioMode::FIOM_READ);
+				sourceFile.open("Source\\Shaders\\" + sourceFiles[i], FioMode::FIOM_BINARY | FioMode::FIOM_READ);
 
 				const std::vector<char> source = sourceFile.readIntoVector();
 
@@ -49,6 +49,43 @@ namespace SSE
 			}
 
 			return shaderModules[0];
+		}
+
+		std::vector<VkPipelineShaderStageCreateInfo> Shader::getShaderStages()
+		{
+			std::vector<VkPipelineShaderStageCreateInfo> result;
+			
+			for (auto shaderModule : shaderModules)
+			{
+				VkShaderStageFlagBits stageFlag;
+				switch (shaderModule.getModuleType())
+				{
+				case Vulkan::ShaderModuleType::SMT_VERTEX:
+				{
+					stageFlag = VK_SHADER_STAGE_VERTEX_BIT;
+					break;
+				}
+				case Vulkan::ShaderModuleType::SMT_FRAGMENT:
+				{
+					stageFlag = VK_SHADER_STAGE_FRAGMENT_BIT;
+					break;
+				}
+				default:
+				{
+					stageFlag = VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
+					break;
+				}
+				}
+				VkPipelineShaderStageCreateInfo shaderStageInfo{};
+				shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+				shaderStageInfo.stage = stageFlag;
+				shaderStageInfo.module = shaderModule.getModule();
+				shaderStageInfo.pName = "main";
+
+				result.push_back(shaderStageInfo);
+			}
+
+			return result;
 		}
 	}
 }

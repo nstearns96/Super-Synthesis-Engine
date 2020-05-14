@@ -63,7 +63,7 @@ namespace SSE
 		{
 			if (presentFamily != nullptr)
 			{
-				return presentFamily - (VkQueueFamilyProperties*)&queueFamilies[0];
+				return presentFamily - &queueFamilies[0];
 			}
 			else return 0;
 		}

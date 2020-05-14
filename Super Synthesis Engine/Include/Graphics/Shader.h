@@ -14,7 +14,6 @@ namespace SSE::Graphics
 	{
 	private:
 		std::vector<Vulkan::VulkanShaderModule> shaderModules;
-		//Shader stage stuff here
 
 	public:
 		bool create(const std::vector<std::string>& sourceFiles, const std::vector<SSE::Vulkan::ShaderModuleType>& moduleTypes);
@@ -22,6 +21,7 @@ namespace SSE::Graphics
 		void destroy();
 
 		Vulkan::VulkanShaderModule getShaderModule(Vulkan::ShaderModuleType moduleType);
+		std::vector<VkPipelineShaderStageCreateInfo> getShaderStages();
 	};
 }
 

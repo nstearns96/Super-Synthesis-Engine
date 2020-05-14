@@ -18,14 +18,15 @@ namespace SSE::Vulkan
 
 	public:
 
-		bool create(VulkanSwapChain& swapChain, VulkanRenderPass& renderPass, const std::vector<VkFramebuffer>& frameBuffers, VkPipeline& pipeline, VulkanVertexBuffer& vertexBuffer);
+		bool create();
 
 		void destroy();
 
 		void freeBuffers();
-		bool allocateBuffers(VulkanSwapChain& swapChain, VulkanRenderPass& renderPass, const std::vector<VkFramebuffer>& frameBuffers, VkPipeline& pipeline, VulkanVertexBuffer& vertexBuffer);
+		bool allocateBuffers(unsigned int numBuffers);
 
-		const VkCommandBuffer* getCommandBuffer(int index);
+		VkCommandBuffer& getNewCommandBuffer(unsigned int index);
+		const VkCommandBuffer* getCommandBuffer(unsigned int index);
 	};
 }
 

@@ -71,24 +71,25 @@ namespace SSE
 			vkGetDeviceQueue(device, physicalDevice.getPresentFamilyIndex(), 0, &presentQueue);
 		}
 
-		VkDevice& VulkanLogicalDevice::getDevice()
+		VkDevice VulkanLogicalDevice::getDevice()
 		{
 			return device;
 		}
 
-		bool VulkanLogicalDevice::submit(VkSubmitInfo& submitInfo, VkFence& fence, bool& recreateSwapChain)
+		VkResult VulkanLogicalDevice::submit(VkSubmitInfo& submitInfo, VkFence* fence)
 		{
-			VkResult result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, fence);
+			VkResult result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, (fence == nullptr) ? VK_NULL_HANDLE : *fence);
 			if (result != VK_SUCCESS)
 			{
 				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to submit render command.");
-				recreateSwapChain = (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR);
-				return false;
 			}
 
-			recreateSwapChain = false;
+			return result;
+		}
 
-			return true;
+		void VulkanLogicalDevice::waitGraphicsIdle()
+		{
+			vkQueueWaitIdle(graphicsQueue);
 		}
 
 		void VulkanLogicalDevice::present(VkPresentInfoKHR& presentInfo)

@@ -37,7 +37,7 @@ namespace SSE::Vulkan
 		void destroyImageViews();
 
 	public:
-		bool create(VulkanSurface& surface, unsigned int width, unsigned int height);
+		bool create(VulkanSurface& surface, const glm::vec2& dimensions);
 
 		void destroy();
 

@@ -9,7 +9,7 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanCommandPool::create(VulkanSwapChain& swapChain, VulkanRenderPass& renderPass, const std::vector<VkFramebuffer>& frameBuffers, VkPipeline& pipeline, VulkanVertexBuffer& vertexBuffer)
+		bool VulkanCommandPool::create()
 		{
 			VkCommandPoolCreateInfo poolInfo{};
 			poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -21,8 +21,6 @@ namespace SSE
 				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create command pool.");
 				return false;
 			}
-
-			allocateBuffers(swapChain, renderPass, frameBuffers, pipeline, vertexBuffer);
 
 			return true;
 		}
@@ -37,11 +35,13 @@ namespace SSE
 		void VulkanCommandPool::freeBuffers()
 		{
 			vkFreeCommandBuffers(LOGICAL_DEVICE_DEVICE, commandPool, commandBuffers.size(), commandBuffers.data());
+
+			commandBuffers.clear();
 		}
 
-		bool VulkanCommandPool::allocateBuffers(VulkanSwapChain& swapChain, VulkanRenderPass& renderPass, const std::vector<VkFramebuffer>& frameBuffers, VkPipeline& pipeline, VulkanVertexBuffer& vertexBuffer)
+		bool VulkanCommandPool::allocateBuffers(unsigned int numBuffers)
 		{
-			commandBuffers.resize(frameBuffers.size());
+			commandBuffers.resize(numBuffers);
 
 			VkCommandBufferAllocateInfo allocInfo{};
 			allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -55,52 +55,15 @@ namespace SSE
 				return false;
 			}
 
-			for (size_t i = 0; i < commandBuffers.size(); i++)
-			{
-				VkCommandBufferBeginInfo beginInfo{};
-				beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-				beginInfo.flags = 0;
-				beginInfo.pInheritanceInfo = nullptr;
-
-				if (vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS)
-				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to begin command buffer.");
-					return false;
-				}
-
-				VkRenderPassBeginInfo renderPassInfo{};
-				renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-				renderPassInfo.renderPass = renderPass.getRenderPass();
-				renderPassInfo.framebuffer = frameBuffers[i];
-				renderPassInfo.renderArea.offset = { 0, 0 };
-				renderPassInfo.renderArea.extent = swapChain.getExtent();
-
-				VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-				renderPassInfo.clearValueCount = 1;
-				renderPassInfo.pClearValues = &clearColor;
-
-				vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-				vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-
-				VkBuffer vertexBuffers[] = { vertexBuffer.getVertexBuffer() };
-				VkDeviceSize offsets[] = { 0 };
-				vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, vertexBuffers, offsets);
-
-				vkCmdDraw(commandBuffers[i], vertexBuffer.getVertexCount(), 1, 0, 0);
-
-				vkCmdEndRenderPass(commandBuffers[i]);
-
-				if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS)
-				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to end command buffer.");
-					return false;
-				}
-			}
-
 			return true;
 		}
 
-		const VkCommandBuffer* VulkanCommandPool::getCommandBuffer(int index)
+		VkCommandBuffer& VulkanCommandPool::getNewCommandBuffer(unsigned int index)
+		{
+			return commandBuffers[index% commandBuffers.size()];
+		}
+
+		const VkCommandBuffer* VulkanCommandPool::getCommandBuffer(unsigned int index)
 		{
 			return &commandBuffers[index % commandBuffers.size()];
 		}
