@@ -13,11 +13,12 @@ namespace SSE::Vulkan
 		uint64_t size;
 
 	public:
-		bool create(void* data, uint64_t _size, unsigned int usageFlags, unsigned int memoryFlags);
+		bool create(uint64_t _size, unsigned int usageFlags, unsigned int memoryFlags);
 
 		void destroy();
 
 		VkBuffer getBuffer();
+		bool bufferData(void* data, bool useStagingBuffer = true);
 	};
 }
 

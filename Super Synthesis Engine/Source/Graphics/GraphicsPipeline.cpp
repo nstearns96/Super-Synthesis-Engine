@@ -1,6 +1,9 @@
 #include "Graphics/GraphicsPipeline.h"
 
 #include <SDL/SDL_vulkan.h>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <chrono>
 
 #include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Logging/Logger.h"
@@ -73,8 +76,8 @@ namespace SSE
 			rasterizer.rasterizerDiscardEnable = VK_FALSE;
 			rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
 			rasterizer.lineWidth = 1.0f;
-			rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-			rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+			rasterizer.cullMode = VK_CULL_MODE_NONE;
+			rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 			rasterizer.depthBiasEnable = VK_FALSE;
 
 			VkPipelineMultisampleStateCreateInfo multisampling{};
@@ -99,7 +102,8 @@ namespace SSE
 
 			VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 			pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-			pipelineLayoutInfo.setLayoutCount = 0;
+			pipelineLayoutInfo.setLayoutCount = 1;
+			pipelineLayoutInfo.pSetLayouts = descriptorPool.getLayouts();
 			pipelineLayoutInfo.pushConstantRangeCount = 0;
 
 			if (vkCreatePipelineLayout(LOGICAL_DEVICE_DEVICE, &pipelineLayoutInfo, nullptr, &layout) != VK_SUCCESS)
@@ -170,6 +174,25 @@ namespace SSE
 				return false;
 			}
 
+			for (int i = 0; i < frameBuffers.size(); ++i)
+			{
+				UniformBuffer<MatricesObject> uniformBuffer;
+				if (!uniformBuffer.create())
+				{
+					return false;
+				}
+				uniformBuffers.push_back(uniformBuffer);
+			}
+
+			if (!descriptorPool.create(frameBuffers.size()))
+			{
+				return false;
+			}
+
+			for (int i = 0; i < frameBuffers.size(); ++i)
+			{
+				uniformBuffers[i].updateDescriptorSet(descriptorPool.getDescriptorSet(i));
+			}
 
 			if (!commandPool.create())
 			{
@@ -221,6 +244,15 @@ namespace SSE
 		
 			vertexBuffer.destroy();
 
+			for (int u = 0; u < uniformBuffers.size(); ++u)
+			{
+				uniformBuffers[u].destroy();
+			}
+
+			uniformBuffers.clear();
+
+			descriptorPool.destroy();
+
 			for (int s = 0; s < MAX_FRAMES_IN_FLIGHT; ++s)
 			{
 				vkDestroySemaphore(LOGICAL_DEVICE_DEVICE, renderFinishedSemaphores[s], nullptr);
@@ -268,6 +300,8 @@ namespace SSE
 				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to acquire swap chain image.");
 				return false;
 			}
+
+			updateUniformBuffers(imageIndex);
 
 			if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) 
 			{
@@ -373,6 +407,16 @@ namespace SSE
 				return false;
 			}
 
+			for (int i = 0; i < frameBuffers.size(); ++i)
+			{
+				UniformBuffer<MatricesObject> uniformBuffer;
+				if (!uniformBuffer.create())
+				{
+					return false;
+				}
+				uniformBuffers.push_back(uniformBuffer);
+			}
+
 			if (!constructPipeline())
 			{
 				return false;
@@ -428,7 +472,9 @@ namespace SSE
 
 				vkCmdBindIndexBuffer(currentCommandBuffer, vertexBuffer.getIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
 
-				vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(vertexBuffer.getIndexCount()), 1, 0, 0, 0);
+				vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &descriptorPool.getDescriptorSet(i), 0, nullptr);
+
+				vkCmdDrawIndexed(currentCommandBuffer, vertexBuffer.getIndexCount(), 1, 0, 0, 0);
 
 				vkCmdEndRenderPass(currentCommandBuffer);
 
@@ -440,6 +486,23 @@ namespace SSE
 			}
 
 			return true;
+		}
+
+		void GraphicsPipeline::updateUniformBuffers(unsigned int imageIndex)
+		{
+			static auto startTime = std::chrono::high_resolution_clock::now();
+
+			auto currentTime = std::chrono::high_resolution_clock::now();
+			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+			MatricesObject ubo;
+
+			ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(sin(time), cos(time), 1.0f));
+			ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			ubo.proj = glm::perspective(glm::radians(45.0f), (float)swapChain.getExtent().width / (float)swapChain.getExtent().height, 0.1f, 10.0f);
+			ubo.proj[1][1] *= -1;
+
+			uniformBuffers[imageIndex].updateBuffer(ubo);
 		}
 	}
 }

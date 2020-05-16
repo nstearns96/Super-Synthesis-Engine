@@ -11,8 +11,9 @@ namespace SSE
 	{
 		bool VulkanVertexBuffer::create(const std::vector<Vertex>& _vertices, const std::vector<uint16_t> _indices)
 		{
-			if(!vertexBuffer.create((void *)_vertices.data(), sizeof(Vertex) * _vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-				|| !indexBuffer.create((void *)_indices.data(), sizeof(uint16_t) * _indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
+			if(!vertexBuffer.create(sizeof(Vertex) * _vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+				|| !indexBuffer.create(sizeof(uint16_t) * _indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+				|| !vertexBuffer.bufferData((void *)_vertices.data()) || !indexBuffer.bufferData((void *)_indices.data()))
 			{
 				return false;
 			}
