@@ -1,5 +1,7 @@
 #include "Vulkan/VulkanCommandPool.h"
 
+#include "EngineTypeDefs.h"
+
 #include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Logging/Logger.h"
 
@@ -34,12 +36,12 @@ namespace SSE
 
 		void VulkanCommandPool::freeBuffers()
 		{
-			vkFreeCommandBuffers(LOGICAL_DEVICE_DEVICE, commandPool, commandBuffers.size(), commandBuffers.data());
+			vkFreeCommandBuffers(LOGICAL_DEVICE_DEVICE, commandPool, (u32)commandBuffers.size(), commandBuffers.data());
 
 			commandBuffers.clear();
 		}
 
-		bool VulkanCommandPool::allocateBuffers(unsigned int numBuffers)
+		bool VulkanCommandPool::allocateBuffers(u32 numBuffers)
 		{
 			commandBuffers.resize(numBuffers);
 
@@ -47,23 +49,75 @@ namespace SSE
 			allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 			allocInfo.commandPool = commandPool;
 			allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-			allocInfo.commandBufferCount = (uint32_t)commandBuffers.size();
+			allocInfo.commandBufferCount = (u32)commandBuffers.size();
 
 			if (vkAllocateCommandBuffers(LOGICAL_DEVICE_DEVICE, &allocInfo, commandBuffers.data()) != VK_SUCCESS)
 			{
 				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to allocate command buffers.");
+				commandBuffers.clear();
 				return false;
 			}
 
 			return true;
 		}
 
-		VkCommandBuffer& VulkanCommandPool::getNewCommandBuffer(unsigned int index)
+		bool VulkanCommandPool::beginBuffers()
+		{
+			VkCommandBufferBeginInfo beginInfo{};
+			beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+			beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+			for (st b = 0; b < commandBuffers.size(); ++b)
+			{
+				if (vkBeginCommandBuffer(commandBuffers[b], &beginInfo) != VK_SUCCESS)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		bool VulkanCommandPool::endBuffers()
+		{
+			for (st b = 0; b < commandBuffers.size(); ++b)
+			{
+				if (vkEndCommandBuffer(commandBuffers[b]) != VK_SUCCESS)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		bool VulkanCommandPool::execute(bool waitGraphics)
+		{
+			VkSubmitInfo submitInfo{};
+			submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+			submitInfo.commandBufferCount = (u32)commandBuffers.size();
+			submitInfo.pCommandBuffers = commandBuffers.data();
+
+			VulkanLogicalDevice logicalDevice = LOGICAL_DEVICE;
+			if (logicalDevice.submit(submitInfo, nullptr) != VK_SUCCESS)
+			{
+				return false;
+			}
+
+			if (waitGraphics)
+			{
+				logicalDevice.waitGraphicsIdle();
+			}
+
+			return true;
+		}
+
+		VkCommandBuffer& VulkanCommandPool::getNewCommandBuffer(u32 index)
 		{
 			return commandBuffers[index% commandBuffers.size()];
 		}
 
-		const VkCommandBuffer* VulkanCommandPool::getCommandBuffer(unsigned int index)
+		const VkCommandBuffer* VulkanCommandPool::getCommandBuffer(u32 index)
 		{
 			return &commandBuffers[index % commandBuffers.size()];
 		}

@@ -3,22 +3,28 @@
 
 #include <vulkan/vulkan.h>
 
+#include "EngineTypeDefs.h"
+#include "Vulkan/Memory/VulkanDeviceMemory.h"
+#include "Vulkan/Graphics/VulkanImage.h"
+
 namespace SSE::Vulkan
 {
 	class VulkanBuffer
 	{
 	private:
 		VkBuffer buffer;
-		VkDeviceMemory bufferMemory;
-		uint64_t size;
+		VulkanDeviceMemory bufferMemory;
+		u64 size;
 
 	public:
-		bool create(uint64_t _size, unsigned int usageFlags, unsigned int memoryFlags);
+		bool create(u64 _size, bitfield usageFlags, bitfield memoryFlags);
 
 		void destroy();
 
 		VkBuffer getBuffer();
+		u64 getSize();
 		bool bufferData(void* data, bool useStagingBuffer = true);
+		bool copyToImage(VulkanImage& image);
 	};
 }
 

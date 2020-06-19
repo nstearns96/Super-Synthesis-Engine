@@ -10,6 +10,8 @@
 #include "Graphics/Shader.h"
 #include "Window/WindowManager.h"
 #include "Model/Vertex.h"
+#include "Graphics/Texture2D.h"
+#include "Resources/ResourceManager.h"
 
 namespace SSE
 {
@@ -42,7 +44,7 @@ namespace SSE
 			auto attributeDescriptions = Vertex::getAttributeDescriptions();
 
 			vertexInputInfo.vertexBindingDescriptionCount = 1;
-			vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+			vertexInputInfo.vertexAttributeDescriptionCount = (u32)attributeDescriptions.size();
 			vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
 			vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
@@ -54,8 +56,8 @@ namespace SSE
 			VkViewport viewport{};
 			viewport.x = 0.0f;
 			viewport.y = 0.0f;
-			viewport.width = (float)swapChain.getExtent().width;
-			viewport.height = (float)swapChain.getExtent().height;
+			viewport.width = (r32)swapChain.getExtent().width;
+			viewport.height = (r32)swapChain.getExtent().height;
 			viewport.minDepth = 0.0f;
 			viewport.maxDepth = 1.0f;
 
@@ -115,7 +117,7 @@ namespace SSE
 
 			VkGraphicsPipelineCreateInfo pipelineInfo{};
 			pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-			pipelineInfo.stageCount = shaderStages.size();
+			pipelineInfo.stageCount = (u32)shaderStages.size();
 			pipelineInfo.pStages = shaderStages.data();
 			pipelineInfo.pVertexInputState = &vertexInputInfo;
 			pipelineInfo.pInputAssemblyState = &inputAssembly;
@@ -141,7 +143,7 @@ namespace SSE
 
 		bool GraphicsPipeline::create()
 		{
-			glm::vec2 frameBufferDimensions = WindowManager::gWindowManager.getWindowFrameBufferDimensions();
+			glm::uvec2 frameBufferDimensions = WindowManager::gWindowManager.getWindowFrameBufferDimensions();
 
 			if (!swapChain.create(surface, frameBufferDimensions))
 			{
@@ -158,23 +160,24 @@ namespace SSE
 				return false;
 			}
 
-			if (!vertexBuffer.create(
-				{
-					{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-					{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-					{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-					{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
-				},
-				{
-					 0, 1, 2, 2, 3, 0
-				}
+			if (!vertexBuffer.create
+				(
+					{
+						{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+						{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+						{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+						{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+					},
+					{
+						0, 1, 2, 2, 3, 0
+					}
 				)
 			)
 			{
 				return false;
 			}
 
-			for (int i = 0; i < frameBuffers.size(); ++i)
+			for (u32 i = 0; i < frameBuffers.size(); ++i)
 			{
 				UniformBuffer<MatricesObject> uniformBuffer;
 				if (!uniformBuffer.create())
@@ -184,14 +187,15 @@ namespace SSE
 				uniformBuffers.push_back(uniformBuffer);
 			}
 
-			if (!descriptorPool.create(frameBuffers.size()))
+			if (!descriptorPool.create((u32)frameBuffers.size()))
 			{
 				return false;
 			}
 
-			for (int i = 0; i < frameBuffers.size(); ++i)
+			for (u32 i = 0; i < frameBuffers.size(); ++i)
 			{
-				uniformBuffers[i].updateDescriptorSet(descriptorPool.getDescriptorSet(i));
+				Texture2D texture = ResourceManager::getTexture("texture");
+				descriptorPool.updateDescriptorSet(i, uniformBuffers[i].getBuffer(), texture.getImageView(), texture.getSampler());
 			}
 
 			if (!commandPool.create())
@@ -222,7 +226,7 @@ namespace SSE
 			fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 			fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-			for (int s = 0; s < MAX_FRAMES_IN_FLIGHT; ++s)
+			for (st s = 0; s < MAX_FRAMES_IN_FLIGHT; ++s)
 			{
 				if (vkCreateSemaphore(LOGICAL_DEVICE_DEVICE, &semaphoreInfo, nullptr, &imageAvailableSemaphores[s]) != VK_SUCCESS ||
 					vkCreateSemaphore(LOGICAL_DEVICE_DEVICE, &semaphoreInfo, nullptr, &renderFinishedSemaphores[s]) != VK_SUCCESS ||
@@ -244,7 +248,7 @@ namespace SSE
 		
 			vertexBuffer.destroy();
 
-			for (int u = 0; u < uniformBuffers.size(); ++u)
+			for (st u = 0; u < uniformBuffers.size(); ++u)
 			{
 				uniformBuffers[u].destroy();
 			}
@@ -253,7 +257,7 @@ namespace SSE
 
 			descriptorPool.destroy();
 
-			for (int s = 0; s < MAX_FRAMES_IN_FLIGHT; ++s)
+			for (st s = 0; s < MAX_FRAMES_IN_FLIGHT; ++s)
 			{
 				vkDestroySemaphore(LOGICAL_DEVICE_DEVICE, renderFinishedSemaphores[s], nullptr);
 				vkDestroySemaphore(LOGICAL_DEVICE_DEVICE, imageAvailableSemaphores[s], nullptr);
@@ -285,7 +289,7 @@ namespace SSE
 				return false;
 			}
 
-			uint32_t imageIndex;
+			u32 imageIndex;
 			VkResult result = vkAcquireNextImageKHR(LOGICAL_DEVICE_DEVICE, swapChain.getSwapChain(), UINT64_MAX,
 				imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
@@ -390,7 +394,7 @@ namespace SSE
 			}
 
 #pragma message("TODO: If the active window has changed, this may cause a crash. Add functionality to check for that")
-			glm::vec2 frameBufferDimensions = WindowManager::gWindowManager.getWindowFrameBufferDimensions();
+			glm::uvec2 frameBufferDimensions = WindowManager::gWindowManager.getWindowFrameBufferDimensions();
 
 			if (!swapChain.create(surface, frameBufferDimensions))
 			{
@@ -407,7 +411,7 @@ namespace SSE
 				return false;
 			}
 
-			for (int i = 0; i < frameBuffers.size(); ++i)
+			for (u32 i = 0; i < frameBuffers.size(); ++i)
 			{
 				UniformBuffer<MatricesObject> uniformBuffer;
 				if (!uniformBuffer.create())
@@ -432,12 +436,12 @@ namespace SSE
 
 		bool GraphicsPipeline::constructCommandBuffers()
 		{
-			if (!commandPool.allocateBuffers(frameBuffers.size()))
+			if (!commandPool.allocateBuffers((u32)frameBuffers.size()))
 			{
 				return false;
 			}
 
-			for (size_t i = 0; i < frameBuffers.size(); i++)
+			for (u32 i = 0; i < frameBuffers.size(); i++)
 			{
 				VkCommandBuffer& currentCommandBuffer = commandPool.getNewCommandBuffer(i);
 
@@ -474,7 +478,7 @@ namespace SSE
 
 				vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &descriptorPool.getDescriptorSet(i), 0, nullptr);
 
-				vkCmdDrawIndexed(currentCommandBuffer, vertexBuffer.getIndexCount(), 1, 0, 0, 0);
+				vkCmdDrawIndexed(currentCommandBuffer, (u32)vertexBuffer.getIndexCount(), 1, 0, 0, 0);
 
 				vkCmdEndRenderPass(currentCommandBuffer);
 
@@ -488,18 +492,18 @@ namespace SSE
 			return true;
 		}
 
-		void GraphicsPipeline::updateUniformBuffers(unsigned int imageIndex)
+		void GraphicsPipeline::updateUniformBuffers(u32 imageIndex)
 		{
 			static auto startTime = std::chrono::high_resolution_clock::now();
 
 			auto currentTime = std::chrono::high_resolution_clock::now();
-			float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+			r32 time = std::chrono::duration<r32, std::chrono::seconds::period>(currentTime - startTime).count();
 
 			MatricesObject ubo;
 
 			ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(sin(time), cos(time), 1.0f));
 			ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-			ubo.proj = glm::perspective(glm::radians(45.0f), (float)swapChain.getExtent().width / (float)swapChain.getExtent().height, 0.1f, 10.0f);
+			ubo.proj = glm::perspective(glm::radians(45.0f), (r32)swapChain.getExtent().width / (r32)swapChain.getExtent().height, 0.1f, 10.0f);
 			ubo.proj[1][1] *= -1;
 
 			uniformBuffers[imageIndex].updateBuffer(ubo);

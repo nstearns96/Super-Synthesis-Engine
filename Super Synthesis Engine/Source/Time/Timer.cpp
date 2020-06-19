@@ -24,12 +24,12 @@ namespace SSE
 	{
 		if (perfCountEnd < perfCountStart)
 		{
-			return (double(SDL_GetPerformanceCounter() - 
+			return ((r64) (SDL_GetPerformanceCounter() - 
 				perfCountStart)) / perfFreq;
 		}
 		else
 		{
-			return (double(perfCountEnd - perfCountEnd)) / perfFreq;
+			return ((r64)(perfCountEnd - perfCountEnd)) / perfFreq;
 		}
 	}
 }

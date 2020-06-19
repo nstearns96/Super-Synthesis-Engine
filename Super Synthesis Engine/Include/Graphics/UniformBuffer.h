@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <vulkan/vulkan.h>
 
-#include "Vulkan/VulkanBuffer.h"
+#include "Vulkan/Memory/VulkanBuffer.h"
 #include "Vulkan/Devices/VulkanDeviceManager.h"
 
 namespace SSE::Graphics
@@ -27,32 +27,14 @@ namespace SSE::Graphics
 			uniformBuffer.destroy();
 		}
 
+		Vulkan::VulkanBuffer getBuffer()
+		{
+			return uniformBuffer;
+		}
+
 		bool updateBuffer(const T& object)
 		{
 			return uniformBuffer.bufferData((void *)&object, false);
-		}
-
-		void updateDescriptorSet(VkDescriptorSet descriptorSet)
-		{
-			VkDescriptorBufferInfo bufferInfo{};
-			bufferInfo.buffer = uniformBuffer.getBuffer();
-			bufferInfo.offset = 0;
-			bufferInfo.range = sizeof(T);
-
-			VkWriteDescriptorSet descriptorWrite{};
-			descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptorWrite.dstSet = descriptorSet;
-			descriptorWrite.dstBinding = 0;
-			descriptorWrite.dstArrayElement = 0;
-
-			descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			descriptorWrite.descriptorCount = 1;
-
-			descriptorWrite.pBufferInfo = &bufferInfo;
-			descriptorWrite.pImageInfo = nullptr;
-			descriptorWrite.pTexelBufferView = nullptr;
-
-			vkUpdateDescriptorSets(LOGICAL_DEVICE_DEVICE, 1, &descriptorWrite, 0, nullptr);
 		}
 	};
 }

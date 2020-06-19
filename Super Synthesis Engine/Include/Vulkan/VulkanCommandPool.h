@@ -23,10 +23,14 @@ namespace SSE::Vulkan
 		void destroy();
 
 		void freeBuffers();
-		bool allocateBuffers(unsigned int numBuffers);
+		bool allocateBuffers(u32 numBuffers);
 
-		VkCommandBuffer& getNewCommandBuffer(unsigned int index);
-		const VkCommandBuffer* getCommandBuffer(unsigned int index);
+		bool beginBuffers();
+		bool endBuffers();
+		bool execute(bool waitGraphics = true);
+
+		VkCommandBuffer& getNewCommandBuffer(u32 index);
+		const VkCommandBuffer* getCommandBuffer(u32 index);
 	};
 }
 

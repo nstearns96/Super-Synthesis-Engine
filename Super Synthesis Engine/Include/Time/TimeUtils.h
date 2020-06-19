@@ -16,7 +16,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #elif defined(__gnu_linux__) || defined(__APPLE__)
-#define LOCAL_TIME(tm,tt) localtime_r(&tm,&tt)
+#define LOCAL_TIME(tm,tt) (localtime_r(&tm,&tt))
 #else
 #define LOCAL_TIME(tm,tt) (tm = localtime(&tt))
 #define _CRT_SECURE_NO_WARNINGS
@@ -50,7 +50,7 @@ namespace SSE::TimeUtils
 		return resultStream.str();
 	}
 
-	unsigned int getTicks()
+	u32 getTicks()
 	{
 		return SDL_GetTicks();
 	}

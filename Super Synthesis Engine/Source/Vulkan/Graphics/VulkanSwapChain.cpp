@@ -11,7 +11,7 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanSwapChain::create(VulkanSurface& surface, const glm::vec2& dimensions)
+		bool VulkanSwapChain::create(VulkanSurface& surface, const glm::uvec2& dimensions)
 		{
 			if (dimensions.x == 0 || dimensions.y == 0)
 			{
@@ -25,7 +25,7 @@ namespace SSE
 			for (const auto& availableFormat : details.formats)
 			{
 #pragma message("TODO: Add functionality for calling a function to get required surface formats")
-				if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) 
+				if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
 				{
 					swapSurfaceFormat = availableFormat;
 					foundFormat = true;
@@ -94,7 +94,7 @@ namespace SSE
 			createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 			
 			VulkanPhysicalDevice activePhysicalDevice = VulkanDeviceManager::gDeviceManager.getActivePhysicalDevice();
-			unsigned int families[] = { activePhysicalDevice.getGraphicsFamilyIndex(), activePhysicalDevice.getPresentFamilyIndex() };
+			u32 families[] = { activePhysicalDevice.getGraphicsFamilyIndex(), activePhysicalDevice.getPresentFamilyIndex() };
 			if (families[0] == families[1])
 			{
 				createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -144,28 +144,9 @@ namespace SSE
 
 			imageViews.resize(images.size());
 
-			for (int i = 0; i < imageViews.size(); ++i)
+			for (st i = 0; i < imageViews.size(); ++i)
 			{
-				VkImageViewCreateInfo createInfo{};
-				createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-				createInfo.image = images[i];
-				createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-				createInfo.format = swapSurfaceFormat.format;
-				createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-				createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-				createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-				createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-				createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				createInfo.subresourceRange.baseMipLevel = 0;
-				createInfo.subresourceRange.levelCount = 1;
-				createInfo.subresourceRange.baseArrayLayer = 0;
-				createInfo.subresourceRange.layerCount = 1;
-
-				if (vkCreateImageView(activeLogicalDevice.getDevice(), &createInfo, nullptr, &imageViews[i]) != VK_SUCCESS)
-				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create image view for swap chain.");
-					return false;
-				}
+				imageViews[i].create(images[i], VK_FORMAT_B8G8R8A8_SRGB);
 			}
 
 			return true;
@@ -175,7 +156,7 @@ namespace SSE
 		{
 			for (auto imageView : imageViews)
 			{
-				vkDestroyImageView(LOGICAL_DEVICE_DEVICE, imageView, nullptr);
+				imageView.destroy();
 			}
 
 			imageViews.resize(0);
@@ -200,11 +181,11 @@ namespace SSE
 		{
 			outFramebuffers.resize(imageViews.size());
 
-			for (size_t i = 0; i < imageViews.size(); i++)
+			for (st i = 0; i < imageViews.size(); i++)
 			{
 				VkImageView attachments[] = 
 				{
-					imageViews[i]
+					imageViews[i].getImageView()
 				};
 
 				VkFramebufferCreateInfo framebufferInfo{};
@@ -231,9 +212,9 @@ namespace SSE
 			return swapChain;
 		}
 
-		unsigned int VulkanSwapChain::getImagesInFlight()
+		u32 VulkanSwapChain::getImagesInFlight()
 		{
-			return images.size();
+			return (u32)images.size();
 		}
 	}
 }

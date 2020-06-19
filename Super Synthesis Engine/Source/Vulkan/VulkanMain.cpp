@@ -9,7 +9,7 @@ namespace SSE::Vulkan
 {
 	bool initVulkan(Window& window, VulkanSurface& surface)
 	{
-		VulkanInstance::gInstance.create(window);
+		VulkanInstance::gInstance.create();
 
 		ValidationLayers::initDebugExtensions();
 

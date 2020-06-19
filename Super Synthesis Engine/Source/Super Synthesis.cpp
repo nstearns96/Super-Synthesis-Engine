@@ -9,6 +9,7 @@
 #include "Graphics/GraphicsPipeline.h"
 #include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Vulkan/Graphics/VulkanSurface.h"
+#include "Resources/ResourceManager.h"
 
 SSE::Graphics::GraphicsPipeline* gPipeline = nullptr;
 
@@ -22,7 +23,7 @@ namespace SSE
 
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		{
-			gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to intialize SDL!");
+			gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to initialize SDL!");
 			return false;
 		}
 
@@ -36,6 +37,8 @@ namespace SSE
 
 		gPipeline = new Graphics::GraphicsPipeline;
 		Vulkan::initVulkan(WindowManager::gWindowManager.getActiveWindow(), gPipeline->surface);
+
+		ResourceManager::loadTexture("texture", "test.bmp");
 
 		gPipeline->create();
 
@@ -80,6 +83,8 @@ namespace SSE
 	{
 		gPipeline->destroy();
 		delete gPipeline;
+
+		ResourceManager::clear();
 
 		Vulkan::cleanupVulkan();
 

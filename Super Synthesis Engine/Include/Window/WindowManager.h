@@ -20,17 +20,17 @@ namespace SSE
 
 		static WindowManager gWindowManager;
 
-		bool createWindow(const std::string& windowName, const char* title, const glm::vec2& position, const glm::vec2& dimensions, unsigned int flags, bool setActive);
+		bool createWindow(const std::string& windowName, const char* title, const glm::uvec2& position, const glm::uvec2& dimensions, u32 flags, bool setActive);
 		bool setActiveWindow(const std::string& windowName);
 		const Window* getWindow(const std::string& windowName) const;
 		Window& getActiveWindow() const;
 		bool destroyWindow(const std::string& windowName);
 
-		glm::vec2 getWindowFrameBufferDimensions() const;
+		glm::uvec2 getWindowFrameBufferDimensions() const;
 
-		unsigned int getWindowCount() const;
+		st getWindowCount() const;
 		void clear();
-		unsigned int handleEvents(const SDL_Event& e);;
+		WindowEventResult handleEvents(const SDL_Event& e);;
 	};
 
 }

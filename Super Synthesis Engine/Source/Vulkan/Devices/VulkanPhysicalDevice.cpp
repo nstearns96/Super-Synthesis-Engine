@@ -16,7 +16,7 @@ namespace SSE
 			}
 			else
 			{
-				for (int i = 0; i < queueFamilies.size(); ++i)
+				for (u32 i = 0; i < queueFamilies.size(); ++i)
 				{
 					if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 					{
@@ -33,14 +33,18 @@ namespace SSE
 				}
 			}
 
-			return graphicsFamily != nullptr && presentFamily != nullptr && querySwapChainSupport(surface);
+#pragma message("TODO: Query this from required optional device features")
+			VkPhysicalDeviceFeatures supportedFeatures;
+			vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
+
+			return graphicsFamily != nullptr && presentFamily != nullptr && querySwapChainSupport(surface) && supportedFeatures.samplerAnisotropy;
 		}
 
 		bool VulkanPhysicalDevice::initDevice(VkPhysicalDevice _device)
 		{
 			device = _device;
 
-			uint32_t queueFamilyCount = 0;
+			u32 queueFamilyCount = 0;
 			vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
 			if (queueFamilyCount == 0) return false;
@@ -50,20 +54,20 @@ namespace SSE
 			return true;
 		}
 
-		unsigned int VulkanPhysicalDevice::getGraphicsFamilyIndex()
+		u32 VulkanPhysicalDevice::getGraphicsFamilyIndex()
 		{
 			if (graphicsFamily != nullptr)
 			{
-				return graphicsFamily - &queueFamilies[0];
+				return (u32)(graphicsFamily - &queueFamilies[0]);
 			}
 			else return 0;
 		}
 
-		unsigned int VulkanPhysicalDevice::getPresentFamilyIndex()
+		u32 VulkanPhysicalDevice::getPresentFamilyIndex()
 		{
 			if (presentFamily != nullptr)
 			{
-				return presentFamily - &queueFamilies[0];
+				return (u32)(presentFamily - &queueFamilies[0]);
 			}
 			else return 0;
 		}
@@ -79,10 +83,11 @@ namespace SSE
 
 			vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface.getSurface(), &details.capabilities);
 
-			uint32_t formatCount;
+			u32 formatCount;
 			vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface.getSurface(), &formatCount, nullptr);
 
-			if (formatCount != 0) {
+			if (formatCount != 0) 
+			{
 				details.formats.resize(formatCount);
 				vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface.getSurface(), &formatCount, details.formats.data());
 			}
@@ -92,7 +97,7 @@ namespace SSE
 				return false;
 			}
 
-			uint32_t presentModeCount;
+			u32 presentModeCount;
 			vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface.getSurface(), &presentModeCount, nullptr);
 
 			if (presentModeCount != 0) {
@@ -114,7 +119,7 @@ namespace SSE
 
 			vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface.getSurface(), &details.capabilities);
 
-			uint32_t formatCount;
+			u32 formatCount;
 			vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface.getSurface(), &formatCount, nullptr);
 
 			if (formatCount != 0) {
@@ -127,7 +132,7 @@ namespace SSE
 				return details;
 			}
 
-			uint32_t presentModeCount;
+			u32 presentModeCount;
 			vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface.getSurface(), &presentModeCount, nullptr);
 
 			if (presentModeCount != 0) {

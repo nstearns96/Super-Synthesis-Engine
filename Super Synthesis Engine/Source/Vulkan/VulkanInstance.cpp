@@ -15,7 +15,7 @@ namespace SSE
 
 		VulkanInstance::VulkanInstance() {};
 
-		bool VulkanInstance::create(Window& window)
+		bool VulkanInstance::create()
 		{
 			VkApplicationInfo appInfo = {};
 			appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -38,11 +38,11 @@ namespace SSE
 
 			std::vector<const char*> layers = Vulkan::ValidationLayers::getRequiredLayers();
 
-			createInfo.enabledLayerCount = layers.size();
+			createInfo.enabledLayerCount = (u32)layers.size();
 			createInfo.ppEnabledLayerNames = layers.data();
 
 			auto extensions = Vulkan::ValidationLayers::getRequiredExtensions();
-			createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+			createInfo.enabledExtensionCount = (u32)extensions.size();
 			createInfo.ppEnabledExtensionNames = extensions.data();
 
 			VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;

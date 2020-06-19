@@ -1,5 +1,6 @@
 #include "Graphics/Shader.h"
 
+#include "EngineTypeDefs.h"
 #include "Logging/Logger.h"
 
 namespace SSE
@@ -10,12 +11,12 @@ namespace SSE
 	{
 		bool Shader::create(const std::vector<std::string>& sourceFiles, const std::vector<Vulkan::ShaderModuleType>& moduleTypes)
 		{
-			for (int i = 0; i < sourceFiles.size(); ++i)
+			for (st i = 0; i < sourceFiles.size(); ++i)
 			{
 				SSE::FileHandle sourceFile;
 				sourceFile.open("Source\\Shaders\\" + sourceFiles[i], FioMode::FIOM_BINARY | FioMode::FIOM_READ);
 
-				const std::vector<char> source = sourceFile.readIntoVector();
+				const std::vector<byte> source = sourceFile.readIntoVector();
 
 				Vulkan::VulkanShaderModule shaderModule;
 				if (!shaderModule.create(source, moduleTypes[i]))
@@ -32,7 +33,7 @@ namespace SSE
 
 		void Shader::destroy()
 		{
-			for (int i = 0; i < shaderModules.size(); ++i)
+			for (st i = 0; i < shaderModules.size(); ++i)
 			{
 				shaderModules[i].destroy();
 			}
@@ -40,7 +41,7 @@ namespace SSE
 
 		Vulkan::VulkanShaderModule Shader::getShaderModule(Vulkan::ShaderModuleType moduleType)
 		{
-			for (int i = 0; i < shaderModules.size(); ++i)
+			for (st i = 0; i < shaderModules.size(); ++i)
 			{
 				if (shaderModules[i].getModuleType() == moduleType)
 				{

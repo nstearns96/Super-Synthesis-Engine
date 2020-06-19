@@ -3,6 +3,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include "EngineTypeDefs.h"
+
 #include "Vulkan/Graphics/VulkanSurface.h"
 #include "Vulkan/Graphics/VulkanRenderPass.h"
 #include "Vulkan/VulkanCommandPool.h"
@@ -12,7 +14,7 @@
 
 namespace SSE::Graphics
 {
-	static const int MAX_FRAMES_IN_FLIGHT = 2;
+	static const i32 MAX_FRAMES_IN_FLIGHT = 2;
 
 	struct MatricesObject
 	{
@@ -38,13 +40,13 @@ namespace SSE::Graphics
 		std::vector<UniformBuffer<MatricesObject>> uniformBuffers;
 		Vulkan::VulkanDescriptorPool descriptorPool;
 
-		unsigned int currentFrame;
+		u32 currentFrame;
 
 		bool recreateSwapChain();
 		bool constructPipeline();
 		bool constructCommandBuffers();
 
-		void updateUniformBuffers(unsigned int imageIndex);
+		void updateUniformBuffers(u32 imageIndex);
 
 	public:
 		Vulkan::VulkanSurface surface;

@@ -8,13 +8,15 @@
 
 #include <string>
 
+#include "EngineTypeDefs.h"
+
 namespace SSE
 {
 	struct Error
 	{
 		std::string message;
-		unsigned int level;
-		unsigned int code;
+		u32 level;
+		u32 code;
 	};
 }
 

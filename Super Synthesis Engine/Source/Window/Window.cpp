@@ -6,18 +6,20 @@ namespace SSE
 {
 	extern Logger gLogger;
 
-	Window::Window(const char* title, glm::vec2 _position, glm::vec2 _dimensions, unsigned int flags)
+	Window::Window(const char* title, const glm::uvec2& _position, const glm::uvec2& _dimensions, bitfield flags)
 	{
+#pragma message("TODO: Handle custom window positions")
 		window = SDL_CreateWindow(title, _position.x, _position.y, _dimensions.x, _dimensions.y, SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-		if (window == NULL) {
+		if (window == nullptr) 
+		{
 			gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to open window. " + std::string(SDL_GetError()));
 		}
 		else
 		{
 			id = SDL_GetWindowID(window);
-			int x, y;
+			i32 x, y;
 			SDL_GetWindowPosition(window, &x, &y);
-			position = glm::vec2{x,y};
+			position = glm::uvec2{x,y};
 			dimensions = _dimensions;
 			status = flags;
 		}
@@ -31,32 +33,32 @@ namespace SSE
 		return window;
 	}
 
-	unsigned int Window::getID()
+	u32 Window::getID()
 	{
 		return id;
 	}
 
-	unsigned int Window::getStatus()
+	bitfield Window::getStatus()
 	{
 		return status;
 	}
 
-	void Window::setStatus(unsigned int flags, bool setFlags)
+	void Window::setStatus(bitfield flags, bool setFlags)
 	{
 		status = setFlags ? (status | flags) : (status & (~flags));
 	}
 
-	void Window::setStatus(unsigned int flags)
+	void Window::setStatus(bitfield flags)
 	{
 		status = flags;
 	}
 
-	int Window::getWidth()
+	u32 Window::getWidth()
 	{
 		return dimensions.x;
 	}
 
-	int Window::getHeight()
+	u32 Window::getHeight()
 	{
 		return dimensions.y;
 	}
@@ -80,11 +82,10 @@ namespace SSE
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
 		case SDL_WINDOWEVENT_RESIZED:
 		{
-			int w;
-			int h;
+			i32 w, h;
 			SDL_GetWindowSize(window, &w, &h);
 
-			if (w != dimensions.x || h != dimensions.y)
+			if ((u32)w != dimensions.x || (u32)h != dimensions.y)
 			{
 				dimensions = { w,h };
 				return RESULT_SIZE_CHANGE;
@@ -144,6 +145,11 @@ namespace SSE
 		{
 			SDL_HideWindow(window);
 			return RESULT_WINDOW_CLOSE;
+			break;
+		}
+		default:
+		{
+			return RESULT_NONE;
 			break;
 		}
 		}

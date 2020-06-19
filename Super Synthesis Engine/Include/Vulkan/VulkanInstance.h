@@ -16,7 +16,7 @@ namespace SSE::Vulkan
 	public:
 		static VulkanInstance gInstance;
 
-		bool create(Window& window);
+		bool create();
 		void destroy();
 
 		VkInstance getInstance();

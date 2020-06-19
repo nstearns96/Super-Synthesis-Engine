@@ -10,6 +10,8 @@
 #include <SDL/SDL_events.h>
 #include <string>
 
+#include "EngineTypeDefs.h"
+
 namespace SSE
 {
 	enum WindowEventResult
@@ -33,26 +35,26 @@ namespace SSE
 	private:
 		SDL_Window* window = nullptr;
 
-		glm::vec2 dimensions;
-		glm::vec2 position;
+		glm::uvec2 dimensions;
+		glm::uvec2 position;
 
-		unsigned int id = 0;
-		unsigned int status = 0x0;
+		u32 id = 0;
+		bitfield status = 0x0;
 
 	public:
-		Window(const char* title, glm::vec2 position = glm::vec2(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED),
-			glm::vec2 dimensions = glm::vec2(1920,1080), unsigned int flags = WINDOW_SHOWN);
+		Window(const char* title, const glm::uvec2& _position = glm::uvec2(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED),
+			const glm::uvec2& _dimensions = glm::uvec2(1920,1080), bitfield flags = WINDOW_SHOWN);
 		Window() {};
 		~Window();
 
 		SDL_Window* getWindow();
-		unsigned int getStatus();
-		void setStatus(unsigned int flags, bool setFlags);
-		void setStatus(unsigned int status);
-		unsigned int getID();
+		bitfield getStatus();
+		void setStatus(bitfield flags, bool setFlags);
+		void setStatus(bitfield status);
+		u32 getID();
 
-		int getWidth();
-		int getHeight();
+		u32 getWidth();
+		u32 getHeight();
 
 		WindowEventResult handleEvent(const SDL_Event& e);
 

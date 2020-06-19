@@ -24,7 +24,7 @@ namespace SSE
 		{
 			VkInstance instance = VulkanInstance::gInstance.getInstance();
 
-			uint32_t deviceCount = 0;
+			u32 deviceCount = 0;
 			vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
 			if (deviceCount == 0) {
@@ -63,7 +63,7 @@ namespace SSE
 
 		bool VulkanDeviceManager::checkDeviceExtensionSupport(VulkanPhysicalDevice physicalDevice)
 		{
-			uint32_t extensionCount;
+			u32 extensionCount;
 			vkEnumerateDeviceExtensionProperties(physicalDevice.getDevice(), nullptr, &extensionCount, nullptr);
 
 			std::vector<VkExtensionProperties> availableExtensions(extensionCount);

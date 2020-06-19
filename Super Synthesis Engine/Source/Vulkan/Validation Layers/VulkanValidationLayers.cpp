@@ -12,6 +12,8 @@ namespace SSE::Vulkan::ValidationLayers
 {
 	VkDebugUtilsMessengerEXT debugMessenger;
 
+#pragma message("TODO: Utilize vulkan callback variables")
+#pragma warning(push, 0)
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback
 	(
 		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -25,10 +27,11 @@ namespace SSE::Vulkan::ValidationLayers
 
 		return VK_FALSE;
 	}
+#pragma warning(pop)
 
 	bool checkValidationLayerSupport()
 	{
-		unsigned int layerCount;
+		u32 layerCount;
 		vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
 		std::vector<VkLayerProperties> layers(layerCount);
@@ -93,7 +96,7 @@ namespace SSE::Vulkan::ValidationLayers
 
 	std::vector<const char*> getRequiredExtensions()
 	{
-		unsigned int count;
+		u32 count;
 		std::vector<const char*> extensions;
 		if (SDL_Vulkan_GetInstanceExtensions(nullptr, &count, nullptr) != SDL_TRUE)
 		{

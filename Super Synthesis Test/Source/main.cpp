@@ -1,10 +1,12 @@
 #include <Include/Super Synthesis.h>
 
-void main()
+int main()
 {
 	SSE::initSubSystems();
 
 	SSE::mainLoop();
 
 	SSE::cleanup();
+
+	return 0;
 }

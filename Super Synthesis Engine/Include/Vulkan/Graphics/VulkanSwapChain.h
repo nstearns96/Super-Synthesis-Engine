@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "VulkanSurface.h"
+#include "Vulkan/Graphics/VulkanImageView.h"
 
 namespace SSE::Vulkan
 {
@@ -28,16 +29,16 @@ namespace SSE::Vulkan
 
 		VkSwapchainKHR swapChain;
 		std::vector<VkImage> images;
-		std::vector<VkImageView> imageViews;
+		std::vector<VulkanImageView> imageViews;
 
-		unsigned int imageCount;
+		u32 imageCount;
 
 		bool createImageViews();
 
 		void destroyImageViews();
 
 	public:
-		bool create(VulkanSurface& surface, const glm::vec2& dimensions);
+		bool create(VulkanSurface& surface, const glm::uvec2& dimensions);
 
 		void destroy();
 
@@ -47,7 +48,7 @@ namespace SSE::Vulkan
 
 		VkSwapchainKHR getSwapChain();
 
-		unsigned int getImagesInFlight();
+		u32 getImagesInFlight();
 
 		bool createFramebuffers(VulkanRenderPass& renderPass, std::vector<VkFramebuffer>& outFramebuffers);
 	};

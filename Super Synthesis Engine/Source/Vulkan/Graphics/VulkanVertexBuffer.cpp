@@ -9,19 +9,32 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanVertexBuffer::create(const std::vector<Vertex>& _vertices, const std::vector<uint16_t> _indices)
+		bool VulkanVertexBuffer::create(const std::vector<Vertex>& _vertices, const std::vector<u16>& _indices)
 		{
-			if(!vertexBuffer.create(sizeof(Vertex) * _vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-				|| !indexBuffer.create(sizeof(uint16_t) * _indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
-				|| !vertexBuffer.bufferData((void *)_vertices.data()) || !indexBuffer.bufferData((void *)_indices.data()))
+			bool result = false;
+			if(vertexBuffer.create(sizeof(Vertex) * _vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
 			{
-				return false;
+				if (indexBuffer.create(sizeof(u16) * _indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
+				{
+					if (vertexBuffer.bufferData((void *) _vertices.data()) && indexBuffer.bufferData((void *) _indices.data()))
+					{
+						vertices = _vertices;
+						indices = _indices;
+						result = true;
+					}
+					else
+					{
+						vertexBuffer.destroy();
+						indexBuffer.destroy();
+					}
+				}
+				else
+				{
+					vertexBuffer.destroy();
+				}
 			}
 
-			vertices = _vertices;
-			indices = _indices;
-
-			return true;
+			return result;
 		}
 
 		void VulkanVertexBuffer::destroy()
@@ -40,12 +53,12 @@ namespace SSE
 			return indexBuffer.getBuffer();
 		}
 
-		unsigned int VulkanVertexBuffer::getVertexCount()
+		st VulkanVertexBuffer::getVertexCount()
 		{
 			return vertices.size();
 		}
 
-		unsigned int VulkanVertexBuffer::getIndexCount()
+		st VulkanVertexBuffer::getIndexCount()
 		{
 			return indices.size();
 		}

@@ -24,18 +24,18 @@ namespace SSE
 
 	void Logger::openLog(const std::string& logPath, ErrorLevel _logLevel, bool _logConsole)
 	{
-		assert(outputFile.open(logPath, FioMode::FIOM_WRITE));
+		outputFile.open(logPath, FioMode::FIOM_WRITE);
 		this->logLevel = _logLevel;
 		this->logConsole = _logConsole;
 	}
 
 	void Logger::closeLog()
 	{
-		assert(outputFile.close());
+		outputFile.close();
 	}
 
 #pragma message("TODO: Support logging file name and line numbers")
-	void Logger::logError(const Error& error, bool console)
+	void Logger::logError(const Error& error)
 	{
 		std::string logMessage =
 			"[" + TimeUtils::getDate() + "]" + getErrorLogPrefix(error) + ": " + error.message + '\n';
@@ -53,7 +53,7 @@ namespace SSE
 
 	void Logger::logError(ErrorLevel errorLevel, const std::string& message)
 	{
-		logError({ message, (unsigned int)errorLevel, NULL });
+		logError({ message, (u32)errorLevel, NULL });
 	}
 
 	std::string Logger::getErrorLogPrefix(const Error& error)

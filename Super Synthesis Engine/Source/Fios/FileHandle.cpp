@@ -5,7 +5,7 @@
 
 namespace SSE
 {
-	FileHandle::FileHandle(const std::string& _filePath, unsigned int _mode)
+	FileHandle::FileHandle(const std::string& _filePath, bitfield _mode)
 	{
 		this->open(_filePath, _mode);
 	}
@@ -39,9 +39,9 @@ namespace SSE
 		}
 	}
 
-	bool FileHandle::open(const std::string& _filePath, unsigned int _mode)
+	bool FileHandle::open(const std::string& _filePath, bitfield _mode)
 	{
-		int fhMode = 0;
+		bitfield fhMode = 0;
 		if (_mode & FioMode::FIOM_READ)
 		{
 			fhMode |= std::fstream::in | std::fstream::ate;
@@ -81,15 +81,15 @@ namespace SSE
 		}
 	}
 
-	std::vector<char> FileHandle::readIntoVector()
+	std::vector<byte> FileHandle::readIntoVector()
 	{
-		std::vector<char> result;
+		std::vector<byte> result;
 		if (isValid() && (mode & FioMode::FIOM_READ))
 		{
 			size_t fileSize = (size_t)handle.tellg();
 			result.resize(fileSize);
 			handle.seekg(0);
-			handle.read(result.data(), fileSize);
+			handle.read((i8*)result.data(), fileSize);
 		}
 
 		close();

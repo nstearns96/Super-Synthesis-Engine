@@ -5,6 +5,10 @@
 
 #include <vector>
 
+#include "EngineTypeDefs.h"
+#include "Vulkan/Memory/VulkanBuffer.h"
+#include "Vulkan/Graphics/VulkanImageView.h"
+
 namespace SSE::Vulkan
 {
 	class VulkanDescriptorPool
@@ -15,13 +19,14 @@ namespace SSE::Vulkan
 		std::vector<VkDescriptorSet> descriptorSets;
 
 	public:
-		bool create(unsigned int count);
+		bool create(u32 count);
 
 		bool allocateDescriptorSets();
 
 		const VkDescriptorSetLayout* getLayouts();
+		void updateDescriptorSet(u32 index, VulkanBuffer uniformBuffer, VulkanImageView imageView, VkSampler sampler);
 
-		VkDescriptorSet& getDescriptorSet(unsigned int index);
+		VkDescriptorSet& getDescriptorSet(u32 index);
 
 		void destroy();
 	};

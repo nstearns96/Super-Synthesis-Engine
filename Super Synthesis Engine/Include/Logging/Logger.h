@@ -17,7 +17,7 @@ namespace SSE
 	private:
 		FileHandle outputFile;
 
-		unsigned int logLevel;
+		u32 logLevel;
 		bool logConsole;
 
 		static std::string getErrorLogPrefix(const Error& error);
@@ -29,7 +29,7 @@ namespace SSE
 		void openLog(const std::string& logPath, ErrorLevel _logLevel = ErrorLevel::EL_ALL, bool _logConsole = true);
 		void closeLog();
 
-		void logError(const Error& error, bool console = true);
+		void logError(const Error& error);
 		void logError(ErrorLevel errorLevel, const std::string& message);
 	};
 }

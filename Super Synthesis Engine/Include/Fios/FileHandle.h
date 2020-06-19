@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 
+#include "EngineTypeDefs.h"
 #include "FioMode.h"
 
 namespace SSE
@@ -14,18 +15,18 @@ namespace SSE
 	private:
 		std::fstream handle;
 		std::string filePath = "";
-		unsigned int mode = FioMode::FIOM_NONE;
+		bitfield mode = FioMode::FIOM_NONE;
 
 	public:
 		FileHandle() {};
-		FileHandle(const std::string& _filePath, unsigned int _mode);
+		FileHandle(const std::string& _filePath, bitfield _mode);
 
 		~FileHandle();
 
-		bool open(const std::string& _filePath, unsigned int _mode);
+		bool open(const std::string& _filePath, bitfield _mode);
 		bool close();
 
-		std::vector<char> readIntoVector();
+		std::vector<byte> readIntoVector();
 		void writeToFile(const std::string& buffer);
 
 		bool isValid() const;

@@ -1,21 +1,23 @@
 #ifndef _SSE_TIMER_H
 #define _SSE_TIMER_H
 
+#include "EngineTypeDefs.h"
+
 namespace SSE
 {
 	class Timer
 	{
 	private:
-		static unsigned long long perfFreq;
+		static u64 perfFreq;
 
-		unsigned long long perfCountStart = 0;
-		unsigned long long perfCountEnd = 0;
+		u64 perfCountStart = 0;
+		u64 perfCountEnd = 0;
 	public:
 		static void initTime();
 
 		void startTime();
 		void endTime();
-		double getTime();
+		r64 getTime();
 	};
 }
 

@@ -15,9 +15,9 @@ namespace SSE
 		bool VulkanLogicalDevice::initDevice(VulkanPhysicalDevice& physicalDevice)
 		{
 			std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-			std::set<unsigned int> uniqueQueueFamilies = { physicalDevice.getGraphicsFamilyIndex(),	physicalDevice.getPresentFamilyIndex() };
+			std::set<u32> uniqueQueueFamilies = { physicalDevice.getGraphicsFamilyIndex(),	physicalDevice.getPresentFamilyIndex() };
 
-			float queuePriority = 1.0f;
+			r32 queuePriority = 1.0f;
 			for (auto& queueFamilyIndex : uniqueQueueFamilies)
 			{
 				VkDeviceQueueCreateInfo queueCreateInfo{};
@@ -29,24 +29,22 @@ namespace SSE
 				queueCreateInfos.push_back(queueCreateInfo);
 			}
 
+#pragma message("TODO: Generalize optional device features")
 			VkPhysicalDeviceFeatures deviceFeatures{};
+			deviceFeatures.samplerAnisotropy = VK_TRUE;
 
 			const std::vector<const char*> requiredDeviceExtensions = VulkanDeviceManager::gDeviceManager.getRequiredDeviceExtensions();
 
-			VkDeviceCreateInfo createInfo{};
-			createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-
-			createInfo.pQueueCreateInfos = queueCreateInfos.data();
-			createInfo.queueCreateInfoCount = queueCreateInfos.size();
-
-			createInfo.pEnabledFeatures = &deviceFeatures;
-
-			createInfo.enabledExtensionCount = requiredDeviceExtensions.size();
-			createInfo.ppEnabledExtensionNames = requiredDeviceExtensions.data();
-
 			std::vector<const char*> validationLayers = Vulkan::ValidationLayers::getRequiredLayers();
 
-			createInfo.enabledLayerCount = validationLayers.size();
+			VkDeviceCreateInfo createInfo{};
+			createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+			createInfo.pQueueCreateInfos = queueCreateInfos.data();
+			createInfo.queueCreateInfoCount = (u32)queueCreateInfos.size();
+			createInfo.pEnabledFeatures = &deviceFeatures;
+			createInfo.enabledExtensionCount = (u32)requiredDeviceExtensions.size();
+			createInfo.ppEnabledExtensionNames = requiredDeviceExtensions.data();
+			createInfo.enabledLayerCount = (u32)validationLayers.size();
 			createInfo.ppEnabledLayerNames = validationLayers.data();
 
 			if (vkCreateDevice(physicalDevice.getDevice(), &createInfo, nullptr, &device) != VK_SUCCESS)

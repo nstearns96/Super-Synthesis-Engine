@@ -27,8 +27,8 @@ namespace SSE::Vulkan
 
 		bool isSuitable(VulkanSurface& surface);
 
-		unsigned int getGraphicsFamilyIndex();
-		unsigned int getPresentFamilyIndex();
+		u32 getGraphicsFamilyIndex();
+		u32 getPresentFamilyIndex();
 
 		SwapChainSupportDetails getSwapChainSupport(VulkanSurface& surface);
 

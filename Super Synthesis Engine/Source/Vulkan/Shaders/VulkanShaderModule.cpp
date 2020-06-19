@@ -9,12 +9,12 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanShaderModule::create(const std::vector<char>& code, ShaderModuleType _moduleType)
+		bool VulkanShaderModule::create(const std::vector<byte>& code, ShaderModuleType _moduleType)
 		{
 			VkShaderModuleCreateInfo createInfo{};
 			createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 			createInfo.codeSize = code.size();
-			createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+			createInfo.pCode = (u32*) code.data();
 
 			if (vkCreateShaderModule(LOGICAL_DEVICE_DEVICE, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) 
 			{
