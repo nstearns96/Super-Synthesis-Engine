@@ -49,7 +49,7 @@ namespace SSE
 
 			if (vkCreateDevice(physicalDevice.getDevice(), &createInfo, nullptr, &device) != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create logical device.");
+				GLOG_CRITICAL("Failed to create logical device.");
 				return false;
 			}
 
@@ -79,7 +79,7 @@ namespace SSE
 			VkResult result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, (fence == nullptr) ? VK_NULL_HANDLE : *fence);
 			if (result != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to submit render command.");
+				GLOG_CRITICAL("Failed to submit render command.");
 			}
 
 			return result;

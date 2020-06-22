@@ -11,7 +11,7 @@ namespace SSE::Vulkan
 		VkImageView imageView;
 
 	public:
-		bool create(VkImage image, VkFormat format);
+		bool create(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 
 		void destroy();
 

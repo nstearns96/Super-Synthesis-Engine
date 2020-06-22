@@ -9,14 +9,14 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanVertexBuffer::create(const std::vector<Vertex>& _vertices, const std::vector<u16>& _indices)
+		bool VulkanVertexBuffer::create(VertexData& _vertices, const std::vector<u16>& _indices)
 		{
 			bool result = false;
-			if(vertexBuffer.create(sizeof(Vertex) * _vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
+			if(vertexBuffer.create(_vertices.getSize(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
 			{
 				if (indexBuffer.create(sizeof(u16) * _indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
 				{
-					if (vertexBuffer.bufferData((void *) _vertices.data()) && indexBuffer.bufferData((void *) _indices.data()))
+					if (vertexBuffer.bufferData(_vertices.getData()) && indexBuffer.bufferData((void *) _indices.data()))
 					{
 						vertices = _vertices;
 						indices = _indices;
@@ -55,7 +55,7 @@ namespace SSE
 
 		st VulkanVertexBuffer::getVertexCount()
 		{
-			return vertices.size();
+			return vertices.getSize()/vertices.getFormat().getFormatStride();
 		}
 
 		st VulkanVertexBuffer::getIndexCount()

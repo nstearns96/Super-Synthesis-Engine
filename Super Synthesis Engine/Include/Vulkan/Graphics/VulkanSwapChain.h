@@ -7,6 +7,7 @@
 
 #include "VulkanSurface.h"
 #include "Vulkan/Graphics/VulkanImageView.h"
+#include "Vulkan/Graphics/VulkanDepthBuffer.h"
 
 namespace SSE::Vulkan
 {
@@ -30,6 +31,7 @@ namespace SSE::Vulkan
 		VkSwapchainKHR swapChain;
 		std::vector<VkImage> images;
 		std::vector<VulkanImageView> imageViews;
+		VulkanDepthBuffer depthBuffer;
 
 		u32 imageCount;
 

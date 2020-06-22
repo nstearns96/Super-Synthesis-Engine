@@ -19,7 +19,7 @@ namespace SSE::Vulkan
 		glm::uvec2 dimensions;
 
 	public:
-		bool create(const glm::uvec2& _dimensions, const VkFormat _format);
+		bool create(void* data, const glm::uvec2& _dimensions, const VkFormat _format, VkImageUsageFlags usage);
 
 		void destroy();
 

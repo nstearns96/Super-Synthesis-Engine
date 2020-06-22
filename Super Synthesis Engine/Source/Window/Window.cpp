@@ -12,7 +12,7 @@ namespace SSE
 		window = SDL_CreateWindow(title, _position.x, _position.y, _dimensions.x, _dimensions.y, SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 		if (window == nullptr) 
 		{
-			gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to open window. " + std::string(SDL_GetError()));
+			GLOG_CRITICAL("Failed to open window. " + std::string(SDL_GetError()));
 		}
 		else
 		{

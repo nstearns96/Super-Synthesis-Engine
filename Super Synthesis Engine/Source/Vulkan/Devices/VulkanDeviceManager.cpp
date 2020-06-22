@@ -28,7 +28,7 @@ namespace SSE
 			vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
 			if (deviceCount == 0) {
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to find GPU with Vulkan support.");
+				GLOG_CRITICAL("Failed to find GPU with Vulkan support.");
 				return false;
 			}
 
@@ -49,7 +49,7 @@ namespace SSE
 
 			if (!foundDevice)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to find suitable physical device.");
+				GLOG_CRITICAL("Failed to find suitable physical device.");
 				return false;
 			}
 

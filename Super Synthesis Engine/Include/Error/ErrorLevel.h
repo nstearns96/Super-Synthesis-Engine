@@ -6,7 +6,8 @@ enum ErrorLevel
 	EL_NONE = 0,
 	EL_CRITICAL,
 	EL_WARNING,
-	EL_ALL,
+	EL_INFO,
+	EL_ALL
 };
 
 #endif

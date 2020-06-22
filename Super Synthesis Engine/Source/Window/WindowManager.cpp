@@ -20,7 +20,7 @@ namespace SSE
 	{
 		if ((windows.find(windowName) != windows.end()))
 		{
-			gLogger.logError(ErrorLevel::EL_WARNING, "Window with the name, \"" + windowName + "\" already exists! Window not created.");
+			GLOG_WARNING("Window with the name, \"" + windowName + "\" already exists! Window not created.");
 			return false;
 		}
 
@@ -51,7 +51,7 @@ namespace SSE
 			return true;
 		}
 
-		gLogger.logError(ErrorLevel::EL_WARNING, "Cannot find window, \"" + windowName + "\".");
+		GLOG_WARNING("Cannot find window, \"" + windowName + "\".");
 		return false;
 	}
 
@@ -80,7 +80,7 @@ namespace SSE
 		}
 		else
 		{
-			gLogger.logError(ErrorLevel::EL_WARNING, "Cannot find window, \"" + windowName + "\".");
+			GLOG_WARNING("Cannot find window, \"" + windowName + "\".");
 			return false;
 		}
 	}

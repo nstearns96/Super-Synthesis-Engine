@@ -21,7 +21,7 @@ namespace SSE
 				}
 			}
 
-			gLogger.logError(ErrorLevel::EL_CRITICAL, "Unable to find valid memory type");
+			GLOG_CRITICAL("Unable to find valid memory type");
 			return UINT_MAX;
 		}
 
@@ -34,7 +34,7 @@ namespace SSE
 
 			if (vkAllocateMemory(LOGICAL_DEVICE_DEVICE, &allocInfo, nullptr, &deviceMemory) != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to allocate memory for buffer.");
+				GLOG_CRITICAL("Failed to allocate memory for buffer.");
 				return false;
 			}
 

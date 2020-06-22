@@ -6,9 +6,18 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
+#include <string.h>
+
 #include "Fios/FileHandle.h"
 #include "Error/Error.h"
 #include "Error/ErrorLevel.h"
+
+#define ERROR_MESSAGE_END (std::string(" ") + __FILE__ + " (Line: " + std::to_string(__LINE__) + ")")
+#define GLOG_ERROR(errorLevel, message) SSE::gLogger.logError( errorLevel , message + ERROR_MESSAGE_END )
+#define GLOG_CRITICAL(message) GLOG_ERROR(ErrorLevel::EL_CRITICAL, std::string(message))
+#define GLOG_WARNING(message) GLOG_ERROR(ErrorLevel::EL_WARNING, std::string(message))
+#define GLOG_INFO(message) GLOG_ERROR(ErrorLevel::EL_INFO, std::string(message))
+
 
 namespace SSE
 {

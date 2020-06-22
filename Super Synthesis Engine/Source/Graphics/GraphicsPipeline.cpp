@@ -9,7 +9,6 @@
 #include "Logging/Logger.h"
 #include "Graphics/Shader.h"
 #include "Window/WindowManager.h"
-#include "Model/Vertex.h"
 #include "Graphics/Texture2D.h"
 #include "Resources/ResourceManager.h"
 
@@ -22,26 +21,10 @@ namespace SSE
 #pragma message("TODO: Add functionality for pipeline parameters")
 		bool GraphicsPipeline::constructPipeline()
 		{
-
-#pragma message("TODO: Add shader creation to a ResourceManager class")
-			Shader shader;
-			if (!shader.create({ "frag.spv","vert.spv" }, { Vulkan::ShaderModuleType::SMT_FRAGMENT, Vulkan::ShaderModuleType::SMT_VERTEX }))
-			{
-				return false;
-			}
-
-			std::vector<VkPipelineShaderStageCreateInfo> shaderStages = shader.getShaderStages();
-
-			if (shaderStages.empty())
-			{
-				shader.destroy();
-				return false;
-			}
-
 			VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-			auto bindingDescription = Vertex::getBindingDescription();
-			auto attributeDescriptions = Vertex::getAttributeDescriptions();
+			auto bindingDescription = vertexFormat.getBindingDescription();
+			auto attributeDescriptions = vertexFormat.getAttributeDescriptions();
 
 			vertexInputInfo.vertexBindingDescriptionCount = 1;
 			vertexInputInfo.vertexAttributeDescriptionCount = (u32)attributeDescriptions.size();
@@ -110,10 +93,23 @@ namespace SSE
 
 			if (vkCreatePipelineLayout(LOGICAL_DEVICE_DEVICE, &pipelineLayoutInfo, nullptr, &layout) != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create pipeline layout.");
-				shader.destroy();
+				GLOG_CRITICAL("Failed to create pipeline layout.");
 				return false;
 			}
+
+			VkPipelineDepthStencilStateCreateInfo depthStencil{};
+			depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+			depthStencil.depthTestEnable = VK_TRUE;
+			depthStencil.depthWriteEnable = VK_TRUE;
+			depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+			depthStencil.depthBoundsTestEnable = VK_FALSE;
+			depthStencil.minDepthBounds = 0.0f;
+			depthStencil.maxDepthBounds = 1.0f;
+			depthStencil.stencilTestEnable = VK_FALSE;
+			depthStencil.front = {};
+			depthStencil.back = {};
+
+			std::vector<VkPipelineShaderStageCreateInfo> shaderStages = ResourceManager::getShader("main").getShaderStages();
 
 			VkGraphicsPipelineCreateInfo pipelineInfo{};
 			pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -129,15 +125,14 @@ namespace SSE
 			pipelineInfo.renderPass = renderPass.getRenderPass();
 			pipelineInfo.subpass = 0;
 			pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+			pipelineInfo.pDepthStencilState = &depthStencil;
 
 			if (vkCreateGraphicsPipelines(LOGICAL_DEVICE_DEVICE, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create graphics pipeline.");
-				shader.destroy();
+				GLOG_CRITICAL("Failed to create graphics pipeline.");
 				return false;
 			}
 
-			shader.destroy();
 			return true;
 		}
 
@@ -160,16 +155,39 @@ namespace SSE
 				return false;
 			}
 
+#pragma message("TODO: Load data from file via Asset namespace")
+			float data[] = 
+			{
+				0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+				0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+				0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+				0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+				-0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+				-0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+				-0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+				-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f
+			};
+
+			vertexFormat.create({ VA_POS3F, VA_COL3F, VA_TEX2F });
+
+			VertexData vertexData;
+			vertexData.create
+			(
+				data,
+				64 * sizeof(r32),
+				vertexFormat
+			);
+
 			if (!vertexBuffer.create
 				(
+					vertexData,
 					{
-						{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-						{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-						{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-						{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
-					},
-					{
-						0, 1, 2, 2, 3, 0
+						0, 2, 1, 1, 2, 3,
+						0, 1, 4, 1, 5, 4,
+						4, 5, 6, 5, 7, 6,
+						2, 6, 7, 2, 7, 3,
+						0, 4, 6, 0, 6, 2,
+						1, 3, 7, 1, 7, 5
 					}
 				)
 			)
@@ -232,7 +250,7 @@ namespace SSE
 					vkCreateSemaphore(LOGICAL_DEVICE_DEVICE, &semaphoreInfo, nullptr, &renderFinishedSemaphores[s]) != VK_SUCCESS ||
 					vkCreateFence(LOGICAL_DEVICE_DEVICE, &fenceInfo, nullptr, &inFlightFences[s]) != VK_SUCCESS)
 				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create semaphores.");
+					GLOG_CRITICAL("Failed to create semaphores.");
 					return false;
 				}
 			}
@@ -295,13 +313,13 @@ namespace SSE
 
 			if (result == VK_ERROR_OUT_OF_DATE_KHR) 
 			{
-				gLogger.logError(ErrorLevel::EL_WARNING, "Swap chain out of date. Recreating swap chain.");
+				GLOG_WARNING("Swap chain out of date. Recreating swap chain.");
 				recreateSwapChain();
 				return false;
 			}
 			else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) 
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to acquire swap chain image.");
+				GLOG_CRITICAL("Failed to acquire swap chain image.");
 				return false;
 			}
 
@@ -339,11 +357,11 @@ namespace SSE
 			{
 				if (isFrameBufferDirty)
 				{
-					gLogger.logError(ErrorLevel::EL_WARNING, "Frame buffer size changed. Recreating swap chain.");
+					GLOG_WARNING("Frame buffer size changed. Recreating swap chain.");
 				}
 				else
 				{
-					gLogger.logError(ErrorLevel::EL_WARNING, "Swap chain out of date or suboptimal. Recreating swap chain.");
+					GLOG_WARNING("Swap chain out of date or suboptimal. Recreating swap chain.");
 				} 
 				
 				isFrameBufferDirty = false;
@@ -385,13 +403,6 @@ namespace SSE
 			vkDestroyRenderPass(LOGICAL_DEVICE_DEVICE, renderPass.getRenderPass(), nullptr);
 
 			swapChain.destroy();
-
-#pragma message("TODO: Add shader creation to a ResourceManager class")
-			Shader shader;
-			if (!shader.create({ "frag.spv","vert.spv" }, { Vulkan::ShaderModuleType::SMT_FRAGMENT, Vulkan::ShaderModuleType::SMT_VERTEX }))
-			{
-				return false;
-			}
 
 #pragma message("TODO: If the active window has changed, this may cause a crash. Add functionality to check for that")
 			glm::uvec2 frameBufferDimensions = WindowManager::gWindowManager.getWindowFrameBufferDimensions();
@@ -452,7 +463,7 @@ namespace SSE
 
 				if (vkBeginCommandBuffer(currentCommandBuffer, &beginInfo) != VK_SUCCESS)
 				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to begin command buffer.");
+					GLOG_CRITICAL("Failed to begin command buffer.");
 					return false;
 				}
 
@@ -463,9 +474,9 @@ namespace SSE
 				renderPassInfo.renderArea.offset = { 0, 0 };
 				renderPassInfo.renderArea.extent = swapChain.getExtent();
 
-				VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-				renderPassInfo.clearValueCount = 1;
-				renderPassInfo.pClearValues = &clearColor;
+				std::vector<VkClearValue> clearValues = { { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 0 } };
+				renderPassInfo.clearValueCount = (u32)clearValues.size();
+				renderPassInfo.pClearValues = clearValues.data();
 
 				vkCmdBeginRenderPass(currentCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 				vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
@@ -484,7 +495,7 @@ namespace SSE
 
 				if (vkEndCommandBuffer(currentCommandBuffer) != VK_SUCCESS)
 				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to end command buffer.");
+					GLOG_CRITICAL("Failed to end command buffer.");
 					return false;
 				}
 			}

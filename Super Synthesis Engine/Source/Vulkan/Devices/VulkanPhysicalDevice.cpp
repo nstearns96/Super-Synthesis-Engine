@@ -93,7 +93,7 @@ namespace SSE
 			}
 			else
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Couldn't find supported format for surface/device pair.");
+				GLOG_CRITICAL("Couldn't find supported format for surface/device pair.");
 				return false;
 			}
 
@@ -106,7 +106,7 @@ namespace SSE
 			}
 			else
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Couldn't find supported present mode for surface/device pair.");
+				GLOG_CRITICAL("Couldn't find supported present mode for surface/device pair.");
 				return false;
 			}
 
@@ -128,7 +128,7 @@ namespace SSE
 			}
 			else
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Couldn't find supported format for surface/device pair.");
+				GLOG_CRITICAL("Couldn't find supported format for surface/device pair.");
 				return details;
 			}
 
@@ -141,11 +141,19 @@ namespace SSE
 			}
 			else
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Couldn't find supported present mode for surface/device pair.");
+				GLOG_CRITICAL("Couldn't find supported present mode for surface/device pair.");
 				return details;
 			}
 
 			return details;
+		}
+
+		VkFormatProperties VulkanPhysicalDevice::getFormatProperties(VkFormat format)
+		{
+			VkFormatProperties props;
+			vkGetPhysicalDeviceFormatProperties(device, format, &props);
+
+			return props;
 		}
 	}
 }

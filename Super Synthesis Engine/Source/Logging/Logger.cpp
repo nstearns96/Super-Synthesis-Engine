@@ -34,7 +34,6 @@ namespace SSE
 		outputFile.close();
 	}
 
-#pragma message("TODO: Support logging file name and line numbers")
 	void Logger::logError(const Error& error)
 	{
 		std::string logMessage =
@@ -67,6 +66,10 @@ namespace SSE
 		case ErrorLevel::EL_WARNING:
 		{
 			return "[WARNING]";
+		}
+		case ErrorLevel::EL_INFO:
+		{
+			return "[INFO]";
 		}
 		default:
 		{

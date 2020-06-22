@@ -17,7 +17,7 @@ namespace SSE::Vulkan
 	{
 		if (SDL_Vulkan_CreateSurface(window.getWindow(), VulkanInstance::gInstance.getInstance(), &surface) != SDL_TRUE)
 		{
-			gLogger.logError(ErrorLevel::EL_CRITICAL, SDL_GetError());
+			GLOG_CRITICAL(SDL_GetError());
 			return false;
 		}
 		return true;

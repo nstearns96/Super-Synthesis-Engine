@@ -18,18 +18,22 @@ namespace SSE
 		{
 			{VK_IMAGE_LAYOUT_UNDEFINED, NULL},
 			{VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_ACCESS_TRANSFER_WRITE_BIT},
-			{VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_SHADER_READ_BIT}
+			{VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_SHADER_READ_BIT},
+			{VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT}
 		};
 
 		static const std::map<VkImageLayout, VkPipelineStageFlags> layoutToPipelineStageMap =
 		{
 			{VK_IMAGE_LAYOUT_UNDEFINED, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT},
 			{VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT},
-			{VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT}
+			{VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+			{VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT}
 		};
 
-		bool VulkanImage::create(const glm::uvec2& _dimensions, const VkFormat _format)
+		bool VulkanImage::create(void* data, const glm::uvec2& _dimensions, const VkFormat _format, VkImageUsageFlags usage)
 		{
+			bool result = false;
+
 			VkImageCreateInfo imageInfo{};
 			imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 			imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -39,37 +43,76 @@ namespace SSE
 			imageInfo.mipLevels = 1;
 			imageInfo.arrayLayers = 1;
 #pragma message("TODO: Support different image formats")
-			imageInfo.format = VK_FORMAT_B8G8R8A8_SRGB;
+			imageInfo.format = _format;
 			imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
 			imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-			imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+			imageInfo.usage = usage;
 			imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 #pragma message("TODO: Add support for MSAA")
 			imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 			imageInfo.flags = 0;
 
-			if (vkCreateImage(LOGICAL_DEVICE_DEVICE, &imageInfo, nullptr, &image) != VK_SUCCESS)
+			if (vkCreateImage(LOGICAL_DEVICE_DEVICE, &imageInfo, nullptr, &image) == VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_WARNING, "Failed to create texture.");
-				return false;
+				VkMemoryRequirements memRequirements;
+				vkGetImageMemoryRequirements(LOGICAL_DEVICE_DEVICE, image, &memRequirements);
+
+				if (imageMemory.create(memRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
+				{
+					layout = VK_IMAGE_LAYOUT_UNDEFINED;
+
+					vkBindImageMemory(LOGICAL_DEVICE_DEVICE, image, imageMemory.getMemory(), 0);
+
+					dimensions = _dimensions;
+					format = _format;
+
+#pragma message("TODO: Better support for hardware-level image buffers i.e. depth buffers, stencil buffers")
+					if (data != nullptr)
+					{
+						VulkanBuffer imageStagingBuffer;
+						if (transitionLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) &&
+							imageStagingBuffer.create(_dimensions.x * _dimensions.y * 4, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
+						{
+							if (imageStagingBuffer.bufferData(data, false) &&
+								imageStagingBuffer.copyToImage(image, _dimensions))
+							{
+
+								result = true;
+							}
+							else
+							{
+								imageMemory.destroy();
+								vkDestroyImage(LOGICAL_DEVICE_DEVICE, image, nullptr);
+							}
+
+							imageStagingBuffer.destroy();
+						}
+						else
+						{
+							imageMemory.destroy();
+							vkDestroyImage(LOGICAL_DEVICE_DEVICE, image, nullptr);
+						}
+					}
+					else
+					{
+						if (_format == supportedDepthFormats[0])
+						{
+							result = transitionLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+						}
+						else
+						{
+							imageMemory.destroy();
+							vkDestroyImage(LOGICAL_DEVICE_DEVICE, image, nullptr);
+						}
+					}
+				}
+				else
+				{
+					vkDestroyImage(LOGICAL_DEVICE_DEVICE, image, nullptr);
+				}
 			}
 
-			VkMemoryRequirements memRequirements;
-			vkGetImageMemoryRequirements(LOGICAL_DEVICE_DEVICE, image, &memRequirements);
-
-			if (!imageMemory.create(memRequirements, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT))
-			{
-				vkDestroyImage(LOGICAL_DEVICE_DEVICE, image, nullptr);
-				return false;
-			}
-
-			dimensions = _dimensions;
-			format = _format;
-			layout = VK_IMAGE_LAYOUT_UNDEFINED;
-
-			vkBindImageMemory(LOGICAL_DEVICE_DEVICE, image, imageMemory.getMemory(), 0);
-
-			return true;
+			return result;
 		}
 
 		bool VulkanImage::transitionLayout(VkImageLayout newLayout)
@@ -104,7 +147,7 @@ namespace SSE
 					barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 					barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 					barrier.image = image;
-					barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+					barrier.subresourceRange.aspectMask = format == VK_FORMAT_B8G8R8A8_SRGB ? VK_IMAGE_ASPECT_COLOR_BIT : VK_IMAGE_ASPECT_DEPTH_BIT;
 					barrier.subresourceRange.baseMipLevel = 0;
 					barrier.subresourceRange.levelCount = 1;
 					barrier.subresourceRange.baseArrayLayer = 0;
@@ -139,8 +182,8 @@ namespace SSE
 
 		void VulkanImage::destroy()
 		{
-			vkDestroyImage(LOGICAL_DEVICE_DEVICE, image, nullptr);
 			imageMemory.destroy();
+			vkDestroyImage(LOGICAL_DEVICE_DEVICE, image, nullptr);
 		}
 
 		VkImage VulkanImage::getImage()

@@ -23,13 +23,13 @@ namespace SSE
 
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		{
-			gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to initialize SDL!");
+			GLOG_CRITICAL("Failed to initialize SDL!");
 			return false;
 		}
 
 		if (SDL_Vulkan_LoadLibrary(nullptr) != NULL)
 		{
-			gLogger.logError(ErrorLevel::EL_CRITICAL, SDL_GetError());
+			GLOG_CRITICAL(SDL_GetError());
 			return false;
 		}
 
@@ -39,6 +39,7 @@ namespace SSE
 		Vulkan::initVulkan(WindowManager::gWindowManager.getActiveWindow(), gPipeline->surface);
 
 		ResourceManager::loadTexture("texture", "test.bmp");
+		ResourceManager::loadShader("main", { "frag.spv","vert.spv" }, { Vulkan::ShaderModuleType::SMT_FRAGMENT, Vulkan::ShaderModuleType::SMT_VERTEX });
 
 		gPipeline->create();
 

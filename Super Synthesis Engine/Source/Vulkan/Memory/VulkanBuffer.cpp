@@ -20,7 +20,7 @@ namespace SSE
 
 			if (vkCreateBuffer(LOGICAL_DEVICE_DEVICE, &bufferInfo, nullptr, &buffer) != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create buffer.");
+				GLOG_CRITICAL("Failed to create buffer.");
 				return false;
 			}
 
@@ -99,7 +99,7 @@ namespace SSE
 			}
 		}
 
-		bool VulkanBuffer::copyToImage(VulkanImage& image)
+		bool VulkanBuffer::copyToImage(VkImage image, const glm::uvec2& dimensions)
 		{
 			bool result = false;
 
@@ -120,13 +120,13 @@ namespace SSE
 					region.imageSubresource.baseArrayLayer = 0;
 					region.imageSubresource.layerCount = 1;
 					region.imageOffset = { 0, 0, 0 };
-					region.imageExtent = { image.getWidth(), image.getHeight(), 1 };
+					region.imageExtent = { dimensions.x, dimensions.y, 1 };
 
 					vkCmdCopyBufferToImage
 					(
 						copyCommand,
 						buffer,
-						image.getImage(),
+						image,
 						VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 						1,
 						&region

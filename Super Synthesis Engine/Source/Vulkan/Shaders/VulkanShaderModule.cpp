@@ -18,7 +18,7 @@ namespace SSE
 
 			if (vkCreateShaderModule(LOGICAL_DEVICE_DEVICE, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) 
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create shader module.");
+				GLOG_CRITICAL("Failed to create shader module.");
 				return false;
 			}
 

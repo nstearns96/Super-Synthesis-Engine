@@ -39,6 +39,7 @@ namespace SSE::Graphics
 		Vulkan::VulkanVertexBuffer vertexBuffer;
 		std::vector<UniformBuffer<MatricesObject>> uniformBuffers;
 		Vulkan::VulkanDescriptorPool descriptorPool;
+		VertexFormat vertexFormat;
 
 		u32 currentFrame;
 

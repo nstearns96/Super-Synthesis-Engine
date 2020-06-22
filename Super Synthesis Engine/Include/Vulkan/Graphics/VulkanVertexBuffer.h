@@ -6,21 +6,21 @@
 #include <vector>
 
 #include "Vulkan/Memory/VulkanBuffer.h"
-#include "Model/Vertex.h"
+#include "Model/VertexData.h"
 
 namespace SSE::Vulkan
 {
 	class VulkanVertexBuffer
 	{
 	private:
-		std::vector<Vertex> vertices;
+		VertexData vertices;
 		std::vector<u16> indices;
 #pragma message("TODO: Store vertex and index buffer in same VulkanBuffer object")
 		VulkanBuffer vertexBuffer;
 		VulkanBuffer indexBuffer;
 
 	public:
-		bool create(const std::vector<Vertex>& _vertices, const std::vector<u16>& _indices);
+		bool create(VertexData& _vertices, const std::vector<u16>& _indices);
 		
 		void destroy();
 

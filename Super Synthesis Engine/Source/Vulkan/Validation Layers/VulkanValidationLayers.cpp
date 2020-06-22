@@ -22,8 +22,29 @@ namespace SSE::Vulkan::ValidationLayers
 		void* pUserData
 	)
 	{
-#pragma message("TODO: Translate Vulkan severity to SSE severity")
-		gLogger.logError(ErrorLevel::EL_CRITICAL, pCallbackData->pMessage);
+		switch (messageSeverity)
+		{
+		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+		{
+			GLOG_ERROR(ErrorLevel::EL_ALL, pCallbackData->pMessage);
+			break;
+		}
+		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+		{
+			GLOG_INFO(pCallbackData->pMessage);
+			break;
+		}
+		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+		{
+			GLOG_WARNING(pCallbackData->pMessage);
+			break;
+		}
+		case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+		{
+			GLOG_CRITICAL(pCallbackData->pMessage);
+			break;
+		}
+		}
 
 		return VK_FALSE;
 	}
@@ -73,7 +94,7 @@ namespace SSE::Vulkan::ValidationLayers
 		auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
 		if (func == nullptr || (func(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS))
 		{
-			gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create VkDebugUtilsMessengerEXT");
+			GLOG_CRITICAL("Failed to create VkDebugUtilsMessengerEXT");
 		}
 	}
 
@@ -90,7 +111,7 @@ namespace SSE::Vulkan::ValidationLayers
 		}
 		else
 		{
-			gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to destroy VkDebugUtilsMessengerEXT");
+			GLOG_CRITICAL("Failed to destroy VkDebugUtilsMessengerEXT");
 		}
 	}
 
@@ -100,7 +121,7 @@ namespace SSE::Vulkan::ValidationLayers
 		std::vector<const char*> extensions;
 		if (SDL_Vulkan_GetInstanceExtensions(nullptr, &count, nullptr) != SDL_TRUE)
 		{
-			gLogger.logError(ErrorLevel::EL_CRITICAL, SDL_GetError());
+			GLOG_CRITICAL(SDL_GetError());
 		}
 		
 		extensions.resize(count);

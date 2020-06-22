@@ -21,7 +21,7 @@ namespace SSE
 				Vulkan::VulkanShaderModule shaderModule;
 				if (!shaderModule.create(source, moduleTypes[i]))
 				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create shader module.");
+					GLOG_CRITICAL("Failed to create shader module.");
 					return false;
 				}
 

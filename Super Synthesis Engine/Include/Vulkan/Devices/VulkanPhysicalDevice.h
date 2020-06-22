@@ -32,6 +32,8 @@ namespace SSE::Vulkan
 
 		SwapChainSupportDetails getSwapChainSupport(VulkanSurface& surface);
 
+		VkFormatProperties getFormatProperties(VkFormat format);
+
 		VkPhysicalDevice& getDevice();
 	};
 }

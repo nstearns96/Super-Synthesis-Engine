@@ -20,7 +20,7 @@ namespace SSE
 
 			if (vkCreateCommandPool(LOGICAL_DEVICE_DEVICE, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) 
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create command pool.");
+				GLOG_CRITICAL("Failed to create command pool.");
 				return false;
 			}
 
@@ -53,7 +53,7 @@ namespace SSE
 
 			if (vkAllocateCommandBuffers(LOGICAL_DEVICE_DEVICE, &allocInfo, commandBuffers.data()) != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to allocate command buffers.");
+				GLOG_CRITICAL("Failed to allocate command buffers.");
 				commandBuffers.clear();
 				return false;
 			}

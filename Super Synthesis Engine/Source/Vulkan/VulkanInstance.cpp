@@ -32,7 +32,7 @@ namespace SSE
 			bool validationLayers = Vulkan::ValidationLayers::enableValidationLayers;
 			if (validationLayers && !(Vulkan::ValidationLayers::checkValidationLayerSupport()))
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Validation layers requested were not available.");
+				GLOG_CRITICAL("Validation layers requested were not available.");
 				return false;
 			}
 
@@ -52,7 +52,7 @@ namespace SSE
 			VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
 			if (result != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create Vulkan instance.");
+				GLOG_CRITICAL("Failed to create Vulkan instance.");
 				return false;
 			}
 

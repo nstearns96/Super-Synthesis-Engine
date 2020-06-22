@@ -15,7 +15,7 @@ namespace SSE
 		{
 			if (dimensions.x == 0 || dimensions.y == 0)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Swap chain dimension was 0. Swap chain was not created.");
+				GLOG_CRITICAL("Swap chain dimension was 0. Swap chain was not created.");
 				return false;
 			}
 
@@ -60,7 +60,7 @@ namespace SSE
 
 				if (swapExtent.width == 0 || swapExtent.height == 0)
 				{
-					gLogger.logError(ErrorLevel::EL_WARNING, "Swap chain dimension was 0");
+					GLOG_WARNING("Swap chain dimension was 0");
 				}
 			}
 			else 
@@ -117,7 +117,7 @@ namespace SSE
 			VulkanLogicalDevice activeLogicalDevice = LOGICAL_DEVICE;
 			if (vkCreateSwapchainKHR(activeLogicalDevice.getDevice(), &createInfo, nullptr, &swapChain) != VK_SUCCESS)
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create swapchain.");
+				GLOG_CRITICAL("Failed to create swapchain.");
 				return false;
 			}
 
@@ -127,12 +127,15 @@ namespace SSE
 
 			createImageViews();
 
+			depthBuffer.create(dimensions);
+
 			return true;
 		}
 
 		void VulkanSwapChain::destroy()
 		{
 			destroyImageViews();
+			depthBuffer.destroy();
 
 			vkDestroySwapchainKHR(LOGICAL_DEVICE_DEVICE, swapChain, nullptr);
 			images.resize(0);
@@ -140,13 +143,11 @@ namespace SSE
 
 		bool VulkanSwapChain::createImageViews()
 		{
-			VulkanLogicalDevice activeLogicalDevice = LOGICAL_DEVICE;
-
 			imageViews.resize(images.size());
 
 			for (st i = 0; i < imageViews.size(); ++i)
 			{
-				imageViews[i].create(images[i], VK_FORMAT_B8G8R8A8_SRGB);
+				imageViews[i].create(images[i], VK_FORMAT_B8G8R8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
 			}
 
 			return true;
@@ -183,23 +184,24 @@ namespace SSE
 
 			for (st i = 0; i < imageViews.size(); i++)
 			{
-				VkImageView attachments[] = 
+				std::vector<VkImageView> attachments = 
 				{
-					imageViews[i].getImageView()
+					imageViews[i].getImageView(),
+					depthBuffer.getImageView().getImageView()
 				};
 
 				VkFramebufferCreateInfo framebufferInfo{};
 				framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 				framebufferInfo.renderPass = renderPass.getRenderPass();
-				framebufferInfo.attachmentCount = 1;
-				framebufferInfo.pAttachments = attachments;
+				framebufferInfo.attachmentCount = (u32)attachments.size();
+				framebufferInfo.pAttachments = attachments.data();
 				framebufferInfo.width = swapExtent.width;
 				framebufferInfo.height = swapExtent.height;
 				framebufferInfo.layers = 1;
 
 				if (vkCreateFramebuffer(LOGICAL_DEVICE_DEVICE, &framebufferInfo, nullptr, &outFramebuffers[i]) != VK_SUCCESS)
 				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create framebuffer.");
+					GLOG_CRITICAL("Failed to create framebuffer.");
 					return false;
 				}
 			}

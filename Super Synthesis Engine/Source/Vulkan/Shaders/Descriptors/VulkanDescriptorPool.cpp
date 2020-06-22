@@ -26,7 +26,7 @@ namespace SSE
 
 			if (vkCreateDescriptorPool(LOGICAL_DEVICE_DEVICE, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) 
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create descriptor pool.");
+				GLOG_CRITICAL("Failed to create descriptor pool.");
 				return false;
 			}
 			
@@ -57,7 +57,7 @@ namespace SSE
 
 				if (vkCreateDescriptorSetLayout(LOGICAL_DEVICE_DEVICE, &layoutInfo, nullptr, &descriptorSetLayouts[d]) != VK_SUCCESS) 
 				{
-					gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create descriptor layout.");
+					GLOG_CRITICAL("Failed to create descriptor layout.");
 					return false;
 				}
 			}
@@ -86,7 +86,7 @@ namespace SSE
 
 			if (vkAllocateDescriptorSets(LOGICAL_DEVICE_DEVICE, &allocInfo, descriptorSets.data()) != VK_SUCCESS) 
 			{
-				gLogger.logError(ErrorLevel::EL_CRITICAL, "Failed to create descriptor layout.");
+				GLOG_CRITICAL("Failed to create descriptor layout.");
 				return false;
 			}
 
