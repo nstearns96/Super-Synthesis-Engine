@@ -17,7 +17,7 @@ namespace SSE
 		{
 			const byte* headerParser = data;
 			BitmapFileHeader fileHeader;
-			memcpy(&fileHeader, data, sizeof(fileHeader));
+			memcpy(&fileHeader, headerParser, sizeof(fileHeader));
 			headerParser += sizeof(fileHeader);
 
 			u16 bitsPerPixel;

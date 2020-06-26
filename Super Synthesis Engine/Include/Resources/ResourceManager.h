@@ -5,6 +5,9 @@
 
 #include "Graphics/Texture2D.h"
 #include "Graphics/Shader.h"
+#include "Audio/AudioSample.h"
+
+#pragma message("TODO: Add support for streamed audio resource")
 
 namespace SSE
 {
@@ -14,8 +17,8 @@ namespace SSE
 		ResourceManager() {};
 
 		static std::map<std::string, Graphics::Texture2D> textures;
-
 		static std::map<std::string, Graphics::Shader> shaders;
+		static std::map<std::string, Audio::AudioSample> audioSamples;
 
 	public:
 		static Graphics::Texture2D getTexture(const std::string& name);
@@ -25,6 +28,10 @@ namespace SSE
 		static Graphics::Shader getShader(const std::string& name);
 
 		static Graphics::Shader loadShader(const std::string& name, const std::vector<std::string>& sourceFiles, const std::vector<SSE::Vulkan::ShaderModuleType>& moduleTypes);
+		
+		static Audio::AudioSample getAudio(const std::string& name);
+
+		static Audio::AudioSample loadAudio(const std::string& path, const std::string& name);
 
 		static void clear();
 	};

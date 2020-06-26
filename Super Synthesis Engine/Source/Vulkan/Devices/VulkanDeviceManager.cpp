@@ -27,7 +27,8 @@ namespace SSE
 			u32 deviceCount = 0;
 			vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
-			if (deviceCount == 0) {
+			if (deviceCount == 0) 
+			{
 				GLOG_CRITICAL("Failed to find GPU with Vulkan support.");
 				return false;
 			}

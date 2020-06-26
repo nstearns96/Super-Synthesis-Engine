@@ -12,7 +12,7 @@ namespace SSE
 		bool VulkanDepthBuffer::create(const glm::uvec2& dimensions)
 		{
 			VkFormat depthFormat = VK_FORMAT_UNDEFINED;
-			for (int f = 0; f < supportedDepthFormats.size(); ++f)
+			for (st f = 0; f < supportedDepthFormats.size(); ++f)
 			{
 				VkFormatProperties formatProperties = PHYSICAL_DEVICE.getFormatProperties(supportedDepthFormats[f]);
 
@@ -25,6 +25,7 @@ namespace SSE
 
 			if (depthFormat == VK_FORMAT_UNDEFINED)
 			{
+				GLOG_CRITICAL("Failed to find suitable format for depth buffer.");
 				return false;
 			}
 

@@ -100,7 +100,8 @@ namespace SSE
 			u32 presentModeCount;
 			vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface.getSurface(), &presentModeCount, nullptr);
 
-			if (presentModeCount != 0) {
+			if (presentModeCount != 0)
+			{
 				details.presentModes.resize(presentModeCount);
 				vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface.getSurface(), &presentModeCount, details.presentModes.data());
 			}
@@ -122,7 +123,8 @@ namespace SSE
 			u32 formatCount;
 			vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface.getSurface(), &formatCount, nullptr);
 
-			if (formatCount != 0) {
+			if (formatCount != 0) 
+			{
 				details.formats.resize(formatCount);
 				vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface.getSurface(), &formatCount, details.formats.data());
 			}
@@ -135,7 +137,8 @@ namespace SSE
 			u32 presentModeCount;
 			vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface.getSurface(), &presentModeCount, nullptr);
 
-			if (presentModeCount != 0) {
+			if (presentModeCount != 0)
+			{
 				details.presentModes.resize(presentModeCount);
 				vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface.getSurface(), &presentModeCount, details.presentModes.data());
 			}

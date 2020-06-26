@@ -1,7 +1,10 @@
 #include "Resources/ResourceManager.h"
 
-#include "Resources/Assets/TextureAssetUtils.h"
 #include "Logging/Logger.h"
+#include "Resources/Assets/TextureAssetUtils.h"
+#include "Resources/Assets/AudioAssetUtils.h"
+
+#pragma message("TODO: Handle failure to load a resource")
 
 namespace SSE
 {
@@ -9,8 +12,8 @@ namespace SSE
 
 	std::map<std::string, Graphics::Texture2D> ResourceManager::textures;
 	std::map<std::string, Graphics::Shader> ResourceManager::shaders;
+	std::map<std::string, Audio::AudioSample> ResourceManager::audioSamples;
 
-#pragma message("TODO: Handle failure to find texture")
 	Graphics::Texture2D ResourceManager::getTexture(const std::string& name)
 	{
 		auto textureIter = textures.find(name);
@@ -22,7 +25,6 @@ namespace SSE
 		return {};
 	}
 
-#pragma message("TODO: Handle failure to load texture")
 	Graphics::Texture2D ResourceManager::loadTexture(const std::string& name, const std::string& path)
 	{
 		Graphics::Texture2D result;
@@ -38,7 +40,6 @@ namespace SSE
 		return result;
 	}
 
-#pragma message("TODO: Handle failure to find shader")
 	Graphics::Shader ResourceManager::getShader(const std::string& name)
 	{
 		auto shaderIter = shaders.find(name);
@@ -50,7 +51,6 @@ namespace SSE
 		return {};
 	}
 
-#pragma message("TODO: Handle failure to load shader")
 	Graphics::Shader ResourceManager::loadShader(const std::string& name, const std::vector<std::string>& sourceFiles, const std::vector<SSE::Vulkan::ShaderModuleType>& moduleTypes)
 	{
 		Graphics::Shader result;
@@ -62,6 +62,35 @@ namespace SSE
 
 		return result;
 	}
+
+	Audio::AudioSample ResourceManager::getAudio(const std::string& name)
+	{
+		auto audioIter = audioSamples.find(name);
+		if (audioIter != audioSamples.end())
+		{
+			return audioIter->second;
+		}
+		else
+		{
+			return {};
+		}
+	}
+
+	Audio::AudioSample ResourceManager::loadAudio(const std::string& path, const std::string& name)
+	{
+		Audio::AudioSample result = {};
+
+		st dataSize;
+		byte* data = Assets::AudioAssetUtils::loadAudioFromFile("Source\\Audio\\" + path, dataSize);
+
+		if (data != nullptr && result.create(data, dataSize))
+		{
+			audioSamples[name] = result;
+		}
+
+		return result;
+	}
+
 
 	void ResourceManager::clear()
 	{
@@ -78,5 +107,12 @@ namespace SSE
 		}
 
 		shaders.clear();
+
+		for (auto& audioSample : audioSamples)
+		{
+			audioSample.second.destroy();
+		}
+
+		audioSamples.clear();
 	}
 }

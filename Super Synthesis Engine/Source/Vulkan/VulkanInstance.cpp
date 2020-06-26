@@ -45,12 +45,11 @@ namespace SSE
 			createInfo.enabledExtensionCount = (u32)extensions.size();
 			createInfo.ppEnabledExtensionNames = extensions.data();
 
-			VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
+			VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo = {};
 			Vulkan::ValidationLayers::getDebugMessengerCreateInfo(debugCreateInfo);
 			createInfo.pNext = &debugCreateInfo;
 
-			VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
-			if (result != VK_SUCCESS)
+			if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
 			{
 				GLOG_CRITICAL("Failed to create Vulkan instance.");
 				return false;

@@ -1,5 +1,5 @@
-#ifndef _SSE_TEXTURE_UTILS_H
-#define _SSE_TEXTURE_UTILS_H
+#ifndef _SSE_TEXTURE_ASSET_UTILS_H
+#define _SSE_TEXTURE_ASSET_UTILS_H
 
 #include <glm/glm.hpp>
 
@@ -13,6 +13,7 @@ namespace SSE::Assets::TextureAssetUtils
 	{
 		TF_RAW = 0x0,
 		TF_BMP,
+
 		TF_NUM_SUPPORTED
 	};
 

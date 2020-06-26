@@ -10,6 +10,7 @@
 #include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Vulkan/Graphics/VulkanSurface.h"
 #include "Resources/ResourceManager.h"
+#include "Audio/AudioManager.h"
 
 SSE::Graphics::GraphicsPipeline* gPipeline = nullptr;
 
@@ -40,6 +41,10 @@ namespace SSE
 
 		ResourceManager::loadTexture("texture", "test.bmp");
 		ResourceManager::loadShader("main", { "frag.spv","vert.spv" }, { Vulkan::ShaderModuleType::SMT_FRAGMENT, Vulkan::ShaderModuleType::SMT_VERTEX });
+		ResourceManager::loadAudio("sine.wav", "sine");
+
+		AudioManager::findDevice("mainAudio");
+		AudioManager::play(ResourceManager::getAudio("sine"));
 
 		gPipeline->create();
 
@@ -75,6 +80,8 @@ namespace SSE
 				}
 			}
 
+			AudioManager::update();
+
 			gPipeline->executeRenderPass();
 		}
 
@@ -84,6 +91,8 @@ namespace SSE
 	{
 		gPipeline->destroy();
 		delete gPipeline;
+
+		AudioManager::clear();
 
 		ResourceManager::clear();
 
