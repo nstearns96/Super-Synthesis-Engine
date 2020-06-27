@@ -71,7 +71,7 @@ namespace SSE
 					{
 						VulkanBuffer imageStagingBuffer;
 						if (transitionLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) &&
-							imageStagingBuffer.create(_dimensions.x * _dimensions.y * 4, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
+							imageStagingBuffer.create((st)_dimensions.x * _dimensions.y * 4, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
 						{
 							if (imageStagingBuffer.bufferData(data, false) &&
 								imageStagingBuffer.copyToImage(image, _dimensions))

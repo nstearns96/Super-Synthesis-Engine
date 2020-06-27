@@ -31,16 +31,15 @@ namespace SSE
 		}
 	}
 
-	AudioHandle AudioManager::play(Audio::AudioSample sample)
+	AudioHandle AudioManager::play(const Audio::AudioSample& sample)
 	{
 #pragma message("TODO: Get first active channel")
-		if (!audioChannels[0].isActive)
+		if (!audioChannels[0].getIsActive())
 		{
-			audioChannels[0].sample = sample;
-			audioChannels[0].isActive = true;
+			audioChannels[0].setSample(sample);
 
 #pragma message("TODO: Get rid of this once mixing is added and add audio queue control logic")
-			mainOutputDevice->queueAudio(audioChannels[0].sample);
+			mainOutputDevice->queueAudio(sample);
 			mainOutputDevice->unpause();
 			return 0;
 		}
@@ -54,11 +53,9 @@ namespace SSE
 
 	void AudioManager::stop(AudioHandle handle)
 	{
-		if (audioChannels[handle].isActive)
+		if (audioChannels[handle].getIsActive())
 		{
-			audioChannels[handle].playCursor = 0;
-			audioChannels[handle].sample = {};
-			audioChannels[handle].isActive = false;
+			audioChannels[handle].clear();
 
 #pragma message("TODO: Get rid of this once mixing is added and add audio queue control logic")
 			mainOutputDevice->pause();
@@ -74,7 +71,7 @@ namespace SSE
 	{
 		for (st c = 0; c < MAX_NUM_CHANNELS; ++c)
 		{
-			if (audioChannels[c].isActive)
+			if (audioChannels[c].getIsActive())
 			{
 				stop(c);
 			}
@@ -90,6 +87,7 @@ namespace SSE
 
 	void AudioManager::update()
 	{
+#pragma message("TODO: Figure out if an audio channel is outputting silence and, if so, stop it")
 #pragma message("TODO: Mix audio and queue it up here")
 		for (auto& device : audioDevices)
 		{

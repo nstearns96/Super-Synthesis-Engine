@@ -7,13 +7,20 @@ namespace SSE::Audio
 {
 	class AudioChannel
 	{
-	public:
+	private:
 #pragma message("TODO: Add properties like panning, looping, gain, etc")
 #pragma message("TODO: Add capability for changes over time like fading out")
-#pragma message("TODO: Add proper class interface")
 		AudioSample sample;
 		st playCursor;
 		bool isActive;
+
+	public:
+		void setSample(const AudioSample& sample);
+		AudioSample getSample();
+
+		bool getIsActive();
+
+		void clear();
 	};
 }
 

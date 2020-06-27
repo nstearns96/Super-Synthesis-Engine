@@ -10,7 +10,7 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanBuffer::create(u64 _size, bitfield usageFlags, bitfield memoryFlags)
+		bool VulkanBuffer::create(st _size, bitfield usageFlags, bitfield memoryFlags)
 		{
 			VkBufferCreateInfo bufferInfo{};
 			bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

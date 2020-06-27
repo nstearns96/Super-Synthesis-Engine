@@ -27,7 +27,7 @@ namespace SSE
 	public:
 		static bool findDevice(const std::string& name, bool isCapture = false);
 		
-		static AudioHandle play(Audio::AudioSample sample);
+		static AudioHandle play(const Audio::AudioSample& sample);
 
 		static void stop(AudioHandle handle);
 

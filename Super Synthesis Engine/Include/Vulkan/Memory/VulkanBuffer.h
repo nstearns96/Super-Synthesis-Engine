@@ -15,15 +15,15 @@ namespace SSE::Vulkan
 	private:
 		VkBuffer buffer;
 		VulkanDeviceMemory bufferMemory;
-		u64 size;
+		st size;
 
 	public:
-		bool create(u64 _size, bitfield usageFlags, bitfield memoryFlags);
+		bool create(st _size, bitfield usageFlags, bitfield memoryFlags);
 
 		void destroy();
 
 		VkBuffer getBuffer();
-		u64 getSize();
+		st getSize();
 		bool bufferData(void* data, bool useStagingBuffer = true);
 		bool copyToImage(VkImage image, const glm::uvec2& dimensions);
 	};
