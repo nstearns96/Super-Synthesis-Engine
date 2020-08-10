@@ -1,4 +1,4 @@
-#include <Include/Super Synthesis.h>
+#include <Super Synthesis.h>
 
 int main()
 {

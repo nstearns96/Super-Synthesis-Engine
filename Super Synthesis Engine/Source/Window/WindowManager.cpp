@@ -2,7 +2,6 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_vulkan.h>
-#include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Logging/Logger.h"

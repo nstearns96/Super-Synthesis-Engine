@@ -11,13 +11,28 @@ namespace SSE
 
 	namespace Graphics
 	{
-		bool Texture2D::create(void* data, const glm::uvec2& _dimensions, const VkFormat _format, VkImageTiling _tiling)
+		bool Texture2D::create(Bitmap& bitmap, VkImageTiling _tiling)
 		{
 			bool result = false;
-			if (image.create(data, _dimensions, _format, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT))
+			if (bitmap.getFormat() != VK_FORMAT_B8G8R8A8_UINT)
+			{
+				BitmapFormatTransitionParams params = {};
+				params.newFormat = VK_FORMAT_B8G8R8A8_UINT;
+				params.channelParams[CHANNEL_GREEN].destinationChannel = CHANNEL_GREEN;
+				params.channelParams[CHANNEL_BLUE].destinationChannel = CHANNEL_BLUE;
+				params.channelParams[CHANNEL_ALPHA].destinationChannel = CHANNEL_ALPHA;
+				params.channelParams[CHANNEL_ALPHA].constant = UINT_MAX;
+				if (!bitmap.transitionFormat(params))
+				{
+					GLOG_CRITICAL("Could not create texture. Failed to transition input bitmap.");
+					return false;
+				}
+			}
+
+			if (image.create(bitmap.getData(), bitmap.getDimensions(), VK_FORMAT_B8G8R8A8_SRGB, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT))
 			{
 				if (image.transitionLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) &&
-					imageView.create(image.getImage(), _format, VK_IMAGE_ASPECT_COLOR_BIT))
+					imageView.create(image.getImage(), VK_FORMAT_B8G8R8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT))
 				{
 					VkSamplerCreateInfo samplerInfo{};
 					samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;

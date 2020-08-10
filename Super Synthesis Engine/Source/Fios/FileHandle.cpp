@@ -86,7 +86,7 @@ namespace SSE
 		std::vector<byte> result;
 		if (isValid() && (mode & FioMode::FIOM_READ))
 		{
-			size_t fileSize = (size_t)handle.tellg();
+			st fileSize = (st)handle.tellg();
 			result.resize(fileSize);
 			handle.seekg(0);
 			handle.read((i8*)result.data(), fileSize);

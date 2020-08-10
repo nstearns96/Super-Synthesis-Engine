@@ -30,6 +30,11 @@ namespace SSE
 					{
 						presentFamily = &queueFamilies[i];
 					}
+
+					if (graphicsFamily == presentFamily)
+					{
+						break;
+					}
 				}
 			}
 

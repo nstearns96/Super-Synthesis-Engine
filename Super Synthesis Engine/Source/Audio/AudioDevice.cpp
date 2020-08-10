@@ -11,7 +11,8 @@ namespace SSE
 	{
 		bool AudioDevice::create(bool isCapture)
 		{
-			if (SDL_GetNumAudioDevices(isCapture) == 0)
+			i32 numDevices = SDL_GetNumAudioDevices(isCapture);
+			if (numDevices == 0)
 			{
 				GLOG_CRITICAL("No available audio deivce.");
 				return false;
@@ -26,9 +27,11 @@ namespace SSE
 			requestedAudioSpec.channels = 2;
 			requestedAudioSpec.samples = 4096;
 
+			const char* deviceName = SDL_GetAudioDeviceName(0, isCapture);
+
 			device = SDL_OpenAudioDevice
 			(
-				SDL_GetAudioDeviceName(0, isCapture),
+				deviceName,
 				isCapture,
 				&requestedAudioSpec,
 				&actualAudioSpec,

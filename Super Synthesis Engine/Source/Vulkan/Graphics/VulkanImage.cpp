@@ -14,6 +14,7 @@ namespace SSE
 
 	namespace Vulkan
 	{
+#pragma message("TODO: Expand these into arrays")
 		static const std::map<VkImageLayout, VkAccessFlags> layoutToAccessMap =
 		{
 			{VK_IMAGE_LAYOUT_UNDEFINED, NULL},

@@ -48,7 +48,7 @@ namespace SSE
 			return buffer;
 		}
 
-		u64 VulkanBuffer::getSize()
+		st VulkanBuffer::getSize()
 		{
 			return size;
 		}
