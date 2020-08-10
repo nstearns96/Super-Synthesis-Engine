@@ -6,6 +6,7 @@
 
 #include "Vulkan/Graphics/VulkanImage.h"
 #include "Vulkan/Graphics/VulkanImageView.h"
+#include "Graphics/Bitmap.h"
 
 namespace SSE::Graphics
 {
@@ -18,7 +19,7 @@ namespace SSE::Graphics
 		VkSampler sampler;
 
 	public:
-		bool create(void* data, const glm::uvec2& _dimensions, VkFormat _format, VkImageTiling _tiling);
+		bool create(Bitmap& bitmap, VkImageTiling _tiling);
 
 		void destroy();
 

@@ -3,8 +3,11 @@
 #include "Logging/Logger.h"
 #include "Resources/Assets/TextureAssetUtils.h"
 #include "Resources/Assets/AudioAssetUtils.h"
+#include "Graphics/Bitmap.h"
+#include "Graphics/Font.h"
 
 #pragma message("TODO: Handle failure to load a resource")
+#pragma message("TODO: Handle failure to find a resource")
 
 namespace SSE
 {
@@ -13,6 +16,7 @@ namespace SSE
 	std::map<std::string, Graphics::Texture2D> ResourceManager::textures;
 	std::map<std::string, Graphics::Shader> ResourceManager::shaders;
 	std::map<std::string, Audio::AudioSample> ResourceManager::audioSamples;
+	std::map<std::string, Graphics::Font> ResourceManager::fonts;
 
 	Graphics::Texture2D ResourceManager::getTexture(const std::string& name)
 	{
@@ -27,17 +31,25 @@ namespace SSE
 
 	Graphics::Texture2D ResourceManager::loadTexture(const std::string& name, const std::string& path)
 	{
-		Graphics::Texture2D result;
+		Graphics::Texture2D result = {};
 
 		glm::uvec2 dimensions;
-		byte* imageData = Assets::TextureAssetUtils::loadTextureFromFile("Source\\Textures\\" + path, dimensions);
+		const byte* imageData = Assets::TextureAssetUtils::loadTextureFromFile("Source\\Textures\\" + path, dimensions);
+		Graphics::Bitmap bitmap;
+		bitmap.create(imageData, dimensions, VK_FORMAT_B8G8R8A8_UINT);
 		if (imageData != nullptr && 
-			result.create(imageData, dimensions, VK_FORMAT_B8G8R8A8_SRGB, VK_IMAGE_TILING_OPTIMAL))
+			result.create(bitmap, VK_IMAGE_TILING_OPTIMAL))
 		{
 			textures.emplace(name, result);
 		}
 
 		return result;
+	}
+
+	Graphics::Texture2D ResourceManager::createTexture(const std::string& name, const Graphics::Texture2D& texture)
+	{
+		textures.emplace(name, texture);
+		return textures.at(name);
 	}
 
 	Graphics::Shader ResourceManager::getShader(const std::string& name)
@@ -91,6 +103,38 @@ namespace SSE
 		return result;
 	}
 
+	Graphics::Font ResourceManager::getFont(const std::string& name)
+	{
+		auto fontIter = fonts.find(name);
+		if (fontIter != fonts.end())
+		{
+			return fontIter->second;
+		}
+		else
+		{
+			return {};
+		}
+	}
+
+	Graphics::Font ResourceManager::loadFont(const std::string& path, const std::string& name)
+	{
+		Graphics::Font result = {};
+
+		FileHandle fh;
+		if (fh.open("Source\\Fonts\\" + path, FIOM_BINARY | FIOM_READ))
+		{
+			std::vector<byte> fontData = fh.readIntoVector();
+			byte* data = new byte[fontData.size()];
+			memcpy(data, fontData.data(), fontData.size());
+
+			if (data != nullptr && result.create(data))
+			{
+				fonts[name] = result;
+			}
+		}
+
+		return result;
+	}
 
 	void ResourceManager::clear()
 	{
@@ -114,5 +158,12 @@ namespace SSE
 		}
 
 		audioSamples.clear();
+
+		for (auto& font : fonts)
+		{
+			font.second.destroy();
+		}
+
+		fonts.clear();
 	}
 }

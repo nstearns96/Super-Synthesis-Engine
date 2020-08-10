@@ -353,21 +353,6 @@ namespace SSE
 
 			Vulkan::VulkanLogicalDevice logicalDevice = LOGICAL_DEVICE;
 			VkResult submitResult = logicalDevice.submit(submitInfo, &inFlightFences[currentFrame]);
-			if (submitResult == VK_ERROR_OUT_OF_DATE_KHR || submitResult == VK_SUBOPTIMAL_KHR || isFrameBufferDirty)
-			{
-				if (isFrameBufferDirty)
-				{
-					GLOG_WARNING("Frame buffer size changed. Recreating swap chain.");
-				}
-				else
-				{
-					GLOG_WARNING("Swap chain out of date or suboptimal. Recreating swap chain.");
-				} 
-				
-				isFrameBufferDirty = false;
-				recreateSwapChain();
-				return false;
-			}
 
 			VkPresentInfoKHR presentInfo{};
 			presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -383,6 +368,22 @@ namespace SSE
 			logicalDevice.present(presentInfo);
 
 			currentFrame = (++currentFrame) % MAX_FRAMES_IN_FLIGHT;
+
+			if (submitResult == VK_ERROR_OUT_OF_DATE_KHR || submitResult == VK_SUBOPTIMAL_KHR || isFrameBufferDirty)
+			{
+				if (isFrameBufferDirty)
+				{
+					GLOG_WARNING("Frame buffer size changed. Recreating swap chain.");
+					isFrameBufferDirty = false;
+				}
+				else
+				{
+					GLOG_WARNING("Swap chain out of date or suboptimal. Recreating swap chain.");
+				}
+
+				recreateSwapChain();
+				return false;
+			}
 
 			return true;
 		}
