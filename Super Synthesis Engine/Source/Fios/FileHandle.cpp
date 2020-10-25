@@ -7,7 +7,7 @@ namespace SSE
 {
 	FileHandle::FileHandle(const std::string& _filePath, bitfield _mode)
 	{
-		this->open(_filePath, _mode);
+		this->create(_filePath, _mode);
 	}
 
 	FileHandle::~FileHandle()
@@ -17,7 +17,7 @@ namespace SSE
 		mode = FioMode::FIOM_NONE;
 	}
 
-	bool FileHandle::close()
+	bool FileHandle::destroy()
 	{
 		if (isValid())
 		{
@@ -39,7 +39,7 @@ namespace SSE
 		}
 	}
 
-	bool FileHandle::open(const std::string& _filePath, bitfield _mode)
+	bool FileHandle::create(const std::string& _filePath, bitfield _mode)
 	{
 		bitfield fhMode = 0;
 		if (_mode & FioMode::FIOM_READ)
@@ -55,7 +55,7 @@ namespace SSE
 			return false;
 		}
 
-		if (this->close())
+		if (this->destroy())
 		{
 			if (_mode & FioMode::FIOM_BINARY)
 			{
@@ -92,7 +92,7 @@ namespace SSE
 			handle.read((i8*)result.data(), fileSize);
 		}
 
-		close();
+		destroy();
 
 		return result;
 	}

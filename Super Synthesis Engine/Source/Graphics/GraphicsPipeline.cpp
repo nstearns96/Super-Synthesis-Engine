@@ -21,10 +21,13 @@ namespace SSE
 #pragma message("TODO: Add functionality for pipeline parameters")
 		bool GraphicsPipeline::constructPipeline()
 		{
+#pragma message("TODO: Query descriptions from shader meta data")
+			Model mainModel = ResourceManager::getModel("viking_room");
+
 			VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-			auto bindingDescription = vertexFormat.getBindingDescription();
-			auto attributeDescriptions = vertexFormat.getAttributeDescriptions();
+			auto bindingDescription = mainModel.getVertexData().getFormat().getBindingDescription();
+			auto attributeDescriptions = mainModel.getVertexData().getFormat().getAttributeDescriptions();
 
 			vertexInputInfo.vertexBindingDescriptionCount = 1;
 			vertexInputInfo.vertexAttributeDescriptionCount = (u32)attributeDescriptions.size();
@@ -156,44 +159,6 @@ namespace SSE
 			}
 
 #pragma message("TODO: Load data from file via Asset namespace")
-			float data[] = 
-			{
-				0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-				0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-				0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-				0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-				-0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-				-0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-				-0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-				-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f
-			};
-
-			vertexFormat.create({ VA_POS3F, VA_COL3F, VA_TEX2F });
-
-			VertexData vertexData;
-			vertexData.create
-			(
-				data,
-				64 * sizeof(r32),
-				vertexFormat
-			);
-
-			if (!vertexBuffer.create
-				(
-					vertexData,
-					{
-						0, 2, 1, 1, 2, 3,
-						0, 1, 4, 1, 5, 4,
-						4, 5, 6, 5, 7, 6,
-						2, 6, 7, 2, 7, 3,
-						0, 4, 6, 0, 6, 2,
-						1, 3, 7, 1, 7, 5
-					}
-				)
-			)
-			{
-				return false;
-			}
 
 			for (u32 i = 0; i < frameBuffers.size(); ++i)
 			{
@@ -264,8 +229,6 @@ namespace SSE
 		{
 			vkDeviceWaitIdle(LOGICAL_DEVICE_DEVICE);
 		
-			vertexBuffer.destroy();
-
 			for (st u = 0; u < uniformBuffers.size(); ++u)
 			{
 				uniformBuffers[u].destroy();
@@ -482,15 +445,17 @@ namespace SSE
 				vkCmdBeginRenderPass(currentCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 				vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 
-				VkBuffer vertexBuffers[] = { vertexBuffer.getVertexBuffer() };
+				Model mainModel = ResourceManager::getModel("viking_room");
+
+				VkBuffer vertexBuffers[] = {mainModel.getVertexBuffer().getVertexBuffer() };
 				VkDeviceSize offsets[] = { 0 };
 				vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
 
-				vkCmdBindIndexBuffer(currentCommandBuffer, vertexBuffer.getIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
+				vkCmdBindIndexBuffer(currentCommandBuffer, mainModel.getVertexBuffer().getIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
 
 				vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &descriptorPool.getDescriptorSet(i), 0, nullptr);
 
-				vkCmdDrawIndexed(currentCommandBuffer, (u32)vertexBuffer.getIndexCount(), 1, 0, 0, 0);
+				vkCmdDrawIndexed(currentCommandBuffer, (u32)mainModel.getVertexBuffer().getIndexCount(), 1, 0, 0, 0);
 
 				vkCmdEndRenderPass(currentCommandBuffer);
 

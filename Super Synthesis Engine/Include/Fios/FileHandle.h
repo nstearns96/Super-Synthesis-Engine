@@ -23,8 +23,8 @@ namespace SSE
 
 		~FileHandle();
 
-		bool open(const std::string& _filePath, bitfield _mode);
-		bool close();
+		bool create(const std::string& _filePath, bitfield _mode);
+		bool destroy();
 
 		std::vector<byte> readIntoVector();
 		void writeToFile(const std::string& buffer);

@@ -17,7 +17,9 @@ namespace SSE
 		VertexFormat format;
 
 	public:
-		void create(void* _data, st _size, VertexFormat& _format);
+		bool create(void* _data, st _size, VertexFormat& _format);
+
+		void destroy();
 
 		void* getData();
 		st getSize();

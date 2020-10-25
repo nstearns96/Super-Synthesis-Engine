@@ -24,14 +24,14 @@ namespace SSE
 
 	void Logger::openLog(const std::string& logPath, ErrorLevel _logLevel, bool _logConsole)
 	{
-		outputFile.open(logPath, FioMode::FIOM_WRITE);
+		outputFile.create(logPath, FioMode::FIOM_WRITE);
 		this->logLevel = _logLevel;
 		this->logConsole = _logConsole;
 	}
 
 	void Logger::closeLog()
 	{
-		outputFile.close();
+		outputFile.destroy();
 	}
 
 	void Logger::logError(const Error& error)

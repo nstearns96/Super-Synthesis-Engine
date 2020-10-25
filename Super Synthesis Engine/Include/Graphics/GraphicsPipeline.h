@@ -36,10 +36,8 @@ namespace SSE::Graphics
 		std::vector<VkSemaphore> renderFinishedSemaphores;
 		std::vector<VkFence> inFlightFences;
 		std::vector<VkFence> imagesInFlight;
-		Vulkan::VulkanVertexBuffer vertexBuffer;
 		std::vector<UniformBuffer<MatricesObject>> uniformBuffers;
 		Vulkan::VulkanDescriptorPool descriptorPool;
-		VertexFormat vertexFormat;
 
 		u32 currentFrame;
 

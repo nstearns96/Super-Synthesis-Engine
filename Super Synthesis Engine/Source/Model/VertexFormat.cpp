@@ -2,9 +2,15 @@
 
 namespace SSE
 {
-	void VertexFormat::create(const std::vector<VertexAspectType>& _aspects)
+	bool VertexFormat::create(const std::vector<VertexAspectType>& _aspects)
 	{
 		aspects = _aspects;
+		return true;
+	}
+
+	void VertexFormat::destroy()
+	{
+		aspects.clear();
 	}
 
 	st VertexFormat::getFormatStride()

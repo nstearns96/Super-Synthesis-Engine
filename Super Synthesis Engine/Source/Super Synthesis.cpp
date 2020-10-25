@@ -39,27 +39,16 @@ namespace SSE
 		gPipeline = new Graphics::GraphicsPipeline;
 		Vulkan::initVulkan(WindowManager::gWindowManager.getActiveWindow(), gPipeline->surface);
 
-		Graphics::Font font = ResourceManager::loadFont("PlayfairDisplay-Regular.ttf", "PlayfairDisplay");
-		Graphics::Bitmap bitmap = font.getBitmapForString("Test", 100.0f/font.getFullHeight());
-		
-		Graphics::BitmapFormatTransitionParams bitmapTransitionParams;
-		bitmapTransitionParams.newFormat = VK_FORMAT_B8G8R8A8_UINT;
-		bitmapTransitionParams.palette[0] = 0xffffffff;
-		bitmapTransitionParams.palette[1] = 0xff000000;
-		bitmap.transitionFormat(bitmapTransitionParams);
-
-		Graphics::Texture2D fontTexture;
-		fontTexture.create(bitmap, VK_IMAGE_TILING_OPTIMAL);
-		
-		ResourceManager::createTexture("texture", fontTexture);
+		ResourceManager::loadTexture("texture", "viking_room.bmp");
 		ResourceManager::loadShader("main", { "frag.spv","vert.spv" }, { Vulkan::ShaderModuleType::SMT_FRAGMENT, Vulkan::ShaderModuleType::SMT_VERTEX });
-		ResourceManager::loadAudio("sine.wav", "sine");
+		ResourceManager::loadAudio("sine", "sine.wav");
+
+		ResourceManager::loadModel("viking_room", "viking_room.obj");
 
 		AudioManager::findDevice("mainAudio");
 		AudioManager::play(ResourceManager::getAudio("sine"));
 
 		gPipeline->create();
-		bitmap.destroy();
 		return true;
 	}
 

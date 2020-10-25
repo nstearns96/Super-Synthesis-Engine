@@ -21,7 +21,7 @@ namespace SSE
 		byte* loadAudioFromFile(const std::string& path, st& size)
 		{
 			FileHandle fileHandle;
-			if (fileHandle.open(path, FIOM_READ | FIOM_BINARY))
+			if (fileHandle.create(path, FIOM_READ | FIOM_BINARY))
 			{
 				std::vector<byte> audioData = fileHandle.readIntoVector();
 

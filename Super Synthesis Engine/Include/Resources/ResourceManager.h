@@ -7,6 +7,7 @@
 #include "Graphics/Shader.h"
 #include "Audio/AudioSample.h"
 #include "Graphics/Font.h"
+#include "Model/Model.h"
 
 #pragma message("TODO: Add support for streamed audio resource")
 
@@ -21,6 +22,7 @@ namespace SSE
 		static std::map<std::string, Graphics::Shader> shaders;
 		static std::map<std::string, Audio::AudioSample> audioSamples;
 		static std::map<std::string, Graphics::Font> fonts;
+		static std::map<std::string, Model> models;
 
 	public:
 		static Graphics::Texture2D getTexture(const std::string& name);
@@ -39,6 +41,10 @@ namespace SSE
 		static Graphics::Font getFont(const std::string& name);
 
 		static Graphics::Font loadFont(const std::string& name, const std::string& path);
+
+		static Model getModel(const std::string& name);
+
+		static Model loadModel(const std::string& name, const std::string& path);
 
 		static void clear();
 	};

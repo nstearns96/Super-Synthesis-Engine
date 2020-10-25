@@ -16,7 +16,9 @@ namespace SSE
 		std::vector<VertexAspectType> aspects;
 
 	public:
-		void create(const std::vector<VertexAspectType>& _aspects);
+		bool create(const std::vector<VertexAspectType>& _aspects);
+
+		void destroy();
 
 		st getFormatStride();
 		std::vector<VertexAspectType> getAspects();

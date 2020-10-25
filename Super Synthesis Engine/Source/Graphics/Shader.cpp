@@ -14,7 +14,7 @@ namespace SSE
 			for (st i = 0; i < sourceFiles.size(); ++i)
 			{
 				SSE::FileHandle sourceFile;
-				sourceFile.open("Source\\Shaders\\" + sourceFiles[i], FioMode::FIOM_BINARY | FioMode::FIOM_READ);
+				sourceFile.create("Source\\Shaders\\" + sourceFiles[i], FioMode::FIOM_BINARY | FioMode::FIOM_READ);
 
 				const std::vector<byte> source = sourceFile.readIntoVector();
 

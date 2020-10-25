@@ -105,7 +105,7 @@ namespace SSE
 
 		i32 Font::getBaselineForScale(r32 scale)
 		{
-			double interm = scale;
+			r64 interm = scale;
 			return (i32)std::round(interm * PARSE_SHORT_BE(tableMap.at(PARSE_ULONG("hhea")) + 4));
 		}
 
@@ -311,7 +311,7 @@ namespace SSE
 					u16 subTableCount = PARSE_USHORT_BE(lookupTable + 4);
 					const byte* subTableOffsets = lookupTable + 6;
 
-					for (int subTableIndex = 0; subTableIndex < subTableCount; ++subTableIndex)
+					for (i32 subTableIndex = 0; subTableIndex < subTableCount; ++subTableIndex)
 					{
 						const byte* subTable = lookupTable + PARSE_USHORT_BE(subTableOffsets + 2 * subTableIndex);
 						const byte* coverageIndices = subTable + PARSE_USHORT_BE(subTable + 2);
@@ -818,7 +818,7 @@ namespace SSE
 				byte flags = vertices[p].type;
 				if (flags & 4)
 				{
-					short deltaY = *pointIter++;
+					i16 deltaY = *pointIter++;
 					y += (flags & 32) ? deltaY : -deltaY;
 				}
 				else
@@ -832,9 +832,9 @@ namespace SSE
 				vertices[p].position.y = (r64)y;
 			}
 
-			std::vector<unsigned short> endContourIndices;
+			std::vector<u16> endContourIndices;
 
-			for (st c = 0; c < (unsigned int)numContours; ++c)
+			for (st c = 0; c < (u32)numContours; ++c)
 			{
 				endContourIndices.push_back(PARSE_USHORT_BE(contourEndPoints + c * 2));
 			}

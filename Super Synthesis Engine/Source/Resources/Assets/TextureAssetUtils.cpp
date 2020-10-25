@@ -24,7 +24,7 @@ namespace SSE
 		byte* loadTextureFromFile(const std::string& path, glm::uvec2& dimensions)
 		{	
 			FileHandle fh;
-			fh.open(path, FioMode::FIOM_READ | FioMode::FIOM_BINARY);
+			fh.create(path, FioMode::FIOM_READ | FioMode::FIOM_BINARY);
 
 			std::vector<byte> imageData = fh.readIntoVector();
 

@@ -3,6 +3,7 @@
 #include "Logging/Logger.h"
 #include "Resources/Assets/TextureAssetUtils.h"
 #include "Resources/Assets/AudioAssetUtils.h"
+#include "Resources/Assets/ModelAssetUtils.h"
 #include "Graphics/Bitmap.h"
 #include "Graphics/Font.h"
 
@@ -17,6 +18,7 @@ namespace SSE
 	std::map<std::string, Graphics::Shader> ResourceManager::shaders;
 	std::map<std::string, Audio::AudioSample> ResourceManager::audioSamples;
 	std::map<std::string, Graphics::Font> ResourceManager::fonts;
+	std::map<std::string, Model> ResourceManager::models;
 
 	Graphics::Texture2D ResourceManager::getTexture(const std::string& name)
 	{
@@ -43,6 +45,7 @@ namespace SSE
 			textures.emplace(name, result);
 		}
 
+		bitmap.destroy();
 		return result;
 	}
 
@@ -121,7 +124,7 @@ namespace SSE
 		Graphics::Font result = {};
 
 		FileHandle fh;
-		if (fh.open("Source\\Fonts\\" + path, FIOM_BINARY | FIOM_READ))
+		if (fh.create("Source\\Fonts\\" + path, FIOM_BINARY | FIOM_READ))
 		{
 			std::vector<byte> fontData = fh.readIntoVector();
 			byte* data = new byte[fontData.size()];
@@ -134,6 +137,33 @@ namespace SSE
 		}
 
 		return result;
+	}
+
+	Model ResourceManager::getModel(const std::string& name)
+	{
+		auto modelIter = models.find(name);
+		if (modelIter != models.end())
+		{
+			return modelIter->second;
+		}
+		else
+		{
+			return {};
+		}
+	}
+
+	Model ResourceManager::loadModel(const std::string& name, const std::string& path)
+	{
+		Model* result = Assets::ModelAssetUtils::loadModelFromFile("Source\\Models\\" + path);
+		if (result != nullptr)
+		{
+			models.emplace(name, *result);
+			return *result;
+		}
+		else
+		{
+			return {};
+		}
 	}
 
 	void ResourceManager::clear()
@@ -165,5 +195,12 @@ namespace SSE
 		}
 
 		fonts.clear();
+
+		for (auto& model : models)
+		{
+			model.second.destroy();
+		}
+
+		models.clear();
 	}
 }

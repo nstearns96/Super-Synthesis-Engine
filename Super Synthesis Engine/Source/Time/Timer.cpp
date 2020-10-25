@@ -20,7 +20,7 @@ namespace SSE
 		perfCountEnd = SDL_GetPerformanceCounter();
 	}
 
-	double Timer::getTime()
+	r64 Timer::getTime()
 	{
 		if (perfCountEnd < perfCountStart)
 		{
