@@ -1,5 +1,7 @@
 #include "Window/Window.h"
-#include "Error/Error.h"
+
+#include <SDL/SDL_vulkan.h>
+
 #include "Logging/Logger.h"
 
 namespace SSE
@@ -16,17 +18,32 @@ namespace SSE
 		}
 		else
 		{
-			id = SDL_GetWindowID(window);
-			i32 x, y;
-			SDL_GetWindowPosition(window, &x, &y);
-			position = glm::uvec2{x,y};
-			dimensions = _dimensions;
-			status = flags;
+			if (surface.create(window))
+			{
+				id = SDL_GetWindowID(window);
+				i32 x, y;
+				SDL_GetWindowPosition(window, &x, &y);
+				position = glm::uvec2{ x,y };
+				dimensions = _dimensions;
+				status = flags;
+			}
+			else
+			{
+				GLOG_CRITICAL("Failed to get window surface");
+				SDL_DestroyWindow(window);
+			}
 		}
 	}
 
-	Window::~Window()
-	{}
+	void Window::destroy()
+	{
+		surface.destroy();
+	}
+
+	Vulkan::VulkanSurface Window::getSurface() const
+	{
+		return surface;
+	}
 
 	SDL_Window* Window::getWindow()
 	{
@@ -153,5 +170,12 @@ namespace SSE
 			break;
 		}
 		}
+	}
+
+	glm::uvec2 Window::getFramebufferDimensions()
+	{
+		glm::uvec2 result;
+		SDL_Vulkan_GetDrawableSize(window, (i32 *)&result.x, (i32 *)&result.y);
+		return result;
 	}
 }

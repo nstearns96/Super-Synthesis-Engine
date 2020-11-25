@@ -1,11 +1,13 @@
 #ifndef _SSE_MODEL_H
 #define _SSE_MODEL_H
 
-#include "EngineTypeDefs.h"
-#include "Model/VertexData.h"
-#include "Vulkan/Graphics/VulkanVertexBuffer.h"
-
 #include <vector>
+
+#include "EngineTypeDefs.h"
+
+#include "Model/VertexData.h"
+
+#include "Vulkan/Graphics/VulkanVertexBuffer.h"
 
 namespace SSE
 {
@@ -21,7 +23,7 @@ namespace SSE
 
 		void destroy();
 
-		Vulkan::VulkanVertexBuffer getVertexBuffer();
+		Vulkan::VulkanVertexBuffer getVertexBuffer() const;
 		VertexData getVertexData();
 	};
 }

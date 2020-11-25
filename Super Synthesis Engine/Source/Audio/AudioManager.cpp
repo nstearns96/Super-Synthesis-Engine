@@ -1,6 +1,7 @@
 #include "Audio/AudioManager.h"
 
 #include "Audio/AudioDeviceStatus.h"
+
 #include "Logging/Logger.h"
 
 #pragma message("TODO: Mix audio channels")
@@ -31,15 +32,15 @@ namespace SSE
 		}
 	}
 
-	AudioHandle AudioManager::play(const Audio::AudioSample& sample)
+	AudioHandle AudioManager::play(const Audio::AudioSample* sample)
 	{
 #pragma message("TODO: Get first active channel")
 		if (!audioChannels[0].getIsActive())
 		{
-			audioChannels[0].setSample(sample);
+			audioChannels[0].setSample(*sample);
 
 #pragma message("TODO: Get rid of this once mixing is added and add audio queue control logic")
-			mainOutputDevice->queueAudio(sample);
+			mainOutputDevice->queueAudio(*sample);
 			mainOutputDevice->unpause();
 			return 0;
 		}

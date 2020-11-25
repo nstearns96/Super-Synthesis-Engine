@@ -3,27 +3,42 @@
 
 #include <vector>
 
+#include <spirv_reflect.h>
 #include <vulkan/vulkan.h>
 
 #include "EngineTypeDefs.h"
-#include "VulkanShaderModuleType.h"
+
+#include "Graphics/Shaders/ShaderModuleType.h"
+
+#include "Model/VertexFormat.h"
 
 namespace SSE::Vulkan
 {
+	struct DescriptorSetLayoutData 
+	{
+		uint32_t set_number;
+		VkDescriptorSetLayoutCreateInfo create_info;
+		std::vector<VkDescriptorSetLayoutBinding> bindings;
+	};
+
 	class VulkanShaderModule
 	{
 	private:
 		VkShaderModule shaderModule;
-		ShaderModuleType moduleType;
+		Graphics::ShaderModuleType moduleType;
+		SpvReflectShaderModule reflectionModule;
 
 	public:
-		bool create(const std::vector<byte>& code, ShaderModuleType _moduleType);
+		bool create(const std::vector<byte>& code, Graphics::ShaderModuleType _moduleType);
 
 		void destroy();
 
-		ShaderModuleType getModuleType();
-		VkShaderModule getModule();
+		Graphics::ShaderModuleType getModuleType() const;
+		VkShaderModule getModule() const;
 
+		VertexFormat getInputFormat() const;
+		std::vector<DescriptorSetLayoutData> getDescriptorSetLayoutData() const;
+		const char* getEntryPoint() const;
 	};
 }
 

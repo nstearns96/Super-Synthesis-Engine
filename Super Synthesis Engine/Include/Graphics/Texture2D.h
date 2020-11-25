@@ -1,12 +1,13 @@
 #ifndef _SSE_TEXTURE_2D_H
 #define _SSE_TEXTURE_2D_H
 
-#include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
+#include <vulkan/vulkan.h>
+
+#include "Graphics/Bitmap.h"
 
 #include "Vulkan/Graphics/VulkanImage.h"
 #include "Vulkan/Graphics/VulkanImageView.h"
-#include "Graphics/Bitmap.h"
 
 namespace SSE::Graphics
 {
@@ -23,8 +24,8 @@ namespace SSE::Graphics
 
 		void destroy();
 
-		Vulkan::VulkanImageView getImageView();
-		VkSampler getSampler();
+		Vulkan::VulkanImageView getImageView() const;
+		VkSampler getSampler() const;
 	};
 }
 #endif

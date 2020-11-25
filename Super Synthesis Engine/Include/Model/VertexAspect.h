@@ -1,9 +1,9 @@
 #ifndef _SSE_VERTEX_ASPECT_H
 #define _SSE_VERTEX_ASPECT_H
 
-#include <glm/glm.hpp>
-
 #include <map>
+
+#include <glm/glm.hpp>
 
 #include "EngineTypeDefs.h"
 
@@ -11,6 +11,7 @@ namespace SSE
 {
 	enum VertexAspectType
 	{
+		VA_NONE,
 		VA_POS2F,
 		VA_POS3F,
 		VA_COL3F,
@@ -20,23 +21,25 @@ namespace SSE
 		VA_TEX3F
 	};
 
-	const static std::map<VertexAspectType, st> aspectPropertyMap =
+	const static st aspectPropertyMap[] =
 	{
-		{VA_POS2F, 2},
-		{VA_POS3F, 3},
-		{VA_COL3F, 3},
-		{VA_COL4F, 4},
-		{VA_TEX1F, 1},
-		{VA_TEX2F, 2},
-		{VA_TEX3F, 2}
+		0,
+		2,
+		3,
+		3,
+		4,
+		1,
+		2,
+		2
 	};
 
 	const static VkFormat sizeToFormat[] = 
 	{
-		 VK_FORMAT_R32_SFLOAT, 
-		 VK_FORMAT_R32G32_SFLOAT, 
-		 VK_FORMAT_R32G32B32_SFLOAT, 
-		 VK_FORMAT_R32G32B32A32_SFLOAT
+		VK_FORMAT_UNDEFINED,
+		VK_FORMAT_R32_SFLOAT, 
+		VK_FORMAT_R32G32_SFLOAT, 
+		VK_FORMAT_R32G32B32_SFLOAT, 
+		VK_FORMAT_R32G32B32A32_SFLOAT
 	};
 }
 

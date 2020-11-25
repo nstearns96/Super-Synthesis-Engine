@@ -2,8 +2,9 @@
 
 #include <set>
 
-#include "Vulkan/VulkanInstance.h"
 #include "Logging/Logger.h"
+
+#include "Vulkan/VulkanInstance.h"
 
 namespace SSE
 {
@@ -20,7 +21,7 @@ namespace SSE
 
 		VulkanDeviceManager VulkanDeviceManager::gDeviceManager;
 
-		bool VulkanDeviceManager::initDevices(VulkanSurface& surface)
+		bool VulkanDeviceManager::initDevices()
 		{
 			VkInstance instance = VulkanInstance::gInstance.getInstance();
 
@@ -41,7 +42,7 @@ namespace SSE
 			{
 				if (!activePhysicalDevice.initDevice(physicalDevice)) continue;
 
-				if (activePhysicalDevice.isSuitable(surface) && checkDeviceExtensionSupport(activePhysicalDevice))
+				if (activePhysicalDevice.isSuitable() && checkDeviceExtensionSupport(activePhysicalDevice))
 				{
 					foundDevice = true;
 					break;

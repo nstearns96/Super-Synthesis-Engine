@@ -1,16 +1,20 @@
 #include "Graphics/GraphicsPipeline.h"
 
-#include <SDL/SDL_vulkan.h>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <chrono>
 
-#include "Vulkan/Devices/VulkanDeviceManager.h"
-#include "Logging/Logger.h"
-#include "Graphics/Shader.h"
-#include "Window/WindowManager.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <SDL/SDL_vulkan.h>
+
+#include "Graphics/Camera.h"
 #include "Graphics/Texture2D.h"
+
+#include "Logging/Logger.h"
+
 #include "Resources/ResourceManager.h"
+
+#include "Vulkan/Devices/VulkanDeviceManager.h"
+
+#include "Window/WindowManager.h"
 
 namespace SSE
 {
@@ -19,15 +23,21 @@ namespace SSE
 	namespace Graphics
 	{
 #pragma message("TODO: Add functionality for pipeline parameters")
-		bool GraphicsPipeline::constructPipeline()
+		bool GraphicsPipeline::create(ResourceHandle _shaderHandle, const Vulkan::VulkanSwapChain& swapChain, const Vulkan::VulkanRenderPass& renderPass)
 		{
-#pragma message("TODO: Query descriptions from shader meta data")
-			Model mainModel = ResourceManager::getModel("viking_room");
-
+			const Shader* shader = ResourceManager::getShader(_shaderHandle);
+			if (!shader)
+			{
+				GLOG_CRITICAL("Failed to get shader for pipeline.");
+				return false;
+			}
+			
+			shaderHandle = _shaderHandle;
 			VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-			auto bindingDescription = mainModel.getVertexData().getFormat().getBindingDescription();
-			auto attributeDescriptions = mainModel.getVertexData().getFormat().getAttributeDescriptions();
+			VertexFormat inputFormat = shader->getInputFormat();
+			auto bindingDescription = inputFormat.getBindingDescription();
+			auto attributeDescriptions = inputFormat.getAttributeDescriptions();
 
 			vertexInputInfo.vertexBindingDescriptionCount = 1;
 			vertexInputInfo.vertexAttributeDescriptionCount = (u32)attributeDescriptions.size();
@@ -88,10 +98,11 @@ namespace SSE
 			colorBlending.blendConstants[2] = 0.0f;
 			colorBlending.blendConstants[3] = 0.0f;
 
+			const std::vector<VkDescriptorSetLayout>& setLayouts = shader->getDescriptorSetLayouts();
 			VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 			pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-			pipelineLayoutInfo.setLayoutCount = 1;
-			pipelineLayoutInfo.pSetLayouts = descriptorPool.getLayouts();
+			pipelineLayoutInfo.setLayoutCount = (u32)setLayouts.size();
+			pipelineLayoutInfo.pSetLayouts = setLayouts.data();
 			pipelineLayoutInfo.pushConstantRangeCount = 0;
 
 			if (vkCreatePipelineLayout(LOGICAL_DEVICE_DEVICE, &pipelineLayoutInfo, nullptr, &layout) != VK_SUCCESS)
@@ -112,7 +123,7 @@ namespace SSE
 			depthStencil.front = {};
 			depthStencil.back = {};
 
-			std::vector<VkPipelineShaderStageCreateInfo> shaderStages = ResourceManager::getShader("main").getShaderStages();
+			std::vector<VkPipelineShaderStageCreateInfo> shaderStages = shader->getShaderStages();
 
 			VkGraphicsPipelineCreateInfo pipelineInfo{};
 			pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -139,351 +150,26 @@ namespace SSE
 			return true;
 		}
 
-		bool GraphicsPipeline::create()
+		bool GraphicsPipeline::recreate(const Vulkan::VulkanSwapChain& swapChain, const Vulkan::VulkanRenderPass& renderPass)
 		{
-			glm::uvec2 frameBufferDimensions = WindowManager::gWindowManager.getWindowFrameBufferDimensions();
-
-			if (!swapChain.create(surface, frameBufferDimensions))
-			{
-				return false;
-			}
-
-			if (!renderPass.create(swapChain))
-			{
-				return false;
-			}
-
-			if (!swapChain.createFramebuffers(renderPass, frameBuffers))
-			{
-				return false;
-			}
-
-#pragma message("TODO: Load data from file via Asset namespace")
-
-			for (u32 i = 0; i < frameBuffers.size(); ++i)
-			{
-				UniformBuffer<MatricesObject> uniformBuffer;
-				if (!uniformBuffer.create())
-				{
-					return false;
-				}
-				uniformBuffers.push_back(uniformBuffer);
-			}
-
-			if (!descriptorPool.create((u32)frameBuffers.size()))
-			{
-				return false;
-			}
-
-			for (u32 i = 0; i < frameBuffers.size(); ++i)
-			{
-				Texture2D texture = ResourceManager::getTexture("texture");
-				descriptorPool.updateDescriptorSet(i, uniformBuffers[i].getBuffer(), texture.getImageView(), texture.getSampler());
-			}
-
-			if (!commandPool.create())
-			{
-				return false;
-			}
-
-			if (!constructPipeline())
-			{
-				return false;
-			}
-
-			if (!constructCommandBuffers())
-			{
-				return false;
-			}
-
-#pragma message("TODO: Abstract sync object creation")
-			imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-			renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-			inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
-			imagesInFlight.resize(swapChain.getImagesInFlight(), VK_NULL_HANDLE);
-
-			VkSemaphoreCreateInfo semaphoreInfo{};
-			semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-			VkFenceCreateInfo fenceInfo{};
-			fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-			fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-
-			for (st s = 0; s < MAX_FRAMES_IN_FLIGHT; ++s)
-			{
-				if (vkCreateSemaphore(LOGICAL_DEVICE_DEVICE, &semaphoreInfo, nullptr, &imageAvailableSemaphores[s]) != VK_SUCCESS ||
-					vkCreateSemaphore(LOGICAL_DEVICE_DEVICE, &semaphoreInfo, nullptr, &renderFinishedSemaphores[s]) != VK_SUCCESS ||
-					vkCreateFence(LOGICAL_DEVICE_DEVICE, &fenceInfo, nullptr, &inFlightFences[s]) != VK_SUCCESS)
-				{
-					GLOG_CRITICAL("Failed to create semaphores.");
-					return false;
-				}
-			}
-
-			currentFrame = 0;
-
-			return true;
+			destroy();
+			return create(shaderHandle, swapChain, renderPass);
 		}
 
 		void GraphicsPipeline::destroy()
 		{
-			vkDeviceWaitIdle(LOGICAL_DEVICE_DEVICE);
-		
-			for (st u = 0; u < uniformBuffers.size(); ++u)
-			{
-				uniformBuffers[u].destroy();
-			}
-
-			uniformBuffers.clear();
-
-			descriptorPool.destroy();
-
-			for (st s = 0; s < MAX_FRAMES_IN_FLIGHT; ++s)
-			{
-				vkDestroySemaphore(LOGICAL_DEVICE_DEVICE, renderFinishedSemaphores[s], nullptr);
-				vkDestroySemaphore(LOGICAL_DEVICE_DEVICE, imageAvailableSemaphores[s], nullptr);
-				vkDestroyFence(LOGICAL_DEVICE_DEVICE, inFlightFences[s], nullptr);
-			}
-
-			for (auto framebuffer : frameBuffers)
-			{
-				vkDestroyFramebuffer(LOGICAL_DEVICE_DEVICE, framebuffer, nullptr);
-			}
-
 			vkDestroyPipeline(LOGICAL_DEVICE_DEVICE, pipeline, nullptr);
 			vkDestroyPipelineLayout(LOGICAL_DEVICE_DEVICE, layout, nullptr);
-
-			commandPool.destroy();
-
-			renderPass.destroy();
-			swapChain.destroy();
-
-			surface.destroy();
 		}
 
-		bool GraphicsPipeline::executeRenderPass()
+		VkPipelineLayout GraphicsPipeline::getLayout()
 		{
-			vkWaitForFences(LOGICAL_DEVICE_DEVICE, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
-		
-			if (WindowManager::gWindowManager.getWindowCount() != 0 && WindowManager::gWindowManager.getActiveWindow().getStatus() & WindowStatusFlags::WINDOW_MINIMIZED)
-			{
-				return false;
-			}
-
-			u32 imageIndex;
-			VkResult result = vkAcquireNextImageKHR(LOGICAL_DEVICE_DEVICE, swapChain.getSwapChain(), UINT64_MAX,
-				imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
-
-			if (result == VK_ERROR_OUT_OF_DATE_KHR) 
-			{
-				GLOG_WARNING("Swap chain out of date. Recreating swap chain.");
-				recreateSwapChain();
-				return false;
-			}
-			else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) 
-			{
-				GLOG_CRITICAL("Failed to acquire swap chain image.");
-				return false;
-			}
-
-			updateUniformBuffers(imageIndex);
-
-			if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) 
-			{
-				vkWaitForFences(LOGICAL_DEVICE_DEVICE, 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
-			}
-			
-			imagesInFlight[imageIndex] = inFlightFences[currentFrame];
-
-			VkSubmitInfo submitInfo{};
-			submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-			VkSemaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
-#pragma message("TODO: Query pipeline layout for attachments")
-			VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-			submitInfo.waitSemaphoreCount = 1;
-			submitInfo.pWaitSemaphores = waitSemaphores;
-			submitInfo.pWaitDstStageMask = waitStages;
-			submitInfo.commandBufferCount = 1;
-			submitInfo.pCommandBuffers = commandPool.getCommandBuffer(imageIndex);
-
-			VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
-			submitInfo.signalSemaphoreCount = 1;
-			submitInfo.pSignalSemaphores = signalSemaphores;
-
-
-			vkResetFences(LOGICAL_DEVICE_DEVICE, 1, &inFlightFences[currentFrame]);
-
-			Vulkan::VulkanLogicalDevice logicalDevice = LOGICAL_DEVICE;
-			VkResult submitResult = logicalDevice.submit(submitInfo, &inFlightFences[currentFrame]);
-
-			VkPresentInfoKHR presentInfo{};
-			presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-			presentInfo.waitSemaphoreCount = 1;
-			presentInfo.pWaitSemaphores = signalSemaphores;
-
-			VkSwapchainKHR swapChains[] = { swapChain.getSwapChain() };
-			presentInfo.swapchainCount = 1;
-			presentInfo.pSwapchains = swapChains;
-			presentInfo.pImageIndices = &imageIndex;
-			presentInfo.pResults = nullptr;
-
-			logicalDevice.present(presentInfo);
-
-			currentFrame = (++currentFrame) % MAX_FRAMES_IN_FLIGHT;
-
-			if (submitResult == VK_ERROR_OUT_OF_DATE_KHR || submitResult == VK_SUBOPTIMAL_KHR || isFrameBufferDirty)
-			{
-				if (isFrameBufferDirty)
-				{
-					GLOG_WARNING("Frame buffer size changed. Recreating swap chain.");
-					isFrameBufferDirty = false;
-				}
-				else
-				{
-					GLOG_WARNING("Swap chain out of date or suboptimal. Recreating swap chain.");
-				}
-
-				recreateSwapChain();
-				return false;
-			}
-
-			return true;
+			return layout;
 		}
 
-		bool GraphicsPipeline::recreateSwapChain()
+		VkPipeline GraphicsPipeline::getPipeline()
 		{
-			vkDeviceWaitIdle(LOGICAL_DEVICE_DEVICE);
-
-			for (auto framebuffer : frameBuffers)
-			{
-				vkDestroyFramebuffer(LOGICAL_DEVICE_DEVICE, framebuffer, nullptr);
-			}
-
-			commandPool.freeBuffers();
-
-			vkDestroyPipeline(LOGICAL_DEVICE_DEVICE, pipeline, nullptr);
-			vkDestroyPipelineLayout(LOGICAL_DEVICE_DEVICE, layout, nullptr);
-			vkDestroyRenderPass(LOGICAL_DEVICE_DEVICE, renderPass.getRenderPass(), nullptr);
-
-			swapChain.destroy();
-
-#pragma message("TODO: If the active window has changed, this may cause a crash. Add functionality to check for that")
-			glm::uvec2 frameBufferDimensions = WindowManager::gWindowManager.getWindowFrameBufferDimensions();
-
-			if (!swapChain.create(surface, frameBufferDimensions))
-			{
-				return false;
-			}
-
-			if (!renderPass.create(swapChain))
-			{
-				return false;
-			}
-
-			if (!swapChain.createFramebuffers(renderPass, frameBuffers))
-			{
-				return false;
-			}
-
-			for (u32 i = 0; i < frameBuffers.size(); ++i)
-			{
-				UniformBuffer<MatricesObject> uniformBuffer;
-				if (!uniformBuffer.create())
-				{
-					return false;
-				}
-				uniformBuffers.push_back(uniformBuffer);
-			}
-
-			if (!constructPipeline())
-			{
-				return false;
-			}
-
-			if (!constructCommandBuffers())
-			{
-				return false;
-			}
-
-			return true;
-		}
-
-		bool GraphicsPipeline::constructCommandBuffers()
-		{
-			if (!commandPool.allocateBuffers((u32)frameBuffers.size()))
-			{
-				return false;
-			}
-
-			for (u32 i = 0; i < frameBuffers.size(); i++)
-			{
-				VkCommandBuffer& currentCommandBuffer = commandPool.getNewCommandBuffer(i);
-
-				VkCommandBufferBeginInfo beginInfo{};
-				beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-				beginInfo.flags = 0;
-				beginInfo.pInheritanceInfo = nullptr;
-
-				if (vkBeginCommandBuffer(currentCommandBuffer, &beginInfo) != VK_SUCCESS)
-				{
-					GLOG_CRITICAL("Failed to begin command buffer.");
-					return false;
-				}
-
-				VkRenderPassBeginInfo renderPassInfo{};
-				renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-				renderPassInfo.renderPass = renderPass.getRenderPass();
-				renderPassInfo.framebuffer = frameBuffers[i];
-				renderPassInfo.renderArea.offset = { 0, 0 };
-				renderPassInfo.renderArea.extent = swapChain.getExtent();
-
-				std::vector<VkClearValue> clearValues = { { 0.0f, 0.0f, 0.0f, 1.0f }, { 1.0f, 0 } };
-				renderPassInfo.clearValueCount = (u32)clearValues.size();
-				renderPassInfo.pClearValues = clearValues.data();
-
-				vkCmdBeginRenderPass(currentCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-				vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-
-				Model mainModel = ResourceManager::getModel("viking_room");
-
-				VkBuffer vertexBuffers[] = {mainModel.getVertexBuffer().getVertexBuffer() };
-				VkDeviceSize offsets[] = { 0 };
-				vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
-
-				vkCmdBindIndexBuffer(currentCommandBuffer, mainModel.getVertexBuffer().getIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
-
-				vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &descriptorPool.getDescriptorSet(i), 0, nullptr);
-
-				vkCmdDrawIndexed(currentCommandBuffer, (u32)mainModel.getVertexBuffer().getIndexCount(), 1, 0, 0, 0);
-
-				vkCmdEndRenderPass(currentCommandBuffer);
-
-				if (vkEndCommandBuffer(currentCommandBuffer) != VK_SUCCESS)
-				{
-					GLOG_CRITICAL("Failed to end command buffer.");
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		void GraphicsPipeline::updateUniformBuffers(u32 imageIndex)
-		{
-			static auto startTime = std::chrono::high_resolution_clock::now();
-
-			auto currentTime = std::chrono::high_resolution_clock::now();
-			r32 time = std::chrono::duration<r32, std::chrono::seconds::period>(currentTime - startTime).count();
-
-			MatricesObject ubo;
-
-			ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(sin(time), cos(time), 1.0f));
-			ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-			ubo.proj = glm::perspective(glm::radians(45.0f), (r32)swapChain.getExtent().width / (r32)swapChain.getExtent().height, 0.1f, 10.0f);
-			ubo.proj[1][1] *= -1;
-
-			uniformBuffers[imageIndex].updateBuffer(ubo);
+			return pipeline;
 		}
 	}
 }

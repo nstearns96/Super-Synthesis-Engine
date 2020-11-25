@@ -1,22 +1,20 @@
 #include "Vulkan/VulkanMain.h"
 
 #include "Vulkan/VulkanInstance.h"
+
 #include "Vulkan/Devices/VulkanDeviceManager.h"
-#include "Vulkan/Validation Layers/VulkanValidationLayers.h"
+
 #include "Vulkan/Graphics/VulkanSwapChain.h"
+
+#include "Vulkan/Validation Layers/VulkanValidationLayers.h"
 
 namespace SSE::Vulkan
 {
-	bool initVulkan(Window& window, VulkanSurface& surface)
+	bool initVulkan()
 	{
-		VulkanInstance::gInstance.create();
-
 		ValidationLayers::initDebugExtensions();
 
-#pragma message("TODO: ResourceManager to allocate the surface")
-		surface.create(window);
-
-		VulkanDeviceManager::gDeviceManager.initDevices(surface);
+		VulkanDeviceManager::gDeviceManager.initDevices();
 
 		return true;
 	}

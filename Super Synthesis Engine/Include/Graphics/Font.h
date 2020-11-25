@@ -1,12 +1,14 @@
 #ifndef _SSE_FONT_H
 #define _SSE_FONT_H
 
+#include <array>
 #include <map>
 #include <vector>
-#include <array>
+
+#include <glm/glm.hpp>
 
 #include "EngineTypeDefs.h"
-#include "glm/glm.hpp"
+
 #include "Graphics/Bitmap.h"
 
 namespace SSE::Graphics

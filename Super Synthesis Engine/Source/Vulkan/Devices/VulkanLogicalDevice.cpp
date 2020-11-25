@@ -2,9 +2,11 @@
 
 #include <set>
 
-#include "Vulkan/Devices/VulkanDeviceManager.h"
-#include "Vulkan/Validation Layers/VulkanValidationLayers.h"
 #include "Logging/Logger.h"
+
+#include "Vulkan/Devices/VulkanDeviceManager.h"
+
+#include "Vulkan/Validation Layers/VulkanValidationLayers.h"
 
 namespace SSE
 { 

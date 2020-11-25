@@ -1,11 +1,11 @@
 #ifndef _SSE_TEXTURE_ASSET_UTILS_H
 #define _SSE_TEXTURE_ASSET_UTILS_H
 
-#include <glm/glm.hpp>
-
 #include <string>
 
-#include "TextureSupportBMP.h"
+#include <glm/glm.hpp>
+
+#include "Resources/Assets/TextureSupportBMP.h"
 
 namespace SSE::Assets::TextureAssetUtils
 {

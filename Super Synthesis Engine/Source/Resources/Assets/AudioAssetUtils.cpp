@@ -1,7 +1,8 @@
 #include "Resources/Assets/AudioAssetUtils.h"
 
-#include "Resources/Assets/AudioSupportWAV.h"
 #include "Logging/Logger.h"
+
+#include "Resources/Assets/AudioSupportWAV.h"
 
 namespace SSE
 {

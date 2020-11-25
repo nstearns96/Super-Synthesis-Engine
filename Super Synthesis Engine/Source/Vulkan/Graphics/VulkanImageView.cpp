@@ -1,6 +1,7 @@
 #include "Vulkan/Graphics/VulkanImageView.h"
 
 #include "Logging/Logger.h"
+
 #include "Vulkan/Devices/VulkanDeviceManager.h"
 
 namespace SSE

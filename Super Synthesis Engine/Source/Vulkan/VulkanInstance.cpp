@@ -3,6 +3,7 @@
 #include <SDL/SDL_vulkan.h>
 
 #include "Logging/Logger.h"
+
 #include "Vulkan/Validation Layers/VulkanValidationLayers.h"
 
 namespace SSE

@@ -2,11 +2,12 @@
 #define _SSE_fILE_HANDLE_H
 
 #include <fstream>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "EngineTypeDefs.h"
-#include "FioMode.h"
+
+#include "Fios/FioMode.h"
 
 namespace SSE
 {

@@ -2,8 +2,9 @@
 
 #include "EngineTypeDefs.h"
 
-#include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Logging/Logger.h"
+
+#include "Vulkan/Devices/VulkanDeviceManager.h"
 
 namespace SSE
 {
@@ -11,12 +12,12 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanCommandPool::create()
+		bool VulkanCommandPool::create(VkCommandPoolCreateFlags flags)
 		{
 			VkCommandPoolCreateInfo poolInfo{};
 			poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-			poolInfo.queueFamilyIndex = VulkanDeviceManager::gDeviceManager.getActivePhysicalDevice().getGraphicsFamilyIndex();
-			poolInfo.flags = 0;
+			poolInfo.queueFamilyIndex = PHYSICAL_DEVICE.getGraphicsFamilyIndex();
+			poolInfo.flags = flags;
 
 			if (vkCreateCommandPool(LOGICAL_DEVICE_DEVICE, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) 
 			{

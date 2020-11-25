@@ -5,8 +5,9 @@
 
 #include <vulkan/vulkan.h>
 
-#include "Model/VertexAspect.h"
 #include "EngineTypeDefs.h"
+
+#include "Model/VertexAspect.h"
 
 namespace SSE
 {

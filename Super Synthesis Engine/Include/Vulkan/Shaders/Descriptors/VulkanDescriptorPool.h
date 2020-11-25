@@ -1,13 +1,17 @@
 #ifndef _SSE_VULKAN_DESCRIPTOR_POOL_H
 #define _SSE_VULKAN_DESCRIPTOR_POOL_H
 
-#include "vulkan/vulkan.h"
-
 #include <vector>
 
+#include <vulkan/vulkan.h>
+
 #include "EngineTypeDefs.h"
-#include "Vulkan/Memory/VulkanBuffer.h"
+
+#include "Resources/ResourceHandleManager.h"
+
 #include "Vulkan/Graphics/VulkanImageView.h"
+
+#include "Vulkan/Memory/VulkanBuffer.h"
 
 namespace SSE::Vulkan
 {
@@ -15,21 +19,24 @@ namespace SSE::Vulkan
 	{
 	private:
 		VkDescriptorPool descriptorPool;
-		std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
+#pragma message("TODO: Should probably switch any vectors that use a ResourceHandleManager to a sparse vector")
 		std::vector<VkDescriptorSet> descriptorSets;
+		ResourceHandleManager descriptorHandles;
 
 	public:
-		bool create(u32 count);
+		bool create();
 
-		bool allocateDescriptorSets();
+		std::vector<ResourceHandle> allocateDescriptorSets(const std::vector<VkDescriptorSetLayout>& setLayouts);
+		void freeDescriptorSets(const std::vector<ResourceHandle> descriptorHandles);
 
-		const VkDescriptorSetLayout* getLayouts();
-		void updateDescriptorSet(u32 index, VulkanBuffer uniformBuffer, VulkanImageView imageView, VkSampler sampler);
+		void updateDescriptorSet(ResourceHandle resourceHandle, std::vector<VkWriteDescriptorSet>& writeDescriptors);
 
-		VkDescriptorSet& getDescriptorSet(u32 index);
+		VkDescriptorSet& getDescriptorSet(ResourceHandle resourceHandle);
 
 		void destroy();
 	};
+
+	extern VulkanDescriptorPool gDescriptorPool;
 }
 
 #endif

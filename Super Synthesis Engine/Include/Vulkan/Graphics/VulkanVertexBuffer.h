@@ -5,8 +5,9 @@
 
 #include <vector>
 
-#include "Vulkan/Memory/VulkanBuffer.h"
 #include "Model/VertexData.h"
+
+#include "Vulkan/Memory/VulkanBuffer.h"
 
 namespace SSE::Vulkan
 {

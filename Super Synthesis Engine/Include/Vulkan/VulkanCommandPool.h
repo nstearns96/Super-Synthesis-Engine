@@ -1,11 +1,12 @@
 #ifndef _SSE_VULKAN_COMMAND_POOL_H
 #define _SSE_VULKAN_COMMAND_POOL_H
 
-#include <vulkan/vulkan.h>
 #include <vector>
 
-#include "Vulkan/Graphics/VulkanSwapChain.h"
+#include <vulkan/vulkan.h>
+
 #include "Vulkan/Graphics/VulkanRenderPass.h"
+#include "Vulkan/Graphics/VulkanSwapChain.h"
 #include "Vulkan/Graphics/VulkanVertexBuffer.h"
 
 namespace SSE::Vulkan
@@ -18,7 +19,7 @@ namespace SSE::Vulkan
 
 	public:
 
-		bool create();
+		bool create(VkCommandPoolCreateFlags flags);
 
 		void destroy();
 

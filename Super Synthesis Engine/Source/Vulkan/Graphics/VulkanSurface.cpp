@@ -4,6 +4,7 @@
 #include <SDL/SDL_vulkan.h>
 
 #include "Logging/Logger.h"
+
 #include "Vulkan/VulkanInstance.h"
 
 namespace SSE
@@ -13,9 +14,9 @@ namespace SSE
 
 namespace SSE::Vulkan
 {
-	bool VulkanSurface::create(Window& window)
+	bool VulkanSurface::create(SDL_Window* window)
 	{
-		if (SDL_Vulkan_CreateSurface(window.getWindow(), VulkanInstance::gInstance.getInstance(), &surface) != SDL_TRUE)
+		if (SDL_Vulkan_CreateSurface(window, VulkanInstance::gInstance.getInstance(), &surface) != SDL_TRUE)
 		{
 			GLOG_CRITICAL(SDL_GetError());
 			return false;
@@ -28,7 +29,7 @@ namespace SSE::Vulkan
 		vkDestroySurfaceKHR(VulkanInstance::gInstance.getInstance(),surface, nullptr);
 	}
 
-	VkSurfaceKHR VulkanSurface::getSurface()
+	VkSurfaceKHR VulkanSurface::getSurface() const
 	{
 		return surface;
 	}

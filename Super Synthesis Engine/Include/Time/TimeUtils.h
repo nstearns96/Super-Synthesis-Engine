@@ -1,10 +1,10 @@
 #ifndef _SSE_TIME_UTILS_H
 #define _SSE_TIME_UTILS_H
 
-#include <string>
+#include <chrono>
 #include <ctime>
 #include <sstream>
-#include <chrono>
+#include <string>
 
 #include <SDL/SDL_timer.h>
 

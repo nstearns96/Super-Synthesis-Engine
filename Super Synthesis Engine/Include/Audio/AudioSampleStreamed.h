@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "EngineTypeDefs.h"
+
 #include "Fios/FileHandle.h"
 
 namespace SSE::Audio

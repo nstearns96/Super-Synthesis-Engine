@@ -1,7 +1,8 @@
 #include "Vulkan/Graphics/VulkanRenderPass.h"
 
-#include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Logging/Logger.h"
+
+#include "Vulkan/Devices/VulkanDeviceManager.h"
 
 namespace SSE
 {
@@ -77,7 +78,7 @@ namespace SSE
 			vkDestroyRenderPass(LOGICAL_DEVICE_DEVICE, renderPass, nullptr);
 		}
 
-		VkRenderPass VulkanRenderPass::getRenderPass()
+		VkRenderPass VulkanRenderPass::getRenderPass() const
 		{
 			return renderPass;
 		}

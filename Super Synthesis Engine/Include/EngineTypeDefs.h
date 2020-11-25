@@ -19,6 +19,8 @@ typedef size_t	st;
 typedef float	r32;
 typedef double	r64;
 
+typedef u64 ResourceHandle;
+
 #define INDEX_NONE SIZE_MAX
 #define INVALID_HANDLE INDEX_NONE
 

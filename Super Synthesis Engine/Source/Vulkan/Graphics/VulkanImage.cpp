@@ -4,9 +4,11 @@
 
 #include <glm/glm.hpp>
 
-#include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Logging/Logger.h"
+
 #include "Vulkan/VulkanCommandPool.h"
+
+#include "Vulkan/Devices/VulkanDeviceManager.h"
 
 namespace SSE
 {
@@ -134,7 +136,7 @@ namespace SSE
 			}
 
 			VulkanCommandPool transitionCommandPool;
-			if (transitionCommandPool.create())
+			if (transitionCommandPool.create(VK_COMMAND_POOL_CREATE_TRANSIENT_BIT))
 			{
 				if (transitionCommandPool.allocateBuffers(1) && 
 					transitionCommandPool.beginBuffers())

@@ -4,6 +4,7 @@
 #include <SDL/SDL_audio.h>
 
 #include "EngineTypeDefs.h"
+
 #include "Audio/AudioSample.h"
 
 namespace SSE::Audio

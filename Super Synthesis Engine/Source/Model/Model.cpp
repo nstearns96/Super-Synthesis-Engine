@@ -28,7 +28,7 @@ namespace SSE
 		indices.clear();
 	}
 
-	Vulkan::VulkanVertexBuffer Model::getVertexBuffer()
+	Vulkan::VulkanVertexBuffer Model::getVertexBuffer() const
 	{
 		return vertexBuffer;
 	}

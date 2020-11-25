@@ -1,11 +1,12 @@
 #ifndef _SSE_BITMAP_H
 #define _SSE_BITMAP_H
 
+#include <array>
+#include <map>
+#include <vector>
+
 #include <glm/glm.hpp>
 #include <vulkan/vulkan.h>
-#include <vector>
-#include <map>
-#include <array>
 
 #include "EngineTypeDefs.h"
 

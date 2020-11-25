@@ -1,11 +1,13 @@
 #include "Resources/ResourceManager.h"
 
-#include "Logging/Logger.h"
-#include "Resources/Assets/TextureAssetUtils.h"
-#include "Resources/Assets/AudioAssetUtils.h"
-#include "Resources/Assets/ModelAssetUtils.h"
 #include "Graphics/Bitmap.h"
 #include "Graphics/Font.h"
+
+#include "Logging/Logger.h"
+
+#include "Resources/Assets/AudioAssetUtils.h"
+#include "Resources/Assets/ModelAssetUtils.h"
+#include "Resources/Assets/TextureAssetUtils.h"
 
 #pragma message("TODO: Handle failure to load a resource")
 #pragma message("TODO: Handle failure to find a resource")
@@ -14,115 +16,114 @@ namespace SSE
 {
 	extern Logger gLogger;
 
-	std::map<std::string, Graphics::Texture2D> ResourceManager::textures;
-	std::map<std::string, Graphics::Shader> ResourceManager::shaders;
-	std::map<std::string, Audio::AudioSample> ResourceManager::audioSamples;
-	std::map<std::string, Graphics::Font> ResourceManager::fonts;
-	std::map<std::string, Model> ResourceManager::models;
+	std::vector<Graphics::Texture2D> ResourceManager::textures(1024);
+	std::vector<Graphics::Shader> ResourceManager::shaders(1024);
+	std::vector<Audio::AudioSample> ResourceManager::audioSamples(1024);
+	std::vector<Graphics::Font> ResourceManager::fonts(1024);
+	std::vector<Model> ResourceManager::models(1024);
+	ResourceHandleManager ResourceManager::textureHandles;
+	ResourceHandleManager ResourceManager::shaderHandles;
+	ResourceHandleManager ResourceManager::audioSampleHandles;
+	ResourceHandleManager ResourceManager::fontHandles;
+	ResourceHandleManager ResourceManager::modelHandles;
 
-	Graphics::Texture2D ResourceManager::getTexture(const std::string& name)
+	const Graphics::Texture2D* ResourceManager::getTexture(ResourceHandle resourceHandle)
 	{
-		auto textureIter = textures.find(name);
-		if (textureIter != textures.end())
+		if (textureHandles.isHandleActive(resourceHandle))
 		{
-			return textureIter->second;
+			return &textures[resourceHandle];
 		}
-
-		return {};
+		
+		return nullptr;
 	}
 
-	Graphics::Texture2D ResourceManager::loadTexture(const std::string& name, const std::string& path)
+	ResourceHandle ResourceManager::loadTexture(const std::string& path)
 	{
-		Graphics::Texture2D result = {};
-
 		glm::uvec2 dimensions;
 		const byte* imageData = Assets::TextureAssetUtils::loadTextureFromFile("Source\\Textures\\" + path, dimensions);
 		Graphics::Bitmap bitmap;
 		bitmap.create(imageData, dimensions, VK_FORMAT_B8G8R8A8_UINT);
+		Graphics::Texture2D newTexture;
 		if (imageData != nullptr && 
-			result.create(bitmap, VK_IMAGE_TILING_OPTIMAL))
+			newTexture.create(bitmap, VK_IMAGE_TILING_OPTIMAL))
 		{
-			textures.emplace(name, result);
+			ResourceHandle resourceHandle = textureHandles.getHandle();
+			textures[resourceHandle] = newTexture;
+			return resourceHandle;
 		}
 
 		bitmap.destroy();
-		return result;
+		return INVALID_HANDLE;
 	}
 
-	Graphics::Texture2D ResourceManager::createTexture(const std::string& name, const Graphics::Texture2D& texture)
+	ResourceHandle ResourceManager::createTexture(const Graphics::Texture2D& texture)
 	{
-		textures.emplace(name, texture);
-		return textures.at(name);
+		ResourceHandle resourceHandle = textureHandles.getHandle();
+		textures[resourceHandle] = texture;
+		return resourceHandle;
 	}
 
-	Graphics::Shader ResourceManager::getShader(const std::string& name)
+	const Graphics::Shader* ResourceManager::getShader(ResourceHandle resourceHandle)
 	{
-		auto shaderIter = shaders.find(name);
-		if (shaderIter != shaders.end())
+		if (shaderHandles.isHandleActive(resourceHandle))
 		{
-			return shaderIter->second;
+			return &shaders[resourceHandle];
 		}
 
-		return {};
+		return nullptr;
 	}
 
-	Graphics::Shader ResourceManager::loadShader(const std::string& name, const std::vector<std::string>& sourceFiles, const std::vector<SSE::Vulkan::ShaderModuleType>& moduleTypes)
+	ResourceHandle ResourceManager::loadShader(const std::vector<std::string>& sourceFiles, const std::vector<Graphics::ShaderModuleType>& moduleTypes)
 	{
-		Graphics::Shader result;
-
-		if (result.create(sourceFiles, moduleTypes))
+		Graphics::Shader newShader;
+		if (newShader.create(sourceFiles, moduleTypes))
 		{
-			shaders.emplace(name, result );
+			ResourceHandle resourceHandle = shaderHandles.getHandle();
+			shaders[resourceHandle] = newShader;
+			return resourceHandle;
 		}
 
-		return result;
+		return INVALID_HANDLE;
 	}
 
-	Audio::AudioSample ResourceManager::getAudio(const std::string& name)
+	const Audio::AudioSample* ResourceManager::getAudio(ResourceHandle resourceHandle)
 	{
-		auto audioIter = audioSamples.find(name);
-		if (audioIter != audioSamples.end())
+		if (audioSampleHandles.isHandleActive(resourceHandle))
 		{
-			return audioIter->second;
+			return &audioSamples[resourceHandle];
 		}
-		else
-		{
-			return {};
-		}
+
+		return nullptr;
 	}
 
-	Audio::AudioSample ResourceManager::loadAudio(const std::string& path, const std::string& name)
+	ResourceHandle ResourceManager::loadAudio(const std::string& path)
 	{
-		Audio::AudioSample result = {};
-
 		st dataSize;
 		byte* data = Assets::AudioAssetUtils::loadAudioFromFile("Source\\Audio\\" + path, dataSize);
 
-		if (data != nullptr && result.create(data, dataSize))
+		Audio::AudioSample newAudio;
+		if (data != nullptr && newAudio.create(data, dataSize))
 		{
-			audioSamples[name] = result;
+			ResourceHandle resourceHandle = audioSampleHandles.getHandle();
+			audioSamples[resourceHandle] = newAudio;
+			return resourceHandle;
 		}
 
-		return result;
+		return INVALID_HANDLE;
 	}
 
-	Graphics::Font ResourceManager::getFont(const std::string& name)
+	const Graphics::Font* ResourceManager::getFont(ResourceHandle resourceHandle)
 	{
-		auto fontIter = fonts.find(name);
-		if (fontIter != fonts.end())
+		if (fontHandles.isHandleActive(resourceHandle))
 		{
-			return fontIter->second;
+			return &fonts[resourceHandle];
 		}
-		else
-		{
-			return {};
-		}
+
+		return nullptr;
 	}
 
-	Graphics::Font ResourceManager::loadFont(const std::string& path, const std::string& name)
+	ResourceHandle ResourceManager::loadFont(const std::string& path)
 	{
-		Graphics::Font result = {};
-
 		FileHandle fh;
 		if (fh.create("Source\\Fonts\\" + path, FIOM_BINARY | FIOM_READ))
 		{
@@ -130,77 +131,77 @@ namespace SSE
 			byte* data = new byte[fontData.size()];
 			memcpy(data, fontData.data(), fontData.size());
 
-			if (data != nullptr && result.create(data))
+			Graphics::Font newFont;
+			if (data != nullptr && newFont.create(data))
 			{
-				fonts[name] = result;
+				ResourceHandle resourceHandle = shaderHandles.getHandle();
+				fonts[resourceHandle] = newFont;
+				return resourceHandle;
 			}
 		}
 
-		return result;
+		return INVALID_HANDLE;
 	}
 
-	Model ResourceManager::getModel(const std::string& name)
+	const Model* ResourceManager::getModel(ResourceHandle resourceHandle)
 	{
-		auto modelIter = models.find(name);
-		if (modelIter != models.end())
+		if (modelHandles.isHandleActive(resourceHandle))
 		{
-			return modelIter->second;
+			return &models[resourceHandle];
 		}
-		else
-		{
-			return {};
-		}
+
+		return nullptr;
 	}
 
-	Model ResourceManager::loadModel(const std::string& name, const std::string& path)
+	ResourceHandle ResourceManager::loadModel(const std::string& path)
 	{
-		Model* result = Assets::ModelAssetUtils::loadModelFromFile("Source\\Models\\" + path);
-		if (result != nullptr)
+		Model newModel;
+		if (Assets::ModelAssetUtils::loadModelFromFile(newModel, "Source\\Models\\" + path))
 		{
-			models.emplace(name, *result);
-			return *result;
+			ResourceHandle resourceHandle = modelHandles.getHandle();
+			models[resourceHandle] = newModel;
+			return resourceHandle;
 		}
-		else
-		{
-			return {};
-		}
+
+		return INVALID_HANDLE;
 	}
 
 	void ResourceManager::clear()
 	{
 		for (auto& texture : textures)
 		{
-			texture.second.destroy();
+			texture.destroy();
 		}
-
-		textures.clear();
-
+		
 		for (auto& shader : shaders)
 		{
-			shader.second.destroy();
+			shader.destroy();
 		}
-
-		shaders.clear();
 
 		for (auto& audioSample : audioSamples)
 		{
-			audioSample.second.destroy();
+			audioSample.destroy();
 		}
-
-		audioSamples.clear();
 
 		for (auto& font : fonts)
 		{
-			font.second.destroy();
+			font.destroy();
 		}
-
-		fonts.clear();
 
 		for (auto& model : models)
 		{
-			model.second.destroy();
+			model.destroy();
 		}
 
+		textures.clear();
+		shaders.clear();
+		audioSamples.clear();
+		fonts.clear();
 		models.clear();
+		textureHandles.clear();
+		shaderHandles.clear();
+		audioSampleHandles.clear();
+		fontHandles.clear();
+		modelHandles.clear();
 	}
 }

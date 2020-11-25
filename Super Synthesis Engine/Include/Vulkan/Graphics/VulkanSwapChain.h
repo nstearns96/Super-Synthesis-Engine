@@ -5,9 +5,9 @@
 
 #include <vector>
 
-#include "VulkanSurface.h"
-#include "Vulkan/Graphics/VulkanImageView.h"
 #include "Vulkan/Graphics/VulkanDepthBuffer.h"
+#include "Vulkan/Graphics/VulkanImageView.h"
+#include "Vulkan/Graphics/VulkanSurface.h"
 
 namespace SSE::Vulkan
 {
@@ -23,7 +23,6 @@ namespace SSE::Vulkan
 	class VulkanSwapChain
 	{
 	private:
-		SwapChainSupportDetails details;
 		VkSurfaceFormatKHR swapSurfaceFormat;
 		VkPresentModeKHR swapPresentMode;
 		VkExtent2D swapExtent;
@@ -40,13 +39,13 @@ namespace SSE::Vulkan
 		void destroyImageViews();
 
 	public:
-		bool create(VulkanSurface& surface, const glm::uvec2& dimensions);
+		bool create();
 
 		void destroy();
 
 		VkSurfaceFormatKHR getFormat();
 		VkPresentModeKHR getPresentMode();
-		VkExtent2D getExtent();
+		VkExtent2D getExtent() const;
 
 		VkSwapchainKHR getSwapChain();
 

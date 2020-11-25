@@ -1,13 +1,16 @@
 #ifndef _SSE_RESOURCE_MANAGER_H
 #define _SSE_RESOURCE_MANAGER_H
 
-#include <map>
-
-#include "Graphics/Texture2D.h"
-#include "Graphics/Shader.h"
 #include "Audio/AudioSample.h"
+
 #include "Graphics/Font.h"
+#include "Graphics/Texture2D.h"
+
+#include "Graphics/Shaders/Shader.h"
+
 #include "Model/Model.h"
+
+#include "Resources/ResourceHandleManager.h"
 
 #pragma message("TODO: Add support for streamed audio resource")
 
@@ -18,33 +21,38 @@ namespace SSE
 	private:
 		ResourceManager() {};
 
-		static std::map<std::string, Graphics::Texture2D> textures;
-		static std::map<std::string, Graphics::Shader> shaders;
-		static std::map<std::string, Audio::AudioSample> audioSamples;
-		static std::map<std::string, Graphics::Font> fonts;
-		static std::map<std::string, Model> models;
+		static std::vector<Graphics::Texture2D> textures;
+		static ResourceHandleManager textureHandles;
+		static std::vector<Graphics::Shader> shaders;
+		static ResourceHandleManager shaderHandles;
+		static std::vector<Audio::AudioSample> audioSamples;
+		static ResourceHandleManager audioSampleHandles;
+		static std::vector<Graphics::Font> fonts;
+		static ResourceHandleManager fontHandles;
+		static std::vector<Model> models;
+		static ResourceHandleManager modelHandles;
 
 	public:
-		static Graphics::Texture2D getTexture(const std::string& name);
+		static const Graphics::Texture2D* getTexture(ResourceHandle resourceHandle);
 
-		static Graphics::Texture2D loadTexture(const std::string& name, const std::string& path);
-		static Graphics::Texture2D createTexture(const std::string& name, const Graphics::Texture2D& texture);
+		static ResourceHandle loadTexture(const std::string& path);
+		static ResourceHandle createTexture(const Graphics::Texture2D& texture);
 
-		static Graphics::Shader getShader(const std::string& name);
+		static const Graphics::Shader* getShader(ResourceHandle resourceHandle);
 
-		static Graphics::Shader loadShader(const std::string& name, const std::vector<std::string>& sourceFiles, const std::vector<SSE::Vulkan::ShaderModuleType>& moduleTypes);
+		static ResourceHandle loadShader(const std::vector<std::string>& sourceFiles, const std::vector<Graphics::ShaderModuleType>& moduleTypes);
 		
-		static Audio::AudioSample getAudio(const std::string& name);
+		static const Audio::AudioSample* getAudio(ResourceHandle resourceHandle);
 
-		static Audio::AudioSample loadAudio(const std::string& name, const std::string& path);
+		static ResourceHandle loadAudio(const std::string& path);
 
-		static Graphics::Font getFont(const std::string& name);
+		static const Graphics::Font* getFont(ResourceHandle resourceHandle);
 
-		static Graphics::Font loadFont(const std::string& name, const std::string& path);
+		static ResourceHandle loadFont(const std::string& path);
 
-		static Model getModel(const std::string& name);
+		static const Model* getModel(ResourceHandle resourceHandle);
 
-		static Model loadModel(const std::string& name, const std::string& path);
+		static ResourceHandle loadModel(const std::string& path);
 
 		static void clear();
 	};

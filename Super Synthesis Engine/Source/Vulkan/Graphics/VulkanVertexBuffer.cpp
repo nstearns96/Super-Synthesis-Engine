@@ -1,7 +1,8 @@
 #include "Vulkan/Graphics/VulkanVertexBuffer.h"
 
-#include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Logging/Logger.h"
+
+#include "Vulkan/Devices/VulkanDeviceManager.h"
 
 namespace SSE
 {

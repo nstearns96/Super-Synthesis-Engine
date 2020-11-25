@@ -1,11 +1,10 @@
 #include "Window/WindowManager.h"
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_vulkan.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Logging/Logger.h"
 #include "Error/Error.h"
+
+#include "Logging/Logger.h"
 
 namespace SSE
 {
@@ -74,7 +73,6 @@ namespace SSE
 			{
 				activeWindow = windows.begin();
 			}
-			windows.erase(windowName);
 			return true;
 		}
 		else
@@ -86,6 +84,10 @@ namespace SSE
 
 	void WindowManager::clear()
 	{
+		for (auto& window : windows)
+		{
+			window.second.destroy();
+		}
 		windows.clear();
 	}
 
@@ -121,15 +123,5 @@ namespace SSE
 	Window& WindowManager::getActiveWindow() const
 	{
 		return (activeWindow->second);
-	}
-
-	glm::uvec2 WindowManager::getWindowFrameBufferDimensions() const
-	{
-		glm::uvec2 result;
-		Window window = getActiveWindow();
-		
-		SDL_Vulkan_GetDrawableSize(WindowManager::gWindowManager.getActiveWindow().getWindow(), (i32 *)&result.x, (i32 *)&result.y);
-
-		return result;
 	}
 }

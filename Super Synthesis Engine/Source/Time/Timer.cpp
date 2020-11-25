@@ -4,6 +4,8 @@
 
 namespace SSE
 {
+	u64 Timer::perfFreq;
+
 	void Timer::initTime()
 	{
 		perfFreq = SDL_GetPerformanceFrequency();
@@ -18,6 +20,10 @@ namespace SSE
 	void Timer::endTime()
 	{
 		perfCountEnd = SDL_GetPerformanceCounter();
+		if (perfCountStart == 0)
+		{
+			perfCountStart = perfCountEnd;
+		}
 	}
 
 	r64 Timer::getTime()
@@ -29,7 +35,7 @@ namespace SSE
 		}
 		else
 		{
-			return ((r64)(perfCountEnd - perfCountEnd)) / perfFreq;
+			return ((r64)(perfCountEnd - perfCountStart)) / perfFreq;
 		}
 	}
 }

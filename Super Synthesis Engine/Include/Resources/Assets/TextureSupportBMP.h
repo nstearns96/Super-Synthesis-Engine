@@ -1,9 +1,9 @@
 #ifndef _SSE_TEXTURE_SUPPORT_BMP_H
 #define _SSE_TEXTURE_SUPPORT_BMP_H
 
-#include <glm/glm.hpp>
-
 #include <vector>
+
+#include <glm/glm.hpp>
 
 #include "EngineTypeDefs.h"
 

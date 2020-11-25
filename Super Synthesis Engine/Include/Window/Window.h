@@ -5,12 +5,15 @@
 #ifndef _SSE_WINDOW_H
 #define _SSE_WINDOW_H
 
-#include <glm/glm.hpp>
-#include <SDL/SDL_video.h>
-#include <SDL/SDL_events.h>
 #include <string>
 
+#include <glm/glm.hpp>
+#include <SDL/SDL_events.h>
+#include <SDL/SDL_video.h>
+
 #include "EngineTypeDefs.h"
+
+#include "Vulkan/Graphics/VulkanSurface.h"
 
 namespace SSE
 {
@@ -34,6 +37,7 @@ namespace SSE
 	{
 	private:
 		SDL_Window* window = nullptr;
+		Vulkan::VulkanSurface surface;
 
 		glm::uvec2 dimensions;
 		glm::uvec2 position;
@@ -45,7 +49,10 @@ namespace SSE
 		Window(const char* title, const glm::uvec2& _position = glm::uvec2(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED),
 			const glm::uvec2& _dimensions = glm::uvec2(1920,1080), bitfield flags = WINDOW_SHOWN);
 		Window() {};
-		~Window();
+
+		void destroy();
+
+		Vulkan::VulkanSurface getSurface() const;
 
 		SDL_Window* getWindow();
 		bitfield getStatus();
@@ -57,7 +64,7 @@ namespace SSE
 		u32 getHeight();
 
 		WindowEventResult handleEvent(const SDL_Event& e);
-
+		glm::uvec2 getFramebufferDimensions();
 	};
 }
 

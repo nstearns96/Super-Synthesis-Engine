@@ -1,8 +1,8 @@
 #include "Resources/Assets/ModelAssetUtils.h"
 
+#include <array>
 #include <map>
 #include <vector>
-#include <array>
 
 #include "Logging/Logger.h"
 
@@ -27,7 +27,7 @@ namespace SSE
 
 	namespace Assets::ModelAssetUtils
 	{
-		Model* loadModelFromFile(const std::string& path)
+		bool loadModelFromFile(Model& model, const std::string& path)
 		{
 			FileHandle fh;
 			if (fh.create(path, FIOM_BINARY | FIOM_READ))
@@ -132,19 +132,15 @@ namespace SSE
 					if (*parser == '\n') ++parser;
 				}
 
-				Model* result = new Model;
 				VertexFormat format;
 				format.create({ VA_POS3F, VA_TEX2F });
 				r32* vertexData = new r32[verts.size()];
 				memcpy(vertexData, verts.data(), verts.size() * sizeof(r32));
-				if (result->create(vertexData, verts.size() * sizeof(r32), format, indices))
-				{
-					return result;
-				}
-				delete result;
+
+				return model.create(vertexData, verts.size() * sizeof(r32), format, indices);
 			}
 
-			return nullptr;
+			return false;
 		}
 	}
 }

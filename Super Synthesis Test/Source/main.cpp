@@ -1,5 +1,6 @@
 #include <Super Synthesis.h>
 
+#undef main
 int main()
 {
 	SSE::initSubSystems();

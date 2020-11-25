@@ -1,8 +1,8 @@
 #ifndef _SSE_VULKAN_IMAGE_H
 #define _SSE_VULKAN_IMAGE_H
 
-#include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
+#include <vulkan/vulkan.h>
 
 #include "Vulkan/Memory/VulkanDeviceMemory.h"
 

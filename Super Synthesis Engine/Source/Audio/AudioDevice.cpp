@@ -1,7 +1,8 @@
 #include "Audio/AudioDevice.h"
 
-#include "Logging/Logger.h"
 #include "Audio/AudioDeviceStatus.h"
+
+#include "Logging/Logger.h"
 
 namespace SSE
 {

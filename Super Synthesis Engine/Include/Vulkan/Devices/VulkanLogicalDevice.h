@@ -3,7 +3,6 @@
 
 #include <vulkan/vulkan.h>
 
-
 namespace SSE::Vulkan
 {
 	class VulkanPhysicalDevice;

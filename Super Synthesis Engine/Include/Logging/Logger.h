@@ -8,9 +8,10 @@
 
 #include <string.h>
 
-#include "Fios/FileHandle.h"
 #include "Error/Error.h"
 #include "Error/ErrorLevel.h"
+
+#include "Fios/FileHandle.h"
 
 #define ERROR_MESSAGE_END (std::string(" ") + __FILE__ + " (Line: " + std::to_string(__LINE__) + ")")
 #define GLOG_ERROR(errorLevel, message) SSE::gLogger.logError( errorLevel , message + ERROR_MESSAGE_END )

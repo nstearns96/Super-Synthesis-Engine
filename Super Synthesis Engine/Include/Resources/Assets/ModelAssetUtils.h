@@ -4,11 +4,12 @@
 #include <string>
 
 #include "EngineTypeDefs.h"
+
 #include "Model/Model.h"
 
 namespace SSE::Assets::ModelAssetUtils
 {
-	Model* loadModelFromFile(const std::string& path);
+	bool loadModelFromFile(Model& model, const std::string& path);
 }
 
 #endif

@@ -1,7 +1,8 @@
 #include "Vulkan/Validation Layers/VulkanValidationLayers.h"
 
-#include "Vulkan/VulkanInstance.h"
 #include "Logging/Logger.h"
+
+#include "Vulkan/VulkanInstance.h"
 
 namespace SSE
 {

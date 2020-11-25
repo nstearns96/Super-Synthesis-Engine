@@ -1,10 +1,10 @@
 #ifndef _SSE_VULKAN_DEPTH_BUFFER_H
 #define _SSE_VULKAN_DEPTH_BUFFER_H
 
+#include <vector>
+
 #include "Vulkan/Graphics/VulkanImage.h"
 #include "Vulkan/Graphics/VulkanImageView.h"
-
-#include <vector>
 
 namespace SSE::Vulkan
 {

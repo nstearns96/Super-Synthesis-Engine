@@ -1,9 +1,12 @@
 #include "Graphics/Texture2D.h"
 
 #include "Logging/Logger.h"
-#include "Vulkan/Memory/VulkanBuffer.h"
+
 #include "Resources/Assets/TextureAssetUtils.h"
+
 #include "Vulkan/Devices/VulkanDeviceManager.h"
+
+#include "Vulkan/Memory/VulkanBuffer.h"
 
 namespace SSE
 {
@@ -80,12 +83,12 @@ namespace SSE
 			vkDestroySampler(LOGICAL_DEVICE_DEVICE, sampler, nullptr);
 		}
 
-		Vulkan::VulkanImageView Texture2D::getImageView()
+		Vulkan::VulkanImageView Texture2D::getImageView() const
 		{
 			return imageView;
 		}
 
-		VkSampler Texture2D::getSampler()
+		VkSampler Texture2D::getSampler() const
 		{
 			return sampler;
 		}

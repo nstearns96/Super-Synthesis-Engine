@@ -1,12 +1,14 @@
 #ifndef _SSE_VULKAN_BUFFER_H
 #define _SSE_VULKAN_BUFFER_H
 
-#include <vulkan/vulkan.h>
 #include <glm/glm.hpp>
+#include <vulkan/vulkan.h>
 
 #include "EngineTypeDefs.h"
-#include "Vulkan/Memory/VulkanDeviceMemory.h"
+
 #include "Vulkan/Graphics/VulkanImage.h"
+
+#include "Vulkan/Memory/VulkanDeviceMemory.h"
 
 namespace SSE::Vulkan
 {

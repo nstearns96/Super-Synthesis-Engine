@@ -2,14 +2,18 @@
 
 #include "Logging/Logger.h"
 
+#include "Window/WindowManager.h"
+
 namespace SSE
 {
 	extern Logger gLogger;
 
 	namespace Vulkan
 	{
-		bool VulkanPhysicalDevice::isSuitable(VulkanSurface& surface)
+		bool VulkanPhysicalDevice::isSuitable()
 		{
+			VulkanSurface surface = WindowManager::gWindowManager.getActiveWindow().getSurface();
+
 			if (graphicsFamily != nullptr && presentFamily != nullptr)
 			{
 				return true;
@@ -119,7 +123,7 @@ namespace SSE
 			return !details.formats.empty() && !details.presentModes.empty();
 		}
 
-		SwapChainSupportDetails VulkanPhysicalDevice::getSwapChainSupport(VulkanSurface& surface)
+		SwapChainSupportDetails VulkanPhysicalDevice::getSwapChainSupport(const VulkanSurface& surface)
 		{
 			SwapChainSupportDetails details;
 

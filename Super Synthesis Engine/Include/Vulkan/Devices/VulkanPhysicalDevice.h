@@ -1,9 +1,9 @@
 #ifndef _SSE_VULKAN_PHYSICAL_DEVICE_H
 #define _SSE_VULKAN_PHYSICAL_DEVICE_H
 
-#include <vulkan/vulkan.h>
-
 #include <vector>
+
+#include <vulkan/vulkan.h>
 
 #include "Vulkan/Graphics/VulkanSurface.h"
 #include "Vulkan/Graphics/VulkanSwapChain.h"
@@ -25,12 +25,12 @@ namespace SSE::Vulkan
 	public:
 		bool initDevice(VkPhysicalDevice _device);
 
-		bool isSuitable(VulkanSurface& surface);
+		bool isSuitable();
 
 		u32 getGraphicsFamilyIndex();
 		u32 getPresentFamilyIndex();
 
-		SwapChainSupportDetails getSwapChainSupport(VulkanSurface& surface);
+		SwapChainSupportDetails getSwapChainSupport(const VulkanSurface& surface);
 
 		VkFormatProperties getFormatProperties(VkFormat format);
 

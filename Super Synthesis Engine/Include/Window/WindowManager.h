@@ -2,9 +2,10 @@
 #define _SSE_WINDOW_MANAGER_H
 
 #include <map>
+
 #include <glm/glm.hpp>
 
-#include "Window.h"
+#include "Window/Window.h"
 
 namespace SSE
 {
@@ -25,8 +26,6 @@ namespace SSE
 		const Window* getWindow(const std::string& windowName) const;
 		Window& getActiveWindow() const;
 		bool destroyWindow(const std::string& windowName);
-
-		glm::uvec2 getWindowFrameBufferDimensions() const;
 
 		st getWindowCount() const;
 		void clear();

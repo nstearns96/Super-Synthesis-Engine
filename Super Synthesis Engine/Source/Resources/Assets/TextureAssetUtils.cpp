@@ -2,8 +2,9 @@
 
 #include <vector>
 
-#include "Logging/Logger.h"
 #include "EngineTypeDefs.h"
+
+#include "Logging/Logger.h"
 
 namespace SSE
 {

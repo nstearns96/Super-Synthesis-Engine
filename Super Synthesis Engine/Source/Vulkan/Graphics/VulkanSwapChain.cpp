@@ -1,9 +1,11 @@
 #include "Vulkan/Graphics/VulkanSwapChain.h"
 
-#include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Logging/Logger.h"
 
+#include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Vulkan/Graphics/VulkanRenderPass.h"
+
+#include "Window/WindowManager.h"
 
 namespace SSE
 {
@@ -11,15 +13,13 @@ namespace SSE
 
 	namespace Vulkan
 	{
-		bool VulkanSwapChain::create(VulkanSurface& surface, const glm::uvec2& dimensions)
+		bool VulkanSwapChain::create()
 		{
-			if (dimensions.x == 0 || dimensions.y == 0)
-			{
-				GLOG_CRITICAL("Swap chain dimension was 0. Swap chain was not created.");
-				return false;
-			}
+			Window& activeWindow = WindowManager::gWindowManager.getActiveWindow();
+			VulkanSurface surface = activeWindow.getSurface();
+			glm::uvec2 dimensions = activeWindow.getFramebufferDimensions();
 
-			details = VulkanDeviceManager::gDeviceManager.getActivePhysicalDevice().getSwapChainSupport(surface);
+			SwapChainSupportDetails details = VulkanDeviceManager::gDeviceManager.getActivePhysicalDevice().getSwapChainSupport(surface);
 
 			bool foundFormat = false;
 			for (const auto& availableFormat : details.formats)
@@ -67,8 +67,8 @@ namespace SSE
 			{
 				VkExtent2D actualExtent = { dimensions.x, dimensions.y};
 				
-				actualExtent.width = SDL_max(details.capabilities.minImageExtent.width, SDL_min(details.capabilities.maxImageExtent.width, actualExtent.width));
-				actualExtent.height = SDL_max(details.capabilities.minImageExtent.height, SDL_min(details.capabilities.maxImageExtent.height, actualExtent.height));
+				actualExtent.width = glm::clamp(actualExtent.width, details.capabilities.minImageExtent.width, details.capabilities.maxImageExtent.width);
+				actualExtent.height = glm::clamp(actualExtent.width, details.capabilities.minImageExtent.height, details.capabilities.maxImageExtent.height);
 				swapExtent = actualExtent;
 			}
 
@@ -168,7 +168,7 @@ namespace SSE
 			return swapSurfaceFormat;
 		}
 
-		VkExtent2D VulkanSwapChain::getExtent()
+		VkExtent2D VulkanSwapChain::getExtent() const
 		{
 			return swapExtent;
 		}

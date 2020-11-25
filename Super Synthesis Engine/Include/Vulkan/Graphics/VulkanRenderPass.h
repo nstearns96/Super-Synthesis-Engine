@@ -3,7 +3,7 @@
 
 #include <vulkan/vulkan.h>
 
-#include "VulkanSwapChain.h"
+#include "Vulkan/Graphics/VulkanSwapChain.h"
 
 namespace SSE::Vulkan
 {
@@ -17,7 +17,7 @@ namespace SSE::Vulkan
 
 		void destroy();
 
-		VkRenderPass getRenderPass();
+		VkRenderPass getRenderPass() const;
 	};
 }
 

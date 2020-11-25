@@ -3,11 +3,12 @@
 #include <assert.h>
 #include <chrono>
 #include <ctime>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 
 #include "Fios/FioMode.h"
+
 #include "Time/TimeUtils.h"
 
 namespace SSE

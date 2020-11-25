@@ -4,8 +4,9 @@
 #include <glm/glm.hpp>
 #include <vulkan/vulkan.h>
 
-#include "Model/VertexFormat.h"
 #include "EngineTypeDefs.h"
+
+#include "Model/VertexFormat.h"
 
 namespace SSE
 {

@@ -4,8 +4,9 @@
 #include <map>
 #include <vector>
 
-#include "Audio/AudioDevice.h"
 #include "Audio/AudioChannel.h"
+#include "Audio/AudioDevice.h"
+
 #include "EngineTypeDefs.h"
 
 #define MAX_NUM_CHANNELS 20
@@ -27,7 +28,7 @@ namespace SSE
 	public:
 		static bool findDevice(const std::string& name, bool isCapture = false);
 		
-		static AudioHandle play(const Audio::AudioSample& sample);
+		static AudioHandle play(const Audio::AudioSample* sample);
 
 		static void stop(AudioHandle handle);
 

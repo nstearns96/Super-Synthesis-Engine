@@ -1,8 +1,10 @@
 #include "vulkan/Memory/VulkanBuffer.h"
 
-#include "Vulkan/Devices/VulkanDeviceManager.h"
 #include "Logging/Logger.h"
+
 #include "Vulkan/VulkanCommandPool.h"
+
+#include "Vulkan/Devices/VulkanDeviceManager.h"
 
 namespace SSE
 {
@@ -64,7 +66,7 @@ namespace SSE
 					if (stagingBuffer.bufferData(data, false))
 					{
 						VulkanCommandPool copyCommandPool;
-						if (copyCommandPool.create())
+						if (copyCommandPool.create(VK_COMMAND_POOL_CREATE_TRANSIENT_BIT))
 						{
 							if (copyCommandPool.allocateBuffers(1) &&
 								copyCommandPool.beginBuffers())
@@ -104,7 +106,7 @@ namespace SSE
 			bool result = false;
 
 			VulkanCommandPool copyCommandPool;
-			if (copyCommandPool.create())
+			if (copyCommandPool.create(VK_COMMAND_POOL_CREATE_TRANSIENT_BIT))
 			{
 				if (copyCommandPool.allocateBuffers(1) &&
 					copyCommandPool.beginBuffers())

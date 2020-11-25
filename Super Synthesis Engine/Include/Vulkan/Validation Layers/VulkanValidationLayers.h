@@ -1,15 +1,16 @@
 #ifndef _SSE_VULKAN_VALIDATION_LAYERS_H
 #define _SSE_VULKAN_VALIDATION_LAYERS_H
 
-#include <SDL/SDL_vulkan.h>
-
-#include <vector>
-#include <vulkan/vulkan.h>
 #include <cstring>
 #include <iostream>
+#include <vector>
+
+#include <SDL/SDL_vulkan.h>
+#include <vulkan/vulkan.h>
+
+#include "Vulkan/VulkanInstance.h"
 
 #include "Window/Window.h"
-#include "Vulkan/VulkanInstance.h"
 
 namespace SSE::Vulkan::ValidationLayers
 {

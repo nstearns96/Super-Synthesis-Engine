@@ -3,8 +3,9 @@
 
 #include <vector>
 
-#include "VulkanPhysicalDevice.h"
-#include "VulkanLogicalDevice.h"
+#include "Vulkan/Devices/VulkanLogicalDevice.h"
+#include "Vulkan/Devices/VulkanPhysicalDevice.h"
+
 #include "Vulkan/Graphics/VulkanSurface.h"
 
 #define LOGICAL_DEVICE Vulkan::VulkanDeviceManager::gDeviceManager.getActiveLogicalDevice()
@@ -25,11 +26,10 @@ namespace SSE::Vulkan
 	public:
 		static VulkanDeviceManager gDeviceManager;
 
-		bool initDevices(VulkanSurface& surface);
+		bool initDevices();
 		void cleanupDevices();
 
 		bool checkDeviceExtensionSupport(VulkanPhysicalDevice physicalDevice);
-		bool querySwapChainSupport(VulkanSurface* surface);
 
 		const std::vector<const char*> getRequiredDeviceExtensions();
 

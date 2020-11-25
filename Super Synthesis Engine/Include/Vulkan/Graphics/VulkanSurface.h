@@ -1,9 +1,9 @@
 #ifndef _SSE_VULKAN_SURFACE_H
 #define _SSE_VULKAN_SURFACE_H
 
-#include <vulkan/vulkan.h>
+#include "vulkan/vulkan.h"
 
-#include "Window/Window.h"
+#include <SDL/SDL.h>
 
 namespace SSE::Vulkan
 {
@@ -13,10 +13,10 @@ namespace SSE::Vulkan
 		VkSurfaceKHR surface;
 
 	public:
-		bool create(Window& window);
+		bool create(SDL_Window* window);
 		void destroy();
 
-		VkSurfaceKHR getSurface();
+		VkSurfaceKHR getSurface() const;
 	};
 }
 #endif
