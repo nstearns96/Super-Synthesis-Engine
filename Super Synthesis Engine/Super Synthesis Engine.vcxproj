@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Audio\AudioChannel.h" />
+    <ClInclude Include="Include\Audio\AudioDevice.h" />
+    <ClInclude Include="Include\Audio\AudioDeviceStatus.h" />
+    <ClInclude Include="Include\Audio\AudioManager.h" />
+    <ClInclude Include="Include\Audio\AudioSample.h" />
+    <ClInclude Include="Include\Audio\AudioSampleStreamed.h" />
+    <ClInclude Include="Include\EngineTypeDefs.h" />
+    <ClInclude Include="Include\Error\Error.h" />
+    <ClInclude Include="Include\Error\ErrorLevel.h" />
+    <ClInclude Include="Include\Fios\FileHandle.h" />
+    <ClInclude Include="Include\Fios\FioMode.h" />
+    <ClInclude Include="Include\Graphics\Bitmap.h" />
+    <ClInclude Include="Include\Graphics\Camera.h" />
+    <ClInclude Include="Include\Graphics\Font.h" />
+    <ClInclude Include="Include\Graphics\GraphicsPipeline.h" />
+    <ClInclude Include="Include\Graphics\Renderer.h" />
+    <ClInclude Include="Include\Graphics\Shaders\Shader.h" />
+    <ClInclude Include="Include\Graphics\Texture2D.h" />
+    <ClInclude Include="Include\Input\InputManager.h" />
+    <ClInclude Include="Include\Logging\Logger.h" />
+    <ClInclude Include="Include\Model\Model.h" />
+    <ClInclude Include="Include\Model\VertexAspect.h" />
+    <ClInclude Include="Include\Model\VertexFormat.h" />
+    <ClInclude Include="Include\Object.h" />
+    <ClInclude Include="Include\Random\Random.h" />
+    <ClInclude Include="Include\Resources\Assets\AudioAssetUtils.h" />
+    <ClInclude Include="Include\Resources\Assets\AudioSupportWAV.h" />
+    <ClInclude Include="Include\Resources\Assets\ModelAssetUtils.h" />
+    <ClInclude Include="Include\Resources\Assets\TextureSupportBMP.h" />
+    <ClInclude Include="Include\Resources\ResourceHandleManager.h" />
+    <ClInclude Include="Include\Resources\ResourceManager.h" />
+    <ClInclude Include="Include\Super Synthesis.h" />
+    <ClInclude Include="Include\Resources\Assets\TextureAssetUtils.h" />
+    <ClInclude Include="Include\Time\ScopedTimer.h" />
+    <ClInclude Include="Include\Time\Timer.h" />
+    <ClInclude Include="Include\Time\TimeUtils.h" />
+    <ClInclude Include="Include\Vulkan\Devices\VulkanDeviceManager.h" />
+    <ClInclude Include="Include\Vulkan\Devices\VulkanLogicalDevice.h" />
+    <ClInclude Include="Include\Vulkan\Devices\VulkanPhysicalDevice.h" />
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanDepthBuffer.h" />
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanImage.h" />
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanImageView.h" />
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanRenderPass.h" />
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanSurface.h" />
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanSwapChain.h" />
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanVertexBuffer.h" />
+    <ClInclude Include="Include\Vulkan\Memory\VulkanDeviceMemory.h" />
+    <ClInclude Include="Include\Vulkan\Shaders\Descriptors\VulkanDescriptorPool.h" />
+    <ClInclude Include="Include\Vulkan\Shaders\VulkanShaderModule.h" />
+    <ClInclude Include="Include\Graphics\Shaders\ShaderModuleType.h" />
+    <ClInclude Include="Include\Vulkan\Validation Layers\VulkanValidationLayers.h" />
+    <ClInclude Include="Include\Vulkan\Memory\VulkanBuffer.h" />
+    <ClInclude Include="Include\Vulkan\VulkanMain.h" />
+    <ClInclude Include="Include\Vulkan\VulkanCommandPool.h" />
+    <ClInclude Include="Include\Vulkan\VulkanInstance.h" />
+    <ClInclude Include="Include\Window\Window.h" />
+    <ClInclude Include="Include\Window\WindowManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Audio\AudioChannel.cpp" />
+    <ClCompile Include="Source\Audio\AudioDevice.cpp" />
+    <ClCompile Include="Source\Audio\AudioManager.cpp" />
+    <ClCompile Include="Source\Audio\AudioSample.cpp" />
+    <ClCompile Include="Source\Audio\AudioSampleStreamed.cpp" />
+    <ClCompile Include="Source\Fios\FileHandle.cpp" />
+    <ClCompile Include="Source\Graphics\Bitmap.cpp" />
+    <ClCompile Include="Source\Graphics\Camera.cpp" />
+    <ClCompile Include="Source\Graphics\Font.cpp" />
+    <ClCompile Include="Source\Graphics\GraphicsPipeline.cpp" />
+    <ClCompile Include="Source\Graphics\Renderer.cpp" />
+    <ClCompile Include="Source\Graphics\Shaders\Shader.cpp" />
+    <ClCompile Include="Source\Graphics\Texture2D.cpp" />
+    <ClCompile Include="Source\Input\InputManager.cpp" />
+    <ClCompile Include="Source\Model\Model.cpp" />
+    <ClCompile Include="Source\Model\VertexFormat.cpp" />
+    <ClCompile Include="Source\Object.cpp" />
+    <ClCompile Include="Source\Random\Random.cpp" />
+    <ClCompile Include="Source\Resources\Assets\AudioAssetUtils.cpp" />
+    <ClCompile Include="Source\Resources\Assets\AudioSupportWAV.cpp" />
+    <ClCompile Include="Source\Resources\Assets\ModelAssetUtils.cpp" />
+    <ClCompile Include="Source\Resources\Assets\TextureAssetUtils.cpp" />
+    <ClCompile Include="Source\Logging\Logger.cpp" />
+    <ClCompile Include="Source\Resources\Assets\TextureSupportBMP.cpp" />
+    <ClCompile Include="Source\Resources\ResourceHandleManager.cpp" />
+    <ClCompile Include="Source\Resources\ResourceManager.cpp" />
+    <ClCompile Include="Source\Super Synthesis.cpp" />
+    <ClCompile Include="Source\Time\ScopedTimer.cpp" />
+    <ClCompile Include="Source\Time\Timer.cpp" />
+    <ClCompile Include="Source\Vulkan\Devices\VulkanDeviceManager.cpp" />
+    <ClCompile Include="Source\Vulkan\Devices\VulkanLogicalDevice.cpp" />
+    <ClCompile Include="Source\Vulkan\Devices\VulkanPhysicalDevice.cpp" />
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanDepthBuffer.cpp" />
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanImage.cpp" />
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanImageView.cpp" />
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanRenderPass.cpp" />
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanSurface.cpp" />
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanSwapChain.cpp" />
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanVertexBuffer.cpp" />
+    <ClCompile Include="Source\Vulkan\Memory\VulkanDeviceMemory.cpp" />
+    <ClCompile Include="Source\Vulkan\Shaders\Descriptors\VulkanDescriptorPool.cpp" />
+    <ClCompile Include="Source\Vulkan\Shaders\VulkanShaderModule.cpp" />
+    <ClCompile Include="Source\Vulkan\Validation Layers\VulkanValidationLayers.cpp" />
+    <ClCompile Include="Source\Vulkan\Memory\VulkanBuffer.cpp" />
+    <ClCompile Include="Source\Vulkan\VulkanCommandPool.cpp" />
+    <ClCompile Include="Source\Vulkan\VulkanInstance.cpp" />
+    <ClCompile Include="Source\Vulkan\VulkanMain.cpp" />
+    <ClCompile Include="Source\Window\Window.cpp" />
+    <ClCompile Include="Source\Window\WindowManager.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{1E3C70D5-938A-494B-8173-546FB27A3B7E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SuperSynthesisEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\nstea\source\repos\Super Synthesis Engine\Super Synthesis Engine\Include;$(ProjectDir)Include;C:\Users\nstea\Project Stuff\Include;C:\Users\nstea\source\repos\Super Synthesis Engine\SPIRV-Reflect\Include;C:\VulkanSDK\1.2.154.1\Include;C:\VulkanSDK\1.2.154.1\Source\SPIRV-Reflect\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\nstea\source\repos\Super Synthesis Engine\SPIRV-Reflect\Output\$(Platform)\$(Configuration);C:\VulkanSDK\1.2.154.1\Lib;C:\Users\nstea\Project Stuff\Lib\$(Platform);$(ProjectDir)../Super Synthesis Engine/Output/$(Platform)/$(Configuration);C:\Users\nstea\Documents\Visual Studio 2017\Projects\Super Synthesis Engine\SPIRV-Reflect\Output\$(Platform)\$(Configuration);C:\VulkanSDK\1.2.154.1\Lib32;D:\Project Stuff\Lib\$(Platform);$(ProjectDir)../Super Synthesis Engine/Output/$(Platform)/$(Configuration);C:\VulkanSDK\1.2.131.2\Lib32;D:\C++ Project Stuff\Libraries;$(LibraryPath)</LibraryPath>
+    <OutDir>Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\nstea\source\repos\Super Synthesis Engine\Super Synthesis Engine\Include;$(ProjectDir)Include;C:\Users\nstea\Project Stuff\Include;C:\Users\nstea\source\repos\Super Synthesis Engine\SPIRV-Reflect\Include;C:\VulkanSDK\1.2.154.1\Include;C:\VulkanSDK\1.2.154.1\Source\SPIRV-Reflect\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\nstea\source\repos\Super Synthesis Engine\SPIRV-Reflect\Output\$(Platform)\$(Configuration);C:\VulkanSDK\1.2.154.1\Lib;C:\Users\nstea\Project Stuff\Lib\$(Platform);$(ProjectDir)../Super Synthesis Engine/Output/$(Platform)/$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\nstea\source\repos\Super Synthesis Engine\Super Synthesis Engine\Include;$(ProjectDir)Include;C:\Users\nstea\Project Stuff\Include;C:\Users\nstea\source\repos\Super Synthesis Engine\SPIRV-Reflect\Include;C:\VulkanSDK\1.2.154.1\Include;C:\VulkanSDK\1.2.154.1\Source\SPIRV-Reflect\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\nstea\source\repos\Super Synthesis Engine\SPIRV-Reflect\Output\$(Platform)\$(Configuration);C:\VulkanSDK\1.2.154.1\Lib;C:\Users\nstea\Project Stuff\Lib\$(Platform);$(ProjectDir)../Super Synthesis Engine/Output/$(Platform)/$(Configuration);C:\Users\nstea\Documents\Visual Studio 2017\Projects\Super Synthesis Engine\SPIRV-Reflect\Output\$(Platform)\$(Configuration);C:\VulkanSDK\1.2.154.1\Lib32;D:\Project Stuff\Lib\$(Platform);$(ProjectDir)../Super Synthesis Engine/Output/$(Platform)/$(Configuration);C:\VulkanSDK\1.2.131.2\Lib;D:\C++ Project Stuff\Libraries;$(LibraryPath)</LibraryPath>
+    <OutDir>Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\nstea\source\repos\Super Synthesis Engine\Super Synthesis Engine\Include;$(ProjectDir)Include;C:\Users\nstea\Project Stuff\Include;C:\Users\nstea\source\repos\Super Synthesis Engine\SPIRV-Reflect\Include;C:\VulkanSDK\1.2.154.1\Include;C:\VulkanSDK\1.2.154.1\Source\SPIRV-Reflect\include;$(ProjectDir)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\nstea\source\repos\Super Synthesis Engine\SPIRV-Reflect\Output\$(Platform)\$(Configuration);C:\VulkanSDK\1.2.154.1\Lib;C:\Users\nstea\Project Stuff\Lib\$(Platform);$(ProjectDir)../Super Synthesis Engine/Output/$(Platform)/$(Configuration);C:\Users\nstea\Documents\Visual Studio 2017\Projects\Super Synthesis Engine\SPIRV-Reflect\Output\$(Platform)\$(Configuration);C:\VulkanSDK\1.2.154.1\Lib;D:\Project Stuff\Lib\$(Platform);$(ProjectDir)../Super Synthesis Engine/Output/$(Platform)/$(Configuration);C:\VulkanSDK\1.2.131.2\Lib;D:\C++ Project Stuff\Libraries;$(LibraryPath)</LibraryPath>
+    <OutDir>Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>Intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.2.131.2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4201;4710;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.2.148.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableSpecificWarnings>4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>D:\C++ Project Stuff\Libraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.2.131.2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4201;4710;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.2.131.2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Language)'=='C++'">
+    <CAExcludePath>"D:\C++ Project Stuff\Includes";.\GeneratedFiles;$(CAExcludePath)</CAExcludePath>
+  </PropertyGroup>
+</Project>

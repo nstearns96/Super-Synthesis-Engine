@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Error">
+      <UniqueIdentifier>{711778bb-8548-442f-bce9-1046da755e0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Fios">
+      <UniqueIdentifier>{1c6276b7-2270-45b9-a33f-5372d612e1d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{c309ee6e-c625-4abd-b209-2a4df5c5b921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Logging">
+      <UniqueIdentifier>{a9f4d827-0255-4ed9-b8b8-c40395fee792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Time">
+      <UniqueIdentifier>{edd054de-98e4-4bdf-914c-6dc23551925a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Model">
+      <UniqueIdentifier>{12cc8aad-d8ec-4697-9268-2b1443f944fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vulkan">
+      <UniqueIdentifier>{acbd21cd-9971-4b27-887f-ff9695194b99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Window">
+      <UniqueIdentifier>{468db357-20d9-464f-bc15-6995a2d87ad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Fios">
+      <UniqueIdentifier>{4f6444c8-ad4d-4ec8-8432-acdd6050cd19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{fa24f8be-6cc9-4a35-87c3-03328dc96f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vulkan\Devices">
+      <UniqueIdentifier>{b17097ec-6fc5-474c-b704-a1b813d50444}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vulkan\Graphics">
+      <UniqueIdentifier>{649aa2cf-4e99-4ef5-80b8-224859e22c15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vulkan\Shaders">
+      <UniqueIdentifier>{0f1eef3c-34cd-4c74-88a7-0c3420ea91cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vulkan\Validation Layers">
+      <UniqueIdentifier>{c9aad9bb-5b90-4212-8bf0-7921382d3c79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Logging">
+      <UniqueIdentifier>{38e35d8f-7249-4cbe-b335-861657caf156}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Time">
+      <UniqueIdentifier>{1bc02d12-7b2e-4d8d-9657-bad826ddb8ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{f24f4c54-6713-4d3f-9dab-ab4665305b88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vulkan">
+      <UniqueIdentifier>{74abe398-9e52-4c6f-80f6-1b8916820d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Window">
+      <UniqueIdentifier>{e1561f50-00f4-46be-bdf4-7c0a2b19b82e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vulkan\Devices">
+      <UniqueIdentifier>{58c617ea-5f8b-4d66-a4fa-acd1dc0110f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vulkan\Graphics">
+      <UniqueIdentifier>{c0d8b0ec-c805-4a51-9aad-8470255d483b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vulkan\Shdaers">
+      <UniqueIdentifier>{19eeebb4-740e-4ac4-ae57-9495c93951e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vulkan\Validation Layers">
+      <UniqueIdentifier>{0846dd0a-c251-4126-b916-b4ddcd9f39cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vulkan\Shaders\Descriptors">
+      <UniqueIdentifier>{4a56f598-9256-4c21-ae57-d4b1dea939d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vulkan\Shdaers\Descriptors">
+      <UniqueIdentifier>{41fa700c-30c8-46ed-a0ca-020aeb0ea0df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Resources">
+      <UniqueIdentifier>{a6f3cdd1-14d8-42ac-a8d7-a7a7027c1e34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Vulkan\Memory">
+      <UniqueIdentifier>{f28c252a-c6e0-4c41-a811-c7245b5cfd89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Resources\Assets">
+      <UniqueIdentifier>{ef5bc735-3dfd-4a60-8237-5472ea321088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resources">
+      <UniqueIdentifier>{887d4acf-8027-4b79-a942-c597d5c5eac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resources\Assets">
+      <UniqueIdentifier>{cb1a585d-f46a-42d3-8635-83c953ecc7f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vulkan\Memory">
+      <UniqueIdentifier>{f8e1c502-4ec0-4555-8f73-7dea89d691ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Audio">
+      <UniqueIdentifier>{2dc65847-09f2-456f-948e-97c5c2b3ba22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{05840d99-b682-4964-a532-e6a05077d967}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Super Synthesis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Error\Error.h">
+      <Filter>Header Files\Error</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Error\ErrorLevel.h">
+      <Filter>Header Files\Error</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Fios\FileHandle.h">
+      <Filter>Header Files\Fios</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Fios\FioMode.h">
+      <Filter>Header Files\Fios</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GraphicsPipeline.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Logging\Logger.h">
+      <Filter>Header Files\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Texture2D.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Time\Timer.h">
+      <Filter>Header Files\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Time\TimeUtils.h">
+      <Filter>Header Files\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\VulkanCommandPool.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\VulkanInstance.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\VulkanMain.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Window\Window.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Window\WindowManager.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Devices\VulkanDeviceManager.h">
+      <Filter>Header Files\Vulkan\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Devices\VulkanLogicalDevice.h">
+      <Filter>Header Files\Vulkan\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Devices\VulkanPhysicalDevice.h">
+      <Filter>Header Files\Vulkan\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanRenderPass.h">
+      <Filter>Header Files\Vulkan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanSurface.h">
+      <Filter>Header Files\Vulkan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanSwapChain.h">
+      <Filter>Header Files\Vulkan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanVertexBuffer.h">
+      <Filter>Header Files\Vulkan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Shaders\VulkanShaderModule.h">
+      <Filter>Header Files\Vulkan\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Validation Layers\VulkanValidationLayers.h">
+      <Filter>Header Files\Vulkan\Validation Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Shaders\Descriptors\VulkanDescriptorPool.h">
+      <Filter>Header Files\Vulkan\Shaders\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\EngineTypeDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Resources\ResourceManager.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Memory\VulkanBuffer.h">
+      <Filter>Header Files\Vulkan\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Resources\Assets\TextureAssetUtils.h">
+      <Filter>Header Files\Resources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Resources\Assets\TextureSupportBMP.h">
+      <Filter>Header Files\Resources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Memory\VulkanDeviceMemory.h">
+      <Filter>Header Files\Vulkan\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanImage.h">
+      <Filter>Header Files\Vulkan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Resources\Assets\AudioAssetUtils.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Audio\AudioChannel.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Audio\AudioDevice.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Audio\AudioDeviceStatus.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Audio\AudioManager.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Audio\AudioSample.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Audio\AudioSampleStreamed.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Resources\Assets\AudioSupportWAV.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Model\VertexAspect.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Model\VertexFormat.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanDepthBuffer.h">
+      <Filter>Header Files\Vulkan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Vulkan\Graphics\VulkanImageView.h">
+      <Filter>Header Files\Vulkan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Bitmap.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Font.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Model\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Resources\Assets\ModelAssetUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Input\InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Shaders\Shader.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Shaders\ShaderModuleType.h">
+      <Filter>Header Files\Vulkan\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Resources\ResourceHandleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Random\Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Time\ScopedTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Super Synthesis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fios\FileHandle.cpp">
+      <Filter>Source Files\Fios</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GraphicsPipeline.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Texture2D.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Logging\Logger.cpp">
+      <Filter>Source Files\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Time\Timer.cpp">
+      <Filter>Source Files\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\VulkanCommandPool.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\VulkanInstance.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\VulkanMain.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window\Window.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window\WindowManager.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Devices\VulkanDeviceManager.cpp">
+      <Filter>Source Files\Vulkan\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Devices\VulkanLogicalDevice.cpp">
+      <Filter>Source Files\Vulkan\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Devices\VulkanPhysicalDevice.cpp">
+      <Filter>Source Files\Vulkan\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanRenderPass.cpp">
+      <Filter>Source Files\Vulkan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanSurface.cpp">
+      <Filter>Source Files\Vulkan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanSwapChain.cpp">
+      <Filter>Source Files\Vulkan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanVertexBuffer.cpp">
+      <Filter>Source Files\Vulkan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Shaders\VulkanShaderModule.cpp">
+      <Filter>Source Files\Vulkan\Shdaers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Validation Layers\VulkanValidationLayers.cpp">
+      <Filter>Source Files\Vulkan\Validation Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Shaders\Descriptors\VulkanDescriptorPool.cpp">
+      <Filter>Source Files\Vulkan\Shdaers\Descriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Memory\VulkanBuffer.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Resources\ResourceManager.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Resources\Assets\TextureSupportBMP.cpp">
+      <Filter>Source Files\Resources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Resources\Assets\TextureAssetUtils.cpp">
+      <Filter>Source Files\Resources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Memory\VulkanDeviceMemory.cpp">
+      <Filter>Source Files\Vulkan\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanImage.cpp">
+      <Filter>Source Files\Vulkan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Resources\Assets\AudioAssetUtils.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio\AudioChannel.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio\AudioDevice.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio\AudioManager.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio\AudioSample.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio\AudioSampleStreamed.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Resources\Assets\AudioSupportWAV.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model\VertexFormat.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanDepthBuffer.cpp">
+      <Filter>Source Files\Vulkan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vulkan\Graphics\VulkanImageView.cpp">
+      <Filter>Source Files\Vulkan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Bitmap.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Font.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Model\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Resources\Assets\ModelAssetUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\InputManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Shaders\Shader.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Resources\ResourceHandleManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Random\Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Time\ScopedTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
