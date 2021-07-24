@@ -1,14 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.852
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Super Synthesis Engine", "Super Synthesis Engine\Super Synthesis Engine.vcxproj", "{1E3C70D5-938A-494B-8173-546FB27A3B7E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Super Synthesis Test", "Super Synthesis Test\Super Synthesis Test.vcxproj", "{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1E3C70D5-938A-494B-8173-546FB27A3B7E} = {1E3C70D5-938A-494B-8173-546FB27A3B7E}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPIRV-Reflect", "SPIRV-Reflect\SPIRV-Reflect.vcxproj", "{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MinecraftTest", "MinecraftTest\MinecraftTest.vcxproj", "{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RunescapeTest", "RunescapeTest\RunescapeTest.vcxproj", "{6B796CCB-B849-44CB-9113-7B97C08EE258}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AD813329-B4C5-41A1-A701-0815492847D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +29,14 @@ Global
 		{1E3C70D5-938A-494B-8173-546FB27A3B7E}.Release|x64.Build.0 = Release|x64
 		{1E3C70D5-938A-494B-8173-546FB27A3B7E}.Release|x86.ActiveCfg = Release|Win32
 		{1E3C70D5-938A-494B-8173-546FB27A3B7E}.Release|x86.Build.0 = Release|Win32
+		{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}.Debug|x64.ActiveCfg = Debug|x64
+		{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}.Debug|x64.Build.0 = Debug|x64
+		{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}.Debug|x86.ActiveCfg = Debug|Win32
+		{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}.Debug|x86.Build.0 = Debug|Win32
+		{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}.Release|x64.ActiveCfg = Release|x64
+		{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}.Release|x64.Build.0 = Release|x64
+		{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}.Release|x86.ActiveCfg = Release|Win32
+		{E1AC2AA3-8B8B-4F41-8A0F-DA3B4D653387}.Release|x86.Build.0 = Release|Win32
 		{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3}.Debug|x64.ActiveCfg = Debug|x64
 		{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3}.Debug|x64.Build.0 = Debug|x64
 		{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3}.Debug|x86.ActiveCfg = Debug|Win32
@@ -34,9 +45,21 @@ Global
 		{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3}.Release|x64.Build.0 = Release|x64
 		{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3}.Release|x86.ActiveCfg = Release|Win32
 		{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3}.Release|x86.Build.0 = Release|Win32
+		{6B796CCB-B849-44CB-9113-7B97C08EE258}.Debug|x64.ActiveCfg = Debug|x64
+		{6B796CCB-B849-44CB-9113-7B97C08EE258}.Debug|x64.Build.0 = Debug|x64
+		{6B796CCB-B849-44CB-9113-7B97C08EE258}.Debug|x86.ActiveCfg = Debug|Win32
+		{6B796CCB-B849-44CB-9113-7B97C08EE258}.Debug|x86.Build.0 = Debug|Win32
+		{6B796CCB-B849-44CB-9113-7B97C08EE258}.Release|x64.ActiveCfg = Release|x64
+		{6B796CCB-B849-44CB-9113-7B97C08EE258}.Release|x64.Build.0 = Release|x64
+		{6B796CCB-B849-44CB-9113-7B97C08EE258}.Release|x86.ActiveCfg = Release|Win32
+		{6B796CCB-B849-44CB-9113-7B97C08EE258}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A0F3FF7F-86B8-4005-BDA5-69CBBEFAE1A3} = {AD813329-B4C5-41A1-A701-0815492847D6}
+		{6B796CCB-B849-44CB-9113-7B97C08EE258} = {AD813329-B4C5-41A1-A701-0815492847D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B10A5E29-DA95-4EE2-809A-78204F2EA5DE}
